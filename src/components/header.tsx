@@ -46,13 +46,21 @@ export function Header() {
         </Link>
         {/* Desktop Nav */}
         <nav className="hidden md:flex items-center gap-2">
-          <Button variant={!isArchivePage ? 'secondary' : 'ghost'} asChild>
+          <Button variant={!isArchivePage ? 'secondary' : 'ghost'} asChild onClick={async (e)=>{
+            e.preventDefault();
+            setLoading(true);
+            router.push('/');
+          }}>
             <Link href="/">
               <Home className="mr-2 h-4 w-4" />
               {t('dashboard')}
             </Link>
           </Button>
-          <Button variant={isArchivePage ? 'secondary' : 'ghost'} asChild>
+          <Button variant={isArchivePage ? 'secondary' : 'ghost'} asChild onClick={async (e)=>{
+            e.preventDefault();
+            setLoading(true);
+            router.push('/archive');
+          }}>
             <Link href="/archive">
               <Archive className="mr-2 h-4 w-4" />
               {t('archive')}
