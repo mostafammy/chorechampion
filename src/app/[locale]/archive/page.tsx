@@ -4,6 +4,8 @@ import { ArchiveTable } from "@/components/archive-table";
 import { Header } from "@/components/header";
 import { useAppContext } from '@/context/app-provider';
 import { useTranslations } from 'next-intl';
+import '@/app/globals.css';
+
 
 export default function ArchivePage() {
   const { archivedTasks, members } = useAppContext();

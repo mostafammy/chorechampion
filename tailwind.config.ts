@@ -7,7 +7,24 @@ export default {
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/components/**/*.{js,ts,jsx,tsx,mdx}',
-    "./src/**/*.{js,ts,jsx,tsx}"
+    "./src/**/*.{js,ts,jsx,tsx}",
+    // If you have a src folder
+    './src/**/*.{js,jsx,ts,tsx}',
+
+    // If components are in root
+    './components/**/*.{js,jsx,ts,tsx}',
+
+    // If using pages directory
+    './pages/**/*.{js,jsx,ts,tsx}',
+
+    // If using app directory (Next.js 13+)
+    './app/**/*.{js,jsx,ts,tsx}',
+
+    // Include HTML files if needed
+    './public/**/*.html',
+
+    // Include any other directories with components
+    './lib/**/*.{js,jsx,ts,tsx}',
   ],
   theme: {
     container: {
