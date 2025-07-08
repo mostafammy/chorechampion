@@ -9,15 +9,34 @@ import { LanguageSwitcher } from './language-switcher';
 import { useTranslations } from 'next-intl';
 import { Sheet, SheetTrigger, SheetContent, SheetTitle } from '@/components/ui/sheet';
 import { Menu } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import LoadingSpinner from './loading-spinner';
 
 export function Header() {
   const t = useTranslations('Header');
+  const router = useRouter();
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   console.log('typeof usePathname:', typeof usePathname);
   const pathname = usePathname(); 
   const isArchivePage = pathname.includes('/archive');
 
+  // Hide loading spinner after navigation
+  useEffect(() => {
+    if (!loading) return;
+    const handleComplete = () => setLoading(false);
+    window.addEventListener('nextjs-route-change-complete', handleComplete);
+    window.addEventListener('nextjs-route-change-error', handleComplete);
+    return () => {
+      window.removeEventListener('nextjs-route-change-complete', handleComplete);
+      window.removeEventListener('nextjs-route-change-error', handleComplete);
+    };
+  }, [loading]);
+
   return (
     <header className="bg-card border-b sticky top-0 z-50">
+      {loading && <LoadingSpinner />}
       <div className="container mx-auto flex items-center justify-between p-4 ">
         <Link href="/" className="flex items-center gap-2 no-underline">
           <Trophy className="h-8 w-8 text-primary" />
@@ -44,7 +63,7 @@ export function Header() {
         </nav>
         {/* Mobile Hamburger */}
         <div className="md:hidden">
-          <Sheet>
+          <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon" aria-label="Open menu">
                 <Menu className="h-6 w-6" />
@@ -63,18 +82,28 @@ export function Header() {
                     </span>
                   </Link>
                 </div>
-                {/* Nav links */}
-                <Button variant={!isArchivePage ? 'secondary' : 'ghost'} asChild className="justify-start w-full">
-                  <Link href="/">
-                    <Home className="mr-2 h-4 w-4" />
-                    {t('dashboard')}
-                  </Link>
+                {/* Nav links with fade-out on click */}
+                <Button variant={!isArchivePage ? 'secondary' : 'ghost'} className="justify-start w-full" onClick={async (e) => {
+                  e.preventDefault();
+                  setOpen(false);
+                  setTimeout(() => {
+                    setLoading(true);
+                    router.push('/');
+                  }, 350);
+                }}>
+                  <Home className="mr-2 h-4 w-4" />
+                  {t('dashboard')}
                 </Button>
-                <Button variant={isArchivePage ? 'secondary' : 'ghost'} asChild className="justify-start w-full">
-                  <Link href="/archive">
-                    <Archive className="mr-2 h-4 w-4" />
-                    {t('archive')}
-                  </Link>
+                <Button variant={isArchivePage ? 'secondary' : 'ghost'} className="justify-start w-full" onClick={async (e) => {
+                  e.preventDefault();
+                  setOpen(false);
+                  setTimeout(() => {
+                    setLoading(true);
+                    router.push('/archive');
+                  }, 350);
+                }}>
+                  <Archive className="mr-2 h-4 w-4" />
+                  {t('archive')}
                 </Button>
                 <div className="flex gap-2 mt-4">
                   <LanguageSwitcher />

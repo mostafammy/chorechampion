@@ -4,6 +4,7 @@ import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/toaster';
 import type { Metadata } from 'next';
 import './globals.css';
+import LoadingSpinner from '@/components/loading-spinner';
 
 export const metadata: Metadata = {
     title: "ChoreChampion",
