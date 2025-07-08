@@ -1,0 +1,169 @@
+'use client';
+
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Member, Task, Period } from '@/types';
+import { PlusCircle, Plus, Minus } from 'lucide-react';
+import { useForm, Controller } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { useTranslations } from 'next-intl';
+
+interface AddTaskDialogProps {
+  members: Member[];
+  onAddTask: (task: Omit<Task, 'id' | 'completed'>) => void;
+}
+
+export function AddTaskDialog({ members, onAddTask }: AddTaskDialogProps) {
+  const [open, setOpen] = useState(false);
+  const t = useTranslations('AddTaskDialog');
+  
+  const formSchema = z.object({
+    name: z.string().min(2, { message: t('validation.taskName') }),
+    score: z.coerce.number().min(1, { message: t('validation.score') }),
+    assigneeId: z.string({ required_error: t('validation.assignee') }),
+    period: z.enum(['daily', 'weekly', 'monthly'], { required_error: t('validation.period') }),
+  });
+
+  type AddTaskFormValues = z.infer<typeof formSchema>;
+  
+  const { register, handleSubmit, control, formState: { errors }, reset, setValue, getValues } = useForm<AddTaskFormValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      score: 10,
+    }
+  });
+
+  const onSubmit = (data: AddTaskFormValues) => {
+    onAddTask({ ...data, period: data.period as Period });
+    reset();
+    setOpen(false);
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={(isOpen) => {
+      setOpen(isOpen);
+      if (!isOpen) {
+        reset();
+      }
+    }}>
+      <DialogTrigger asChild>
+        <Button variant="outline" size="sm">
+          <PlusCircle className="mr-2 h-4 w-4" />
+          {t('addTask')}
+        </Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px]">
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <DialogHeader>
+            <DialogTitle className="font-headline">{t('title')}</DialogTitle>
+            <DialogDescription>{t('description')}</DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="name" className="text-right">{t('taskLabel')}</Label>
+              <div className="col-span-3">
+                <Input id="name" {...register("name")} />
+                {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name.message}</p>}
+              </div>
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="score" className="text-right">{t('scoreLabel')}</Label>
+               <div className="col-span-3">
+                 <div className="flex items-center gap-2">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="icon"
+                      className="h-8 w-8 shrink-0"
+                      onClick={() => {
+                        const score = getValues('score') || 1;
+                        setValue('score', Math.max(1, score - 1), { shouldValidate: true });
+                      }}
+                    >
+                      <Minus className="h-4 w-4" />
+                    </Button>
+                    <Input id="score" type="number" {...register("score")} className="w-full text-center" />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="icon"
+                      className="h-8 w-8 shrink-0"
+                      onClick={() => {
+                        const score = getValues('score') || 0;
+                        setValue('score', score + 1, { shouldValidate: true });
+                      }}
+                    >
+                      <Plus className="h-4 w-4" />
+                    </Button>
+                  </div>
+                {errors.score && <p className="text-red-500 text-xs mt-1">{errors.score.message}</p>}
+              </div>
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="assigneeId" className="text-right">{t('assigneeLabel')}</Label>
+              <div className="col-span-3">
+                <Controller
+                  name="assigneeId"
+                  control={control}
+                  render={({ field }) => (
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <SelectTrigger>
+                        <SelectValue placeholder={t('selectPersonPlaceholder')} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {members.map((member) => (
+                          <SelectItem key={member.id} value={member.id}>
+                            {member.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
+                {errors.assigneeId && <p className="text-red-500 text-xs mt-1">{errors.assigneeId.message}</p>}
+              </div>
+            </div>
+            <div className="grid grid-cols-4 items-center gap-4">
+              <Label htmlFor="period" className="text-right">{t('frequencyLabel')}</Label>
+              <div className="col-span-3">
+                 <Controller
+                  name="period"
+                  control={control}
+                  render={({ field }) => (
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <SelectTrigger>
+                        <SelectValue placeholder={t('selectPeriodPlaceholder')} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="daily">{t('daily')}</SelectItem>
+                        <SelectItem value="weekly">{t('weekly')}</SelectItem>
+                        <SelectItem value="monthly">{t('monthly')}</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
+                {errors.period && <p className="text-red-500 text-xs mt-1">{errors.period.message}</p>}
+              </div>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button type="submit">{t('submit')}</Button>
+          </DialogFooter>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
+}

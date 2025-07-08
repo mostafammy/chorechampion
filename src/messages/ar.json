@@ -1,0 +1,62 @@
+{
+  "Header": {
+    "title": "بطل الأعمال",
+    "dashboard": "لوحة التحكم",
+    "archive": "الأرشيف"
+  },
+  "Dashboard": {
+    "overallProgress": "التقدم العام",
+    "daily": "يومي",
+    "weekly": "أسبوعي",
+    "monthly": "شهري"
+  },
+  "PerformanceSummary": {
+    "totalPoints": "مجموع النقاط",
+    "taskProgress": "تقدم المهمة"
+  },
+  "AddTaskDialog": {
+    "addTask": "أضف مهمة",
+    "title": "تعيين مهمة جديدة",
+    "description": "املأ التفاصيل أدناه لإضافة مهمة منزلية جديدة لأحد أفراد العائلة.",
+    "taskLabel": "المهمة",
+    "scoreLabel": "النقاط",
+    "assigneeLabel": "تعيين إلى",
+    "frequencyLabel": "التكرار",
+    "selectPersonPlaceholder": "اختر شخصًا",
+    "selectPeriodPlaceholder": "اختر فترة",
+    "daily": "يومي",
+    "weekly": "أسبوعي",
+    "monthly": "شهري",
+    "submit": "أضف المهمة",
+    "validation": {
+      "taskName": "يجب أن يتكون اسم المهمة من حرفين على الأقل.",
+      "score": "يجب أن تكون النقاط 1 على الأقل.",
+      "assignee": "الرجاء اختيار شخص.",
+      "period": "الرجاء اختيار فترة."
+    }
+  },
+  "TaskList": {
+    "noTasks": "لا توجد مهام لهذه الفترة. عمل رائع!",
+    "undo": "تراجع"
+  },
+  "ArchivePage": {
+    "title": "أرشيف المهام",
+    "description": "مراجعة الإنجازات السابقة وسجلات الأداء.",
+    "noTasks": "لم يتم إكمال أي مهام بعد. تحقق مرة أخرى لاحقًا!",
+    "tasksCompleted": "{count, plural, zero {لم تكتمل أي مهمة} one {مهمة واحدة مكتملة} two {مهمتان مكتملتان} few {مهام مكتملة} many {مهام مكتملة} other {# مهام مكتملة}}"
+  },
+  "ArchiveTable": {
+    "task": "المهمة",
+    "period": "الفترة",
+    "score": "النقاط",
+    "completed": "مكتملة"
+  },
+  "OverallProgressChart": {
+    "noPoints": "لم يتم تسجيل أي نقاط بعد!",
+    "description": "أكمل بعض المهام لترى التقدم هنا."
+  },
+  "Layout": {
+    "title": "بطل الأعمال",
+    "description": "إدارة الأعمال المنزلية بسهولة وقليل من المرح."
+  }
+}

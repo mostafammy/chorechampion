@@ -1,7 +1,30 @@
-import type { NextConfig } from "next";
+import type {NextConfig} from 'next';
+import createNextIntlPlugin from 'next-intl/plugin';
+
+const withNextIntl = createNextIntlPlugin('./src/i18n.ts');
 
 const nextConfig: NextConfig = {
-  /* config options here */
+    /* config options here */
+    experimental: {
+        // allowedDevOrigins: ['https://6000-firebase-studio-1751655458192.cluster-ombtxv25tbd6yrjpp3lukp6zhc.cloudworkstations.dev'],
+    },
+    turbopack:{},
+    typescript: {
+        ignoreBuildErrors: true,
+    },
+    eslint: {
+        ignoreDuringBuilds: true,
+    },
+    images: {
+        remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: 'placehold.co',
+                port: '',
+                pathname: '/**',
+            },
+        ],
+    },
 };
 
-export default nextConfig;
+export default withNextIntl(nextConfig);

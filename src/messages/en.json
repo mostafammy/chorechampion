@@ -1,0 +1,62 @@
+{
+  "Header": {
+    "title": "ChoreChampion",
+    "dashboard": "Dashboard",
+    "archive": "Archive"
+  },
+  "Dashboard": {
+    "overallProgress": "Overall Progress",
+    "daily": "Daily",
+    "weekly": "Weekly",
+    "monthly": "Monthly"
+  },
+  "PerformanceSummary": {
+    "totalPoints": "Total Points",
+    "taskProgress": "Task Progress"
+  },
+  "AddTaskDialog": {
+    "addTask": "Add Task",
+    "title": "Assign a New Task",
+    "description": "Fill in the details below to add a new chore for a family member.",
+    "taskLabel": "Task",
+    "scoreLabel": "Score",
+    "assigneeLabel": "Assign To",
+    "frequencyLabel": "Frequency",
+    "selectPersonPlaceholder": "Select a person",
+    "selectPeriodPlaceholder": "Select a period",
+    "daily": "Daily",
+    "weekly": "Weekly",
+    "monthly": "Monthly",
+    "submit": "Add Task",
+    "validation": {
+      "taskName": "Task name must be at least 2 characters.",
+      "score": "Score must be at least 1.",
+      "assignee": "Please select an assignee.",
+      "period": "Please select a period."
+    }
+  },
+  "TaskList": {
+    "noTasks": "No tasks for this period. Great job!",
+    "undo": "Undo"
+  },
+  "ArchivePage": {
+    "title": "Task Archive",
+    "description": "Review past achievements and performance records.",
+    "noTasks": "No tasks have been completed yet. Check back later!",
+    "tasksCompleted": "{count, plural, one {# task completed} other {# tasks completed}}"
+  },
+  "ArchiveTable": {
+    "task": "Task",
+    "period": "Period",
+    "score": "Score",
+    "completed": "Completed"
+  },
+  "OverallProgressChart": {
+    "noPoints": "No points scored yet!",
+    "description": "Complete some tasks to see the progress here."
+  },
+  "Layout": {
+    "title": "ChoreChampion",
+    "description": "Manage household chores with ease and a little bit of fun."
+  }
+}
