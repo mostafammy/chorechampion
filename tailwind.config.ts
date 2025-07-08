@@ -3,28 +3,10 @@ import type {Config} from 'tailwindcss';
 export default {
   // darkMode: ['class'],
   content: [
-    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/app/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/app/components/**/*.{js,ts,jsx,tsx,mdx}',
-    "./src/**/*.{js,ts,jsx,tsx}",
-    // If you have a src folder
-    './src/**/*.{js,jsx,ts,tsx}',
-
-    // If components are in root
-    './components/**/*.{js,jsx,ts,tsx}',
-
-    // If using pages directory
-    './pages/**/*.{js,jsx,ts,tsx}',
-
-    // If using app directory (Next.js 13+)
-    './app/**/*.{js,jsx,ts,tsx}',
-
-    // Include HTML files if needed
-    './public/**/*.html',
-
-    // Include any other directories with components
-    './lib/**/*.{js,jsx,ts,tsx}',
+    './src/app/**/*.{js,ts,jsx,tsx,mdx}', // For Next.js app directory components and pages
+    './src/components/**/*.{js,ts,jsx,tsx,mdx}', // For shared components
+    './src/lib/**/*.{js,ts,jsx,tsx}', // For utility functions or library code that might use Tailwind
+    './public/**/*.html', // If there are any static HTML files in public using Tailwind
   ],
   theme: {
     container: {
