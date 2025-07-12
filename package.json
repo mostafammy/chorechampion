@@ -44,6 +44,7 @@
     "framer-motion": "^11.3.11",
     "genkit": "^1.13.0",
     "lucide-react": "^0.475.0",
+    "nanoid": "^5.1.5",
     "next": "15.3.3",
     "next-intl": "^3.26.5",
     "next-themes": "^0.3.0",
