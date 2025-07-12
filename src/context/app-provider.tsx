@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useState, useMemo, ReactNode } from 'react';
+import { createContext, useContext, useState, useMemo, ReactNode, useEffect } from 'react';
 import type { Member, Task, ArchivedTask, Period } from '@/types';
 import { initialMembers, initialActiveTasks, initialArchivedTasks } from '@/data/seed';
 
@@ -9,7 +9,7 @@ interface AppContextType {
   activeTasks: Task[];
   archivedTasks: ArchivedTask[];
   scoreAdjustments: Record<string, number>;
-  handleAddTask: (task: Omit<Task, 'id' | 'completed'>) => void;
+  handleAddTask: (task: Task) => void;
   handleToggleTask: (taskId: string) => void;
   handleAdjustScore: (memberId: string, amount: number) => void;
 }
@@ -22,6 +22,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [archivedTasks, setArchivedTasks] = useState<ArchivedTask[]>(initialArchivedTasks);
   const [scoreAdjustments, setScoreAdjustments] = useState<Record<string, number>>({});
 
+  useEffect(() => {
+    console.log('Active tasks updated:', activeTasks);
+  }, [activeTasks]);
+
   const handleAdjustScore = (memberId: string, amount: number) => {
     setScoreAdjustments((prev) => ({
       ...prev,
@@ -29,13 +33,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
     }));
   };
 
-  const handleAddTask = (task: Omit<Task, 'id' | 'completed'>) => {
-    const newTask: Task = {
-      ...task,
-      id: `t${Date.now()}`,
-      completed: false,
-    };
-    setActiveTasks((prevTasks) => [...prevTasks, newTask]);
+  const handleAddTask = (task: Task) => {
+    setActiveTasks((prevTasks) => [...prevTasks, task]);
   };
 
   const handleToggleTask = (taskId: string) => {

@@ -23,11 +23,12 @@ import { useTranslations } from 'next-intl';
 
 interface AddTaskDialogProps {
   members: Member[];
-  onAddTask: (task: Omit<Task, 'id' | 'completed'>) => void;
+  onAddTask: (task: Task) => void;
 }
 
 export function AddTaskDialog({ members, onAddTask }: AddTaskDialogProps) {
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const t = useTranslations('AddTaskDialog');
   
   const formSchema = z.object({
@@ -46,10 +47,31 @@ export function AddTaskDialog({ members, onAddTask }: AddTaskDialogProps) {
     }
   });
 
-  const onSubmit = (data: AddTaskFormValues) => {
-    onAddTask({ ...data, period: data.period as Period });
-    reset();
-    setOpen(false);
+  const onSubmit = async (data: AddTaskFormValues) => {
+    setLoading(true);
+    try {
+        console.log(data);
+        const response = await fetch('/api/AddTask', {
+            method: 'POST',
+            body: JSON.stringify({
+                name: data.name,
+                score: data.score,
+                assigneeId: data.assigneeId,
+                period: data.period,
+            }),
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        const task = await response.json();
+        await Promise.resolve(onAddTask(task));
+        reset();
+        setOpen(false);
+    }catch (errors){
+        console.error("Error adding task:", errors);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -160,7 +182,15 @@ export function AddTaskDialog({ members, onAddTask }: AddTaskDialogProps) {
             </div>
           </div>
           <DialogFooter>
-            <Button type="submit">{t('submit')}</Button>
+            <Button type="submit" disabled={loading}>
+              {loading && (
+                <svg className="animate-spin mr-2 h-4 w-4 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+                </svg>
+              )}
+              {t('submit')}
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>

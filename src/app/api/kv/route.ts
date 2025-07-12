@@ -1,9 +1,9 @@
+import {getRedis} from "@/lib/redis";
+
 export const runtime = 'edge'; // or 'nodejs'
-import { Redis } from '@upstash/redis';
 import { NextResponse } from 'next/server';
 
-const redis = Redis.fromEnv();
-
+const redis = getRedis();
 export const GET = async () => {
     try {
         const result = await redis.get("item");
