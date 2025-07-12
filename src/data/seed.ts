@@ -23,3 +23,15 @@ export const initialActiveTasks: Task[] = allInitialTasks
 export const initialArchivedTasks: ArchivedTask[] = allInitialTasks
     .filter(t => t.completed)
     .map(({...rest}) => ({...rest, completed: true, completedDate: new Date(Date.now() - Math.floor(Math.random() * 1000 * 60 * 60 * 24 * 7)) }));
+
+// Fetch tasks from the API endpoint
+export async function fetchAllTasksFromApi(): Promise<Task[]> {
+  try {
+    const res = await fetch('/api/GetAllTasks');
+    if (!res.ok) return [];
+    return await res.json();
+  } catch (e) {
+    console.error('Failed to fetch tasks from API:', e);
+    return [];
+  }
+}

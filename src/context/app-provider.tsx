@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useState, useMemo, ReactNode, useEffect } from 'react';
 import type { Member, Task, ArchivedTask, Period } from '@/types';
-import { initialMembers, initialActiveTasks, initialArchivedTasks } from '@/data/seed';
+import { initialMembers, initialActiveTasks, initialArchivedTasks, fetchAllTasksFromApi } from '@/data/seed';
 
 interface AppContextType {
   members: Member[];
@@ -22,6 +22,15 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const [archivedTasks, setArchivedTasks] = useState<ArchivedTask[]>(initialArchivedTasks);
   const [scoreAdjustments, setScoreAdjustments] = useState<Record<string, number>>({});
 
+  // Fetch tasks from API on mount and update activeTasks
+  useEffect(() => {
+    fetchAllTasksFromApi().then((tasks) => {
+      if (Array.isArray(tasks) && tasks.length > 0) {
+        setActiveTasks(tasks.filter(t => !t.completed));
+      }
+    });
+  }, []);
+
   useEffect(() => {
     console.log('Active tasks updated:', activeTasks);
   }, [activeTasks]);
@@ -40,6 +49,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
   const handleToggleTask = (taskId: string) => {
     const taskToArchive = activeTasks.find((task) => task.id === taskId);
     if (taskToArchive) {
+      // Add The Task Completion Date to The Database
+
       setArchivedTasks((prev) => [
         ...prev,
         { ...taskToArchive, completed: true, completedDate: new Date() },
