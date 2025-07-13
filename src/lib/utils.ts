@@ -1,7 +1,8 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import type { Period } from "@/types";
 
-export function cn(...inputs: ClassValue[]) {
+export function cn(...inputs: ClassValue[]): string {
   return twMerge(clsx(inputs));
 }
 
@@ -9,13 +10,13 @@ export const IS_DEV = process.env.NODE_ENV === "development";
 
 /**
  * Generate a completion key for a task based on its frequency and the current date.
- * @param period 'daily' | 'weekly' | 'monthly'
+ * @param period Period
  * @param taskId string
  * @param date Optional Date object (defaults to now)
  * @returns string completion key
  */
 export function generateCompletionKey(
-  period: "daily" | "weekly" | "monthly",
+  period: Period,
   taskId: string,
   date: Date = new Date()
 ): string {

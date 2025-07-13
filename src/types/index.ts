@@ -1,4 +1,4 @@
-export type Period = 'daily' | 'weekly' | 'monthly';
+export type Period = "daily" | "weekly" | "monthly";
 
 export interface Task {
   id: string;
@@ -18,3 +18,34 @@ export interface Member {
 export interface ArchivedTask extends Task {
   completedDate: Date;
 }
+
+export interface AddTaskRequest {
+  name: string;
+  score: number;
+  assigneeId: string;
+  period: Period;
+}
+
+export interface ConfirmCompletionRequest {
+  completionKey: string;
+}
+
+export interface InitiateCompletionRequest {
+  taskId: string;
+}
+
+export interface AppContextType {
+  members: Member[];
+  activeTasks: Task[];
+  archivedTasks: ArchivedTask[];
+  scoreAdjustments: Record<string, number>;
+  handleAddTask: (task: Task) => void;
+  handleToggleTask: (taskId: string) => void;
+  handleAdjustScore: (memberId: string, amount: number) => void;
+}
+
+export interface AppProviderProps {
+  children: React.ReactNode;
+}
+
+export type { Toast } from "@/hooks/use-toast";
