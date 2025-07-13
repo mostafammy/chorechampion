@@ -95,7 +95,7 @@ export function TaskList({ tasks, onToggleTask }: TaskListProps) {
             toast({
               title: t('taskCompleted'),
               description: t('taskCompletedSuccessfully') || 'Task completed successfully!',
-              variant: 'default',
+              variant: 'success',
             });
             if (IS_DEV) {
               console.log('Task completed:', taskId);

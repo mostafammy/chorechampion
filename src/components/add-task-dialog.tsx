@@ -20,6 +20,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { useTranslations } from 'next-intl';
+import { useToast } from '@/hooks/use-toast';
 
 interface AddTaskDialogProps {
   members: Member[];
@@ -30,6 +31,7 @@ export function AddTaskDialog({ members, onAddTask }: AddTaskDialogProps) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const t = useTranslations('AddTaskDialog');
+  const { toast } = useToast();
   
   const formSchema = z.object({
     name: z.string().min(2, { message: t('validation.taskName') }),
@@ -65,6 +67,11 @@ export function AddTaskDialog({ members, onAddTask }: AddTaskDialogProps) {
         });
         const task = await response.json();
         await Promise.resolve(onAddTask(task));
+        toast({
+          title: t('taskAdded'),
+          description: t('taskAddedSuccessfully') || 'Task added successfully!',
+          variant: 'success',
+        });
         reset();
         setOpen(false);
     }catch (errors){

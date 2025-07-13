@@ -33,7 +33,9 @@
       "score": "Score must be at least 1.",
       "assignee": "Please select an assignee.",
       "period": "Please select a period."
-    }
+    },
+    "taskAdded": "Task Added",
+    "taskAddedSuccessfully": "Task added successfully!"
   },
   "TaskList": {
     "noTasks": "No tasks for this period. Great job!",
