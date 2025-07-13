@@ -37,7 +37,16 @@
   },
   "TaskList": {
     "noTasks": "No tasks for this period. Great job!",
-    "undo": "Undo"
+    "undo": "Undo",
+    "taskCompleted": "Task Completed",
+    "taskCompletedSuccessfully": "Task completed successfully!",
+    "error": "Error",
+    "failedToGetCompletionKey": "Failed to get completion key.",
+    "failedToInitiateCompletion": "Failed to initiate completion.",
+    "taskCompletionFailed": "Task completion failed.",
+    "cancelled": "Cancelled",
+    "taskCompletionCancelled": "Task completion cancelled by user.",
+    "taskConfirmationFailed": "Task confirmation failed."
   },
   "ArchivePage": {
     "title": "Task Archive",

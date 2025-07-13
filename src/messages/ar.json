@@ -37,7 +37,16 @@
   },
   "TaskList": {
     "noTasks": "لا توجد مهام لهذه الفترة. عمل رائع!",
-    "undo": "تراجع"
+    "undo": "تراجع",
+    "taskCompleted": "تم إكمال المهمة",
+    "taskCompletedSuccessfully": "تم إكمال المهمة بنجاح!",
+    "error": "خطأ",
+    "failedToGetCompletionKey": "فشل في الحصول على مفتاح الإكمال.",
+    "failedToInitiateCompletion": "فشل في بدء الإكمال.",
+    "taskCompletionFailed": "فشل في إكمال المهمة.",
+    "cancelled": "تم الإلغاء",
+    "taskCompletionCancelled": "تم إلغاء إكمال المهمة من قبل المستخدم.",
+    "taskConfirmationFailed": "فشل في تأكيد إكمال المهمة."
   },
   "ArchivePage": {
     "title": "أرشيف المهام",

@@ -8,6 +8,8 @@ import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Undo2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { useToast } from '@/hooks/use-toast';
+import { IS_DEV } from '@/lib/utils';
 
 interface TaskListProps {
   tasks: Task[];
@@ -17,28 +19,130 @@ interface TaskListProps {
 export function TaskList({ tasks, onToggleTask }: TaskListProps) {
   const [pendingRemoval, setPendingRemoval] = useState<string[]>([]);
   const timeoutsRef = useRef<Record<string, NodeJS.Timeout>>({});
+  const abortControllersRef = useRef<Record<string, AbortController>>({});
+  const completionKeysRef = useRef<Record<string, string>>({});
   const t = useTranslations('TaskList');
+  const { toast } = useToast();
 
   // Cleanup timeouts on unmount
   useEffect(() => {
     return () => {
+      // Clear all timeouts
       Object.values(timeoutsRef.current).forEach(clearTimeout);
+      // Abort all pending requests
+      Object.values(abortControllersRef.current).forEach(controller => controller.abort());
+      // Optionally clear completion keys
+      completionKeysRef.current = {};
     };
   }, []);
 
-  const handleToggle = (taskId: string) => {
+  const handleToggle = async (taskId: string) => {
     if (timeoutsRef.current[taskId]) return;
 
     setPendingRemoval((prev) => [...prev, taskId]);
 
+    // Phase 1: Get completion key
+    let completionKey: string | undefined;
+    try {
+      const res = await fetch('/api/InitiateCompletion', {
+        method: 'POST',
+        body: JSON.stringify({ taskId }),
+        headers: { 'Content-Type': 'application/json' },
+      });
+      const data = await res.json();
+      completionKey = data.completionKey;
+      if (!completionKey) {
+        toast({
+          title: t('error'),
+          description: t('failedToGetCompletionKey') || 'Failed to get completion key',
+          variant: 'destructive',
+        });
+        if (IS_DEV) {
+          console.error('Failed to get completion key for task', taskId);
+        }
+        setPendingRemoval((prev) => prev.filter((id) => id !== taskId));
+        return;
+      }
+      completionKeysRef.current[taskId] = completionKey;
+    } catch (err) {
+      toast({
+        title: t('error'),
+        description: t('failedToInitiateCompletion') || 'Failed to initiate completion',
+        variant: 'destructive',
+      });
+      if (IS_DEV) {
+        console.error('Failed to initiate completion for task', taskId, err);
+      }
+      setPendingRemoval((prev) => prev.filter((id) => id !== taskId));
+      return;
+    }
+
+    // Set up abort logic
+    let abortController = new AbortController();
+    abortControllersRef.current[taskId] = abortController;
+
+    // Phase 2: Wait ~4800ms then send confirm request
     timeoutsRef.current[taskId] = setTimeout(() => {
+      fetch('/api/ConfirmCompletion', {
+        method: 'POST',
+        signal: abortController.signal, // Hook into abort logic
+        body: JSON.stringify({ completionKey: completionKeysRef.current[taskId] }),
+        headers: { 'Content-Type': 'application/json' },
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            toast({
+              title: t('taskCompleted'),
+              description: t('taskCompletedSuccessfully') || 'Task completed successfully!',
+              variant: 'default',
+            });
+            if (IS_DEV) {
+              console.log('Task completed:', taskId);
+            }
+          } else {
+            toast({
+              title: t('error'),
+              description: t('taskCompletionFailed') || 'Task completion failed.',
+              variant: 'destructive',
+            });
+            if (IS_DEV) {
+              console.error('Task completion failed:', taskId, data);
+            }
+          }
+        })
+        .catch(err => {
+          if (err.name === 'AbortError') {
+            toast({
+              title: t('cancelled'),
+              description: t('taskCompletionCancelled') || 'Task completion cancelled by user.',
+              variant: 'destructive',
+            });
+            if (IS_DEV) {
+              console.log('Task completion cancelled by user:', taskId);
+            }
+          } else {
+            toast({
+              title: t('error'),
+              description: t('taskConfirmationFailed') || 'Task confirmation failed.',
+              variant: 'destructive',
+            });
+            if (IS_DEV) {
+              console.error('Task confirmation failed:', taskId, err);
+            }
+          }
+        });
+
       onToggleTask(taskId);
       delete timeoutsRef.current[taskId];
-    }, 5000); // 5-second delay
+      delete abortControllersRef.current[taskId];
+    }, 4800); // Fixed delay for Phase 2
   };
   
   const handleUndo = (taskId: string) => {
     if (timeoutsRef.current[taskId]) {
+      abortControllersRef.current[taskId]?.abort(); // 💥 Instantly cancel the Phase 2 call
+      delete abortControllersRef.current[taskId];
       clearTimeout(timeoutsRef.current[taskId]);
       delete timeoutsRef.current[taskId];
       setPendingRemoval((prev) => prev.filter((id) => id !== taskId));
