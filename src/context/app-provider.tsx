@@ -8,8 +8,8 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export function AppProvider({ children }: AppProviderProps) {
   const [members] = useState<Member[]>(initialMembers);
-  const [activeTasks, setActiveTasks] = useState<Task[]>(initialActiveTasks);
-  const [archivedTasks, setArchivedTasks] = useState<ArchivedTask[]>(initialArchivedTasks);
+  const [activeTasks, setActiveTasks] = useState<Task[]>([]); // initialActiveTasks
+  const [archivedTasks, setArchivedTasks] = useState<ArchivedTask[]>([]); // initialArchivedTasks
   const [scoreAdjustments, setScoreAdjustments] = useState<Record<string, number>>({});
 
   // Fetch tasks from API on mount and update activeTasks

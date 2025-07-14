@@ -92,12 +92,6 @@ export async function GET(request: Request) {
       if (IS_DEV) {
         console.error("Some tasks had invalid or missing properties.");
       }
-      return new Response(
-        JSON.stringify({
-          error: "Some tasks had invalid or missing properties.",
-        }),
-        { status: 400 }
-      );
     }
 
     // Check completion key for each task and update completed property if found
