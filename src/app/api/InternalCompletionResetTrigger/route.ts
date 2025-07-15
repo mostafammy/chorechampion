@@ -7,7 +7,6 @@ export async function POST(request: Request) {
 
     // Verify the request is from a Vercel CRON job
 
-
     if (cronHeader !== "true") {
       return new NextResponse("Unauthorized - Not a Vercel CRON job", {
         status: 401,
@@ -37,4 +36,8 @@ export async function POST(request: Request) {
     return new NextResponse("Internal Server Error", { status: 500 });
   } finally {
   }
+}
+
+export async function GET(request: Request) {
+  return POST(request);
 }
