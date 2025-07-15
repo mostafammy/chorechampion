@@ -7,11 +7,11 @@ export async function POST(request: Request) {
 
     // Verify the request is from a Vercel CRON job
 
-    if (cronHeader !== "true") {
-      return new NextResponse("Unauthorized - Not a Vercel CRON job", {
-        status: 401,
-      });
-    }
+    // if (request.method === "POST" && cronHeader !== "true") {
+    //   return new NextResponse("Unauthorized - Not a Vercel CRON job", {
+    //     status: 401,
+    //   });
+    // }
 
     // Call internal logic
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
