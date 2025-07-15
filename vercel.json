@@ -1,16 +1,9 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "version": 2,
   "crons": [
     {
       "path": "/api/InternalCompletionResetTrigger",
       "schedule": "0 0 1 */2 *"
     }
-  ],
-  "routes": [],
-  "build": {
-    "env": {
-      "RESET_SECRET": "@RESET_SECRET"
-    }
-  }
+  ]
 }
