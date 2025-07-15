@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { scanCompletionTasks } from "@/lib/utils";
+import {baseUrl, scanCompletionTasks} from "@/lib/utils";
 import { getRedis } from "@/lib/redis";
 import { IS_DEV } from "@/lib/utils";
 
@@ -57,15 +57,11 @@ export async function POST(request: Request) {
     );
     // End The Reset Logic Here
 
-    const baseUrl =
-      process.env.NEXT_PUBLIC_VERCEL_URL ||
-      process.env.NEXT_PUBLIC_BASE_URL ||
-      process.env.NEXT_PUBLIC_VERCEL_ENV ||
-      "http://localhost:3000";
+
 
     // Call ConfirmResetCompletion endpoint to delete the keys
     const confirmResetRes = await fetch(
-      `https://${baseUrl}/api/ConfirmResetCompletion`,
+      `${baseUrl}/api/ConfirmResetCompletion`,
       {
         method: "POST",
         headers: {

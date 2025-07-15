@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { IS_DEV } from "@/lib/utils";
+import {baseUrl, IS_DEV} from "@/lib/utils";
 
 export async function POST(request: Request) {
   try {
@@ -14,16 +14,12 @@ export async function POST(request: Request) {
     // }
 
     // Call internal logic
-    const baseUrl =
-      process.env.NEXT_PUBLIC_VERCEL_URL ||
-      process.env.NEXT_PUBLIC_BASE_URL ||
-      process.env.NEXT_PUBLIC_VERCEL_ENV ||
-      "http://localhost:3000";
+
 
     console.log("baseUrl", baseUrl);
 
     const reset = await fetch(
-      `https://${baseUrl}/api/ResetCompletionScanning`,
+      `${baseUrl}/api/ResetCompletionScanning`,
       {
         method: "POST",
         headers: {

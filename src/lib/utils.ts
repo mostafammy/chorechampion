@@ -334,3 +334,12 @@ export function examples() {
 
   console.log(`Keys in July 2025: ${keysInRange.length}`);
 }
+
+
+export const baseUrl = process.env.NEXT_PUBLIC_VERCEL_URL
+      ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
+      : process.env.NEXT_PUBLIC_BASE_URL
+      ? `https://${process.env.NEXT_PUBLIC_BASE_URL}`
+      : process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}`
+      : "http://localhost:3000";
