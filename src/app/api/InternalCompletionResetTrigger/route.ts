@@ -1,32 +1,29 @@
 import { NextResponse } from "next/server";
-import {baseUrl, IS_DEV} from "@/lib/utils";
+import { baseUrl, IS_DEV } from "@/lib/utils";
 
 export async function POST(request: Request) {
   try {
-    const cronHeader = request.headers.get("x-vercel-cron");
-
     // Verify the request is from a Vercel CRON job
 
-    // if (request.method === "POST" && cronHeader !== "true") {
-    //   return new NextResponse("Unauthorized - Not a Vercel CRON job", {
-    //     status: 401,
-    //   });
-    // }
+    if (!IS_DEV) {
+      const authHeader = request.headers.get("authorization");
+      if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
+        return new Response("Unauthorized", {
+          status: 401,
+        });
+      }
+    }
 
     // Call internal logic
 
-
     console.log("baseUrl", baseUrl);
 
-    const reset = await fetch(
-      `${baseUrl}/api/ResetCompletionScanning`,
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${process.env.RESET_SECRET}`,
-        },
-      }
-    );
+    const reset = await fetch(`${baseUrl}/api/ResetCompletionScanning`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${process.env.RESET_SECRET}`,
+      },
+    });
 
     const result = await reset.text();
 
