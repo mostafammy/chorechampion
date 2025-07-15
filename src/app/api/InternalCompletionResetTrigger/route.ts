@@ -14,13 +14,23 @@ export async function POST(request: Request) {
     // }
 
     // Call internal logic
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-    const reset = await fetch(`/api/ResetCompletionScanning`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${process.env.RESET_SECRET}`,
-      },
-    });
+    const baseUrl =
+      process.env.NEXT_PUBLIC_VERCEL_URL ||
+      process.env.NEXT_PUBLIC_BASE_URL ||
+      process.env.NEXT_PUBLIC_VERCEL_ENV ||
+      "http://localhost:3000";
+
+    console.log("baseUrl", baseUrl);
+
+    const reset = await fetch(
+      `https://${baseUrl}/api/ResetCompletionScanning`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${process.env.RESET_SECRET}`,
+        },
+      }
+    );
 
     const result = await reset.text();
 

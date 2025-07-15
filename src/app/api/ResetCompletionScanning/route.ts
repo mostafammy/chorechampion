@@ -57,13 +57,22 @@ export async function POST(request: Request) {
     );
     // End The Reset Logic Here
 
+    const baseUrl =
+      process.env.NEXT_PUBLIC_VERCEL_URL ||
+      process.env.NEXT_PUBLIC_BASE_URL ||
+      process.env.NEXT_PUBLIC_VERCEL_ENV ||
+      "http://localhost:3000";
+
     // Call ConfirmResetCompletion endpoint to delete the keys
-    const confirmResetRes = await fetch(`/api/ConfirmResetCompletion`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${process.env.RESET_SECRET}`,
-      },
-    });
+    const confirmResetRes = await fetch(
+      `https://${baseUrl}/api/ConfirmResetCompletion`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${process.env.RESET_SECRET}`,
+        },
+      }
+    );
     const confirmResetData = await confirmResetRes.json();
 
     if (IS_DEV) {
