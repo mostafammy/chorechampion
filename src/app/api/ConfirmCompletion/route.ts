@@ -51,7 +51,10 @@ export async function POST(request: Request) {
     const { completionKey } = body;
 
     // Finalize the writing of the completion key
-    await redis.set(completionKey, "true");
+    await redis.set(completionKey, "true" , { ex: 60 * 60 * 24 * 90 }); // 90 days expiration
+
+    const ttl = await redis.ttl(completionKey); // Should be 7776000
+    console.log("TTL:", ttl);
 
     return new Response(JSON.stringify({ success: true }), {
       status: 200,

@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "cron": [
+    {
+      "path": "/api/InternalCompletionResetTrigger",
+      "schedule": "0 0 1 */2 *",
+      "enabled": true
+    }
+  ],
+  "routes": [],
+  "build": {
+    "env": {
+      "RESET_SECRET": "@RESET_SECRET"
+    }
+  }
+}
