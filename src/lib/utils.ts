@@ -382,6 +382,15 @@ export async function fetchAdjustScoreApi({
       headers: { "Content-Type": "application/json" },
     });
 
+    // Handle 204 No Content
+    if (res.status === 204) {
+      return {
+        success: false,
+        error:
+          "No content returned from server (204). This may indicate a server error.",
+      };
+    }
+
     const data = await res.json().catch(() => undefined);
 
     if (!res.ok) {
