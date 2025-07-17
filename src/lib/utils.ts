@@ -2,6 +2,7 @@ import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import type { Period } from "@/types";
 import { Redis } from "@upstash/redis";
+import type { Task } from "@/types";
 
 export function cn(...inputs: ClassValue[]): string {
   return twMerge(clsx(inputs));
@@ -64,25 +65,6 @@ export async function scanCompletionTasks(
   return keys;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 interface ParsedCompletionKey {
   period: Period;
   taskId: string;
@@ -119,7 +101,7 @@ export function parseCompletionKey(key: string): ParseResult {
       datePart: null,
       date: null,
       isValid: false,
-      error: `Invalid key format: ${key}`
+      error: `Invalid key format: ${key}`,
     };
   }
 
@@ -133,7 +115,7 @@ export function parseCompletionKey(key: string): ParseResult {
       taskId,
       datePart,
       date,
-      isValid: true
+      isValid: true,
     };
   } catch (error) {
     return {
@@ -142,7 +124,7 @@ export function parseCompletionKey(key: string): ParseResult {
       datePart: null,
       date: null,
       isValid: false,
-      error: `Failed to parse date part "${datePart}" for period "${period}": ${error}`
+      error: `Failed to parse date part "${datePart}" for period "${period}": ${error}`,
     };
   }
 }
@@ -172,10 +154,12 @@ function parseDatePart(period: Period, datePart: string): Date {
 function parseDailyDate(datePart: string): Date {
   const datePattern = /^\d{4}-\d{2}-\d{2}$/;
   if (!datePattern.test(datePart)) {
-    throw new Error(`Invalid daily date format: ${datePart}. Expected YYYY-MM-DD`);
+    throw new Error(
+      `Invalid daily date format: ${datePart}. Expected YYYY-MM-DD`
+    );
   }
 
-  const date = new Date(datePart + 'T00:00:00.000Z');
+  const date = new Date(datePart + "T00:00:00.000Z");
   if (isNaN(date.getTime())) {
     throw new Error(`Invalid date: ${datePart}`);
   }
@@ -191,7 +175,9 @@ function parseWeeklyDate(datePart: string): Date {
   const match = datePart.match(weekPattern);
 
   if (!match) {
-    throw new Error(`Invalid weekly date format: ${datePart}. Expected YYYY-WNN`);
+    throw new Error(
+      `Invalid weekly date format: ${datePart}. Expected YYYY-WNN`
+    );
   }
 
   const [, yearStr, weekStr] = match;
@@ -205,8 +191,12 @@ function parseWeeklyDate(datePart: string): Date {
   // Calculate the date of the Monday of the given ISO week
   const jan4 = new Date(Date.UTC(year, 0, 4));
   const jan4DayOfWeek = jan4.getUTCDay() || 7; // Convert Sunday (0) to 7
-  const mondayOfWeek1 = new Date(jan4.getTime() - (jan4DayOfWeek - 1) * 86400000);
-  const mondayOfTargetWeek = new Date(mondayOfWeek1.getTime() + (week - 1) * 7 * 86400000);
+  const mondayOfWeek1 = new Date(
+    jan4.getTime() - (jan4DayOfWeek - 1) * 86400000
+  );
+  const mondayOfTargetWeek = new Date(
+    mondayOfWeek1.getTime() + (week - 1) * 7 * 86400000
+  );
 
   return mondayOfTargetWeek;
 }
@@ -219,7 +209,9 @@ function parseMonthlyDate(datePart: string): Date {
   const match = datePart.match(monthPattern);
 
   if (!match) {
-    throw new Error(`Invalid monthly date format: ${datePart}. Expected YYYY-MM`);
+    throw new Error(
+      `Invalid monthly date format: ${datePart}. Expected YYYY-MM`
+    );
   }
 
   const [, yearStr, monthStr] = match;
@@ -248,10 +240,12 @@ export function parseCompletionKeys(keys: string[]): ParseResult[] {
  * @param keys - Array of Redis keys to parse
  * @returns Array of valid parsed keys only
  */
-export function parseValidCompletionKeys(keys: string[]): ParsedCompletionKey[] {
+export function parseValidCompletionKeys(
+  keys: string[]
+): ParsedCompletionKey[] {
   return keys
-      .map(parseCompletionKey)
-      .filter((result): result is ParsedCompletionKey => result.isValid);
+    .map(parseCompletionKey)
+    .filter((result): result is ParsedCompletionKey => result.isValid);
 }
 
 /**
@@ -259,7 +253,9 @@ export function parseValidCompletionKeys(keys: string[]): ParsedCompletionKey[] 
  * @param keys - Array of Redis keys to parse
  * @returns Object with keys grouped by period
  */
-export function groupKeysByPeriod(keys: string[]): Record<Period, ParsedCompletionKey[]> {
+export function groupKeysByPeriod(
+  keys: string[]
+): Record<Period, ParsedCompletionKey[]> {
   const validKeys = parseValidCompletionKeys(keys);
 
   return validKeys.reduce((groups, key) => {
@@ -279,13 +275,13 @@ export function groupKeysByPeriod(keys: string[]): Record<Period, ParsedCompleti
  * @returns Array of parsed keys within the date range
  */
 export function getKeysInDateRange(
-    keys: string[],
-    startDate: Date,
-    endDate: Date
+  keys: string[],
+  startDate: Date,
+  endDate: Date
 ): ParsedCompletionKey[] {
   const validKeys = parseValidCompletionKeys(keys);
 
-  return validKeys.filter(key => {
+  return validKeys.filter((key) => {
     const keyDate = key.date;
     return keyDate >= startDate && keyDate <= endDate;
   });
@@ -313,33 +309,51 @@ export function examples() {
     "task:completion:daily:task-L-e4UdbrSM:2025-07-14",
     "task:completion:weekly:task-ABC123:2025-W28",
     "task:completion:monthly:task-XYZ789:2025-07",
-    "invalid:key:format"
+    "invalid:key:format",
   ];
 
   const results = parseCompletionKeys(keys);
-  const validResults = results.filter(r => r.isValid);
-  const invalidResults = results.filter(r => !r.isValid);
+  const validResults = results.filter((r) => r.isValid);
+  const invalidResults = results.filter((r) => !r.isValid);
 
   console.log(`Valid keys: ${validResults.length}`);
   console.log(`Invalid keys: ${invalidResults.length}`);
 
   // Example 3: Group by period
   const groupedKeys = groupKeysByPeriod(keys);
-  console.log('Keys by period:', groupedKeys);
+  console.log("Keys by period:", groupedKeys);
 
   // Example 4: Get keys in date range
-  const startDate = new Date('2025-07-01');
-  const endDate = new Date('2025-07-31');
+  const startDate = new Date("2025-07-01");
+  const endDate = new Date("2025-07-31");
   const keysInRange = getKeysInDateRange(keys, startDate, endDate);
 
   console.log(`Keys in July 2025: ${keysInRange.length}`);
 }
 
+export async function SSRfetchAllTasksFromApi(): Promise<Task[]> {
+  try {
+    const isServer = typeof window === "undefined";
+    const baseUrl = isServer
+        ? process.env.VERCEL_URL
+            ? `https://${process.env.VERCEL_URL}`
+            : process.env.NEXT_PUBLIC_VERCEL_URL
+                ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
+                : process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
+        : "";
+    const res = await fetch(`${baseUrl}/api/GetAllTasks`);
+    if (!res.ok) return [];
+    return (await res.json()) as Task[];
+  } catch (e: unknown) {
+    console.error("Failed to fetch tasks from API:", e);
+    return [];
+  }
+}
 
 export const baseUrl = process.env.NEXT_PUBLIC_VERCEL_URL
-      ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
-      : process.env.NEXT_PUBLIC_BASE_URL
-      ? `https://${process.env.NEXT_PUBLIC_BASE_URL}`
-      : process.env.VERCEL_URL
-      ? `https://${process.env.VERCEL_URL}`
-      : "http://localhost:3000";
+  ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
+  : process.env.NEXT_PUBLIC_BASE_URL
+  ? `https://${process.env.NEXT_PUBLIC_BASE_URL}`
+  : process.env.VERCEL_URL
+  ? `https://${process.env.VERCEL_URL}`
+  : "http://localhost:3000";

@@ -1,31 +1,27 @@
 'use client';
 
 import { createContext, useContext, useState, useMemo, ReactNode, useEffect } from 'react';
-import type { Member, Task, ArchivedTask, Period, AppContextType, AppProviderProps } from '@/types';
-import { initialMembers, initialActiveTasks, initialArchivedTasks, fetchAllTasksFromApi } from '@/data/seed';
+import type { Member, Task, ArchivedTask, Period, AppContextType, AppProviderProps as BaseAppProviderProps } from '@/types';
+import { initialMembers } from '@/data/seed';
+
+interface AppProviderProps extends BaseAppProviderProps {
+  initialActiveTasks?: Task[];
+  initialArchivedTasks?: ArchivedTask[];
+}
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
-export function AppProvider({ children }: AppProviderProps) {
+export function AppProvider({
+  children,
+  initialActiveTasks = [],
+  initialArchivedTasks = [],
+}: AppProviderProps) {
   const [members] = useState<Member[]>(initialMembers);
-  const [activeTasks, setActiveTasks] = useState<Task[]>([]); // initialActiveTasks
-  const [archivedTasks, setArchivedTasks] = useState<ArchivedTask[]>([]); // initialArchivedTasks
+  const [activeTasks, setActiveTasks] = useState<Task[]>(initialActiveTasks);
+  const [archivedTasks, setArchivedTasks] = useState<ArchivedTask[]>(initialArchivedTasks);
   const [scoreAdjustments, setScoreAdjustments] = useState<Record<string, number>>({});
 
-  // Fetch tasks from API on mount and update activeTasks
-  useEffect(() => {
-    fetchAllTasksFromApi().then((tasks: Task[]) => {
-      if (Array.isArray(tasks) && tasks.length > 0) {
-        setActiveTasks(tasks.filter(t => !t.completed));
-        setArchivedTasks(
-          tasks.filter(t => t.completed).map(t => ({
-            ...t,
-            completedDate: new Date(), // or use t.completedDate if available from backend
-          }))
-        );
-      }
-    });
-  }, []);
+  // Remove the useEffect that fetches tasks on mount
 
   useEffect(() => {
     console.log('Active tasks updated:', activeTasks);
