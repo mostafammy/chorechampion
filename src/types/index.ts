@@ -9,6 +9,31 @@ export interface Task {
   assigneeId: string;
 }
 
+export interface ScoreSummary {
+  total: number;
+  adjustment: number;
+  completed: number;
+  last_adjusted_at?: string;
+}
+
+export interface ScoreLogEntry {
+  delta: number;
+  reason: string;
+  source: 'manual' | 'task' | 'bonus' | 'admin';
+  userId: string;
+  taskId?: string;
+  at: string; // ISO date string
+}
+
+
+export interface AdjustScoreInput {
+  userId: string;
+  delta: number;
+  reason?: string;
+  source: "manual" | "task" | "bonus" | "admin";
+  taskId?: string | null;
+}
+
 export interface Member {
   id: string;
   name: string;

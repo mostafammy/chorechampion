@@ -1,6 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
-import type { Period } from "@/types";
+import { AdjustScoreInput, Period } from "@/types";
 import { Redis } from "@upstash/redis";
 import type { Task } from "@/types";
 
@@ -335,12 +335,12 @@ export async function SSRfetchAllTasksFromApi(): Promise<Task[]> {
   try {
     const isServer = typeof window === "undefined";
     const baseUrl = isServer
-        ? process.env.VERCEL_URL
-            ? `https://${process.env.VERCEL_URL}`
-            : process.env.NEXT_PUBLIC_VERCEL_URL
-                ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
-                : process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
-        : "";
+      ? process.env.VERCEL_URL
+        ? `https://${process.env.VERCEL_URL}`
+        : process.env.NEXT_PUBLIC_VERCEL_URL
+        ? `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`
+        : process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000"
+      : "";
     const res = await fetch(`${baseUrl}/api/GetAllTasks`);
     if (!res.ok) return [];
     return (await res.json()) as Task[];
@@ -357,3 +357,44 @@ export const baseUrl = process.env.NEXT_PUBLIC_VERCEL_URL
   : process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
   : "http://localhost:3000";
+
+export async function fetchAdjustScoreApi({
+  userId,
+  delta,
+  reason = "",
+  source = "manual",
+  taskId = null,
+}: AdjustScoreInput): Promise<{
+  success: boolean;
+  data?: any;
+  error?: string;
+}> {
+  try {
+    const res = await fetch(`${baseUrl}/api/AdjustScore`, {
+      method: "POST",
+      body: JSON.stringify({
+        userId,
+        delta,
+        reason,
+        source,
+        taskId,
+      }),
+      headers: { "Content-Type": "application/json" },
+    });
+
+    const data = await res.json().catch(() => undefined);
+
+    if (!res.ok) {
+      return {
+        success: false,
+        error: data?.error || `Request failed with status ${res.status}`,
+      };
+    }
+    return { success: true, data };
+  } catch (error: any) {
+    return {
+      success: false,
+      error: error?.message || "Network error or unexpected error occurred.",
+    };
+  }
+}
