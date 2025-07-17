@@ -17,6 +17,12 @@ export function AppProvider({ children }: AppProviderProps) {
     fetchAllTasksFromApi().then((tasks: Task[]) => {
       if (Array.isArray(tasks) && tasks.length > 0) {
         setActiveTasks(tasks.filter(t => !t.completed));
+        setArchivedTasks(
+          tasks.filter(t => t.completed).map(t => ({
+            ...t,
+            completedDate: new Date(), // or use t.completedDate if available from backend
+          }))
+        );
       }
     });
   }, []);
