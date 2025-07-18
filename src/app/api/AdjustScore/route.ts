@@ -59,14 +59,18 @@ export async function POST(request: Request) {
     };
 
     console.log("About to update Redis");
-    await redis
-      .multi()
-      .hincrby(scoreKey, "adjustment", delta)
-      .hincrby(scoreKey, "total", delta)
+    const multi = redis.multi();
+    if (source === "task") {
+      multi.hincrby(scoreKey, "total", delta);
+    } else {
+      multi.hincrby(scoreKey, "adjustment", delta);
+      multi.hincrby(scoreKey, "total", delta);
+    }
+    multi
       .hset(scoreKey, { last_adjusted_at: now })
       .lpush(logKey, JSON.stringify(logEntry))
-      .ltrim(logKey, 0, 49)
-      .exec();
+      .ltrim(logKey, 0, 49);
+    await multi.exec();
     console.log("Redis updated");
 
     return withCors(

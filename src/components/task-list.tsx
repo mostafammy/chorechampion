@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Undo2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useToast } from '@/hooks/use-toast';
-import { IS_DEV } from '@/lib/utils';
+import {fetchAdjustScoreApi, IS_DEV} from '@/lib/utils';
 
 interface TaskListProps {
   tasks: Task[];
@@ -24,6 +24,7 @@ export function TaskList({ tasks, onToggleTask }: TaskListProps) {
   const t = useTranslations('TaskList');
   const { toast } = useToast();
 
+
   // Cleanup timeouts on unmount
   useEffect(() => {
     return () => {
@@ -36,7 +37,7 @@ export function TaskList({ tasks, onToggleTask }: TaskListProps) {
     };
   }, []);
 
-  const handleToggle = async (taskId: string) => {
+  const handleToggle = async (taskId: string,taskData:Task) => {
     if (timeoutsRef.current[taskId]) return;
 
     setPendingRemoval((prev) => [...prev, taskId]);
@@ -100,6 +101,8 @@ export function TaskList({ tasks, onToggleTask }: TaskListProps) {
             if (IS_DEV) {
               console.log('Task completed:', taskId);
             }
+
+            fetchAdjustScoreApi({userId: taskData.assigneeId, delta: taskData.score, source: 'task', taskId: taskId});
           } else {
             toast({
               title: t('error'),
@@ -196,7 +199,7 @@ export function TaskList({ tasks, onToggleTask }: TaskListProps) {
                     <Checkbox
                       id={task.id}
                       checked={task.completed}
-                      onCheckedChange={() => handleToggle(task.id)}
+                      onCheckedChange={() => handleToggle(task.id, task)}
                       aria-label={`Mark task ${task.name} as ${task.completed ? 'incomplete' : 'complete'}`}
                     />
                     <Label
