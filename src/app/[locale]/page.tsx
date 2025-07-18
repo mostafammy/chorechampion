@@ -20,14 +20,16 @@ export default async function Page() {
       completedDate: new Date(),
     }));
 
-    // This is in your page.tsx (server component)
+
 const members = initialMembers; // or however you get your members
 
 const adjustments: Record<string, number> = {};
 
 await Promise.all(
   members.map(async (member) => {
-    const res = await fetch(`${baseUrl}/api/score/${member.id}`, { cache: "no-store" });
+    const res = await fetch(`${baseUrl}/api/score/${member.id}`, {
+        method: "GET",
+        cache: "default" });
     if (res.ok) {
       const data = await res.json();
       adjustments[member.id] = data.adjustment ?? 0;
