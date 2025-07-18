@@ -1,6 +1,20 @@
 import { getRedis } from "@/lib/redis";
 import { AdjustScoreInput } from "@/types";
 
+const allowedOrigin = "https://chorechampion.vercel.app"; // or "*" for all origins
+
+function withCors(response: Response) {
+  response.headers.set("Access-Control-Allow-Origin", allowedOrigin);
+  response.headers.set("Access-Control-Allow-Methods", "POST, OPTIONS");
+  response.headers.set("Access-Control-Allow-Headers", "Content-Type");
+  return response;
+}
+
+export async function OPTIONS() {
+  // Respond to preflight request
+  return withCors(new Response(null, { status: 204 }));
+}
+
 export async function POST(request: Request) {
   try {
     console.log("AdjustScore API called");
@@ -10,9 +24,14 @@ export async function POST(request: Request) {
     // Basic validation
     if (!body.userId || typeof body.delta !== "number" || !body.source) {
       console.log("Validation failed", body);
-      return new Response(
-        JSON.stringify({ success: false, error: "Missing or invalid fields" }),
-        { status: 400 }
+      return withCors(
+        new Response(
+          JSON.stringify({
+            success: false,
+            error: "Missing or invalid fields",
+          }),
+          { status: 400 }
+        )
       );
     }
 
@@ -50,15 +69,19 @@ export async function POST(request: Request) {
       .exec();
     console.log("Redis updated");
 
-    return new Response(JSON.stringify({ success: true }), { status: 200 });
+    return withCors(
+      new Response(JSON.stringify({ success: true }), { status: 200 })
+    );
   } catch (error: any) {
     console.error("AdjustScore error:", error);
-    return new Response(
-      JSON.stringify({
-        success: false,
-        error: error?.message || "Internal server error",
-      }),
-      { status: 500 }
+    return withCors(
+      new Response(
+        JSON.stringify({
+          success: false,
+          error: error?.message || "Internal server error",
+        }),
+        { status: 500 }
+      )
     );
   }
 }
