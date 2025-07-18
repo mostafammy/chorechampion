@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getRedis } from "@/lib/redis";
-import { IS_DEV } from "@/lib/utils";
+import { baseUrl, IS_DEV } from "@/lib/utils";
+import { initialMembers } from "@/data/seed";
 
 export async function POST(request: Request) {
   try {
@@ -71,6 +72,23 @@ export async function POST(request: Request) {
         `[ConfirmResetCompletion] Deleted ${keys.length} completion keys.`
       );
     }
+
+    const members = initialMembers; // or however you get your members
+
+    await Promise.all(
+      members.map(async (member) => {
+        const scoreKey = `user:${member.id}:score`;
+        // Option 1: Reset fields to zero
+        await redis.hset(scoreKey, {
+          adjustment: 0,
+          total: 0,
+          last_adjusted_at: new Date().toISOString(),
+        });
+
+        // Option 2: To delete the entire score hash, use:
+        // await redis.del(scoreKey);
+      })
+    );
 
     return new NextResponse(
       JSON.stringify({
