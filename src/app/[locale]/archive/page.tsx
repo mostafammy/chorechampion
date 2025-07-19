@@ -1,27 +1,19 @@
-'use client';
-
-import { ArchiveTable } from "@/components/archive-table";
 import { Header } from "@/components/header";
-import { useAppContext } from '@/context/app-provider';
-import { useTranslations } from 'next-intl';
 import '@/app/globals.css';
+import ArchiveMain from "@/components/archive-main";
 
 
-export default function ArchivePage() {
-  const { archivedTasks, members } = useAppContext();
-  const t = useTranslations('ArchivePage');
+
+export default async function ArchivePage() {
+
+
+
 
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
       <main className="flex-1 p-4 sm:p-6 md:p-8">
-        <div className="container mx-auto">
-          <h1 className="text-4xl font-bold font-headline mb-6">{t('title')}</h1>
-          <p className="text-muted-foreground mb-8">
-            {t('description')}
-          </p>
-          <ArchiveTable archivedTasks={archivedTasks} members={members} />
-        </div>
+        <ArchiveMain/>
       </main>
     </div>
   );
