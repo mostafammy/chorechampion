@@ -69,5 +69,54 @@
   "Layout": {
     "title": "بطل الأعمال",
     "description": "إدارة الأعمال المنزلية بسهولة وقليل من المرح."
+  },
+  "LoginForm": {
+    "welcomeBack": "مرحبًا بعودتك",
+    "loginWithAppleOrGoogle": "سجّل الدخول باستخدام حساب Apple أو Google",
+    "loginWithApple": "تسجيل الدخول باستخدام Apple",
+    "loginWithGoogle": "تسجيل الدخول باستخدام Google",
+    "orContinueWith": "أو تابع باستخدام",
+    "email": "البريد الإلكتروني",
+    "emailPlaceholder": "m@example.com",
+    "password": "كلمة المرور",
+    "forgotPassword": "هل نسيت كلمة المرور؟",
+    "login": "تسجيل الدخول",
+    "noAccount": "ليس لديك حساب؟",
+    "signUp": "سجّل الآن",
+    "termsAgreement1": "بالنقر على متابعة، أنت توافق على",
+    "termsOfService": "شروط الخدمة",
+    "and": "و",
+    "privacyPolicy": "سياسة الخصوصية",
+    "loginSuccessTitle": "تم تسجيل الدخول بنجاح!",
+    "loginSuccessDesc": "مرحبًا بعودتك!",
+    "loginErrorTitle": "فشل تسجيل الدخول",
+    "loginErrorDesc": "البريد الإلكتروني أو كلمة المرور غير صحيحة.",
+    "loggingIn": "جاري تسجيل الدخول..."
+  },
+  "LoginPage": {
+    "brandName": "بطل الأعمال",
+    "loginTitle": "تسجيل الدخول – بطل الأعمال"
+  },
+  "SignupForm": {
+    "createAccount": "إنشاء حساب",
+    "joinPlatform": "انضم إلى منصتنا اليوم!",
+    "fullName": "الاسم الكامل",
+    "fullNamePlaceholder": "محمد أحمد",
+    "email": "البريد الإلكتروني",
+    "emailPlaceholder": "example@email.com",
+    "password": "كلمة المرور",
+    "passwordPlaceholder": "••••••••",
+    "signUp": "سجّل الآن",
+    "alreadyHaveAccount": "هل لديك حساب بالفعل؟",
+    "logIn": "تسجيل الدخول",
+    "signupTitle": "إنشاء حساب – بطل الأعمال",
+    "signupWithApple": "سجّل باستخدام Apple",
+    "signupWithGoogle": "سجّل باستخدام Google",
+    "orContinueWith": "أو تابع باستخدام",
+    "signupSuccessTitle": "تم التسجيل بنجاح!",
+    "signupSuccessDesc": "يمكنك الآن تسجيل الدخول.",
+    "signupErrorTitle": "فشل التسجيل",
+    "signupErrorDesc": "حدث خطأ. يرجى المحاولة مرة أخرى.",
+    "signingUp": "جاري التسجيل..."
   }
 }

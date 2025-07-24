@@ -69,5 +69,54 @@
   "Layout": {
     "title": "ChoreChampion",
     "description": "Manage household chores with ease and a little bit of fun."
+  },
+  "LoginForm": {
+    "welcomeBack": "Welcome back",
+    "loginWithAppleOrGoogle": "Login with your Apple or Google account",
+    "loginWithApple": "Login with Apple",
+    "loginWithGoogle": "Login with Google",
+    "orContinueWith": "Or continue with",
+    "email": "Email",
+    "emailPlaceholder": "m@example.com",
+    "password": "Password",
+    "forgotPassword": "Forgot your password?",
+    "login": "Login",
+    "noAccount": "Don't have an account?",
+    "signUp": "Sign up",
+    "termsAgreement1": "By clicking continue, you agree to our",
+    "termsOfService": "Terms of Service",
+    "and": "and",
+    "privacyPolicy": "Privacy Policy",
+    "loginSuccessTitle": "Login successful!",
+    "loginSuccessDesc": "Welcome back!",
+    "loginErrorTitle": "Login failed",
+    "loginErrorDesc": "Invalid email or password.",
+    "loggingIn": "Logging in..."
+  },
+  "LoginPage": {
+    "brandName": "ChoreChampion",
+    "loginTitle": "Login – ChoreChampion"
+  },
+  "SignupForm": {
+    "createAccount": "Create an account",
+    "joinPlatform": "Join our platform today!",
+    "fullName": "Full Name",
+    "fullNamePlaceholder": "John Doe",
+    "email": "Email",
+    "emailPlaceholder": "example@email.com",
+    "password": "Password",
+    "passwordPlaceholder": "••••••••",
+    "signUp": "Sign Up",
+    "alreadyHaveAccount": "Already have an account?",
+    "logIn": "Log In",
+    "signupTitle": "Sign Up – ChoreChampion",
+    "signupWithApple": "Sign up with Apple",
+    "signupWithGoogle": "Sign up with Google",
+    "orContinueWith": "Or continue with",
+    "signupSuccessTitle": "Signup successful!",
+    "signupSuccessDesc": "You can now log in.",
+    "signupErrorTitle": "Signup failed",
+    "signupErrorDesc": "An error occurred. Please try again.",
+    "signingUp": "Signing up..."
   }
 }

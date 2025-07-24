@@ -2,10 +2,13 @@ import type { Metadata } from 'next';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, getTranslations } from 'next-intl/server';
 import '@/app/globals.css'
-import {baseUrl, SSRfetchAllTasksFromApi} from "@/lib/utils";
+import {baseUrl} from "@/lib/utils";
 import {initialMembers} from "@/data/seed";
 import {AppProvider} from "@/context/app-provider";
 import {MergeCompletionDate} from "@/lib/completionDateService";
+import getAllTasksService from "@/lib/getAllTasksService";
+import {getScoreSummary} from "@/lib/scoreService";
+import {cookies} from "next/headers";
 
 // Add this line to enable ISR with 60-second revalidation
 export const revalidate = 60;
@@ -33,8 +36,7 @@ export default async function LocaleLayout({
 
 
 
-
-  const tasks = await SSRfetchAllTasksFromApi(); // SSR Fetch tasks from API
+  const tasks = await getAllTasksService(); // SSR Fetch tasks from API
 
   const activeTasks = tasks.filter(t => !t.completed);
   const archivedTasks = tasks
@@ -55,12 +57,9 @@ export default async function LocaleLayout({
 
   await Promise.all(
       members.map(async (member) => {
-        const res = await fetch(`${baseUrl}/api/score/${member.id}`, {
-          method: "GET",
-          cache: "default" });
-        if (res.ok) {
-          const data = await res.json();
-          adjustments[member.id] = data.adjustment ?? 0;
+        const res = await getScoreSummary(member.id);
+        if (res) {
+          adjustments[member.id] = res.adjustment ?? 0;
         } else {
           adjustments[member.id] = 0;
         }

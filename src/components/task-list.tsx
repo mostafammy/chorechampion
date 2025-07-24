@@ -9,7 +9,8 @@ import { Button } from '@/components/ui/button';
 import { Undo2 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { useToast } from '@/hooks/use-toast';
-import {fetchAdjustScoreApi, IS_DEV} from '@/lib/utils';
+import { fetchAdjustScoreApi, IS_DEV } from '@/lib/utils';
+import api from '@/lib/api';
 
 interface TaskListProps {
   tasks: Task[];
@@ -37,7 +38,7 @@ export function TaskList({ tasks, onToggleTask }: TaskListProps) {
     };
   }, []);
 
-  const handleToggle = async (taskId: string,taskData:Task) => {
+  const handleToggle = async (taskId: string, taskData: Task) => {
     if (timeoutsRef.current[taskId]) return;
 
     setPendingRemoval((prev) => [...prev, taskId]);
@@ -45,17 +46,17 @@ export function TaskList({ tasks, onToggleTask }: TaskListProps) {
     // Phase 1: Get completion key
     let completionKey: string | undefined;
     try {
-      const res = await fetch('/api/InitiateCompletion', {
-        method: 'POST',
-        body: JSON.stringify({ taskId }),
-        headers: { 'Content-Type': 'application/json' },
-      });
-      const data = await res.json();
+      const data: { completionKey: string } = await api
+        .post('InitiateCompletion', {
+          json: { taskId },
+        })
+        .json();
       completionKey = data.completionKey;
       if (!completionKey) {
         toast({
           title: t('error'),
-          description: t('failedToGetCompletionKey') || 'Failed to get completion key',
+          description:
+            t('failedToGetCompletionKey') || 'Failed to get completion key',
           variant: 'destructive',
         });
         if (IS_DEV) {
@@ -68,7 +69,8 @@ export function TaskList({ tasks, onToggleTask }: TaskListProps) {
     } catch (err) {
       toast({
         title: t('error'),
-        description: t('failedToInitiateCompletion') || 'Failed to initiate completion',
+        description:
+          t('failedToInitiateCompletion') || 'Failed to initiate completion',
         variant: 'destructive',
       });
       if (IS_DEV) {
@@ -84,29 +86,36 @@ export function TaskList({ tasks, onToggleTask }: TaskListProps) {
 
     // Phase 2: Wait ~4800ms then send confirm request
     timeoutsRef.current[taskId] = setTimeout(() => {
-      fetch('/api/ConfirmCompletion', {
-        method: 'POST',
-        signal: abortController.signal, // Hook into abort logic
-        body: JSON.stringify({ completionKey: completionKeysRef.current[taskId] }),
-        headers: { 'Content-Type': 'application/json' },
-      })
-        .then(res => res.json())
-        .then(data => {
+      api
+        .post('ConfirmCompletion', {
+          signal: abortController.signal, // Hook into abort logic
+          json: { completionKey: completionKeysRef.current[taskId] },
+        })
+        .json<{ success: boolean }>()
+        .then((data) => {
           if (data.success) {
             toast({
               title: t('taskCompleted'),
-              description: t('taskCompletedSuccessfully') || 'Task completed successfully!',
+              description:
+                t('taskCompletedSuccessfully') ||
+                'Task completed successfully!',
               variant: 'success',
             });
             if (IS_DEV) {
               console.log('Task completed:', taskId);
             }
 
-            fetchAdjustScoreApi({userId: taskData.assigneeId, delta: taskData.score, source: 'task', taskId: taskId});
+            fetchAdjustScoreApi({
+              userId: taskData.assigneeId,
+              delta: taskData.score,
+              source: 'task',
+              taskId: taskId,
+            });
           } else {
             toast({
               title: t('error'),
-              description: t('taskCompletionFailed') || 'Task completion failed.',
+              description:
+                t('taskCompletionFailed') || 'Task completion failed.',
               variant: 'destructive',
             });
             if (IS_DEV) {
@@ -114,11 +123,13 @@ export function TaskList({ tasks, onToggleTask }: TaskListProps) {
             }
           }
         })
-        .catch(err => {
+        .catch((err) => {
           if (err.name === 'AbortError') {
             toast({
               title: t('cancelled'),
-              description: t('taskCompletionCancelled') || 'Task completion cancelled by user.',
+              description:
+                t('taskCompletionCancelled') ||
+                'Task completion cancelled by user.',
               variant: 'destructive',
             });
             if (IS_DEV) {
@@ -127,7 +138,8 @@ export function TaskList({ tasks, onToggleTask }: TaskListProps) {
           } else {
             toast({
               title: t('error'),
-              description: t('taskConfirmationFailed') || 'Task confirmation failed.',
+              description:
+                t('taskConfirmationFailed') || 'Task confirmation failed.',
               variant: 'destructive',
             });
             if (IS_DEV) {
@@ -141,7 +153,7 @@ export function TaskList({ tasks, onToggleTask }: TaskListProps) {
       delete abortControllersRef.current[taskId];
     }, 4800); // Fixed delay for Phase 2
   };
-  
+
   const handleUndo = (taskId: string) => {
     if (timeoutsRef.current[taskId]) {
       abortControllersRef.current[taskId]?.abort(); // 💥 Instantly cancel the Phase 2 call

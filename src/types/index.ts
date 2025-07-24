@@ -1,3 +1,8 @@
+import {signupSchema} from "@/schemas/auth/signup.schema";
+import { z } from 'zod'
+import React from "react";
+import {loginSchema} from "@/schemas/auth/login.schema";
+
 export type Period = "daily" | "weekly" | "monthly";
 
 export interface Task {
@@ -74,3 +79,16 @@ export interface AppProviderProps {
 }
 
 export type { Toast } from "@/hooks/use-toast";
+
+export type SignupInputType = z.infer<typeof signupSchema>
+export type LoginInputType = z.infer<typeof loginSchema>
+
+
+
+export interface JwtPayload {
+  id: string;
+  role: string;
+  email: string;
+  iat?: number;
+  exp?: number;
+}

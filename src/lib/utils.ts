@@ -3,6 +3,7 @@ import { twMerge } from "tailwind-merge";
 import { AdjustScoreInput, Period } from "@/types";
 import { Redis } from "@upstash/redis";
 import type { Task } from "@/types";
+import {prisma} from "@/lib/prismaClient";
 
 export function cn(...inputs: ClassValue[]): string {
   return twMerge(clsx(inputs));
@@ -406,4 +407,33 @@ export async function fetchAdjustScoreApi({
       error: error?.message || "Network error or unexpected error occurred.",
     };
   }
+}
+
+// Utility to escape HTML
+export function escapeHtml(str: string): string {
+  return str.replace(/[&<>'"`=\/]/g, function (s) {
+    return (
+      (
+        {
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          "'": "&#39;",
+          '"': "&quot;",
+          "`": "&#96;",
+          "=": "&#61;",
+          "/": "&#47;",
+        } as Record<string, string>
+      )[s] || s
+    );
+  });
+}
+
+// Check if email exists (separate, reusable, testable)
+export async function isEmailTaken(
+  email: string,
+  db = prisma
+): Promise<boolean> {
+  const user = await db.user.findUnique({ where: { email } });
+  return !!user;
 }

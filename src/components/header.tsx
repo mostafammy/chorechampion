@@ -13,9 +13,12 @@ import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import LoadingSpinner from './loading-spinner';
 
+
 export function Header() {
-  const t = useTranslations('Header');
   const router = useRouter();
+
+
+  const t = useTranslations('Header');
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   console.log('typeof usePathname:', typeof usePathname);
