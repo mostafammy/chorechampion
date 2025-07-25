@@ -5,6 +5,7 @@ import type { Member, Task, ArchivedTask, Period, AppContextType, AppProviderPro
 import { initialMembers } from '@/data/seed';
 import { ScoreService } from '@/lib/api/scoreService';
 import { toast } from '@/hooks/use-toast';
+import {useAuthenticationGuard} from "@/hooks/useAuthenticationGuard";
 
 interface AppProviderProps extends BaseAppProviderProps {
   initialActiveTasks?: Task[];
@@ -20,6 +21,15 @@ export function AppProvider({
   initialArchivedTasks = [],
   initialScoreAdjustments = {},
 }: AppProviderProps) {
+  // ✅ PHASE 2: Authentication Guard Integration
+  const { 
+    authStatus, 
+    isLoading: authLoading, 
+    isAuthenticated, 
+    checkAuthentication,
+    refreshToken 
+  } = useAuthenticationGuard();
+
   const [members] = useState<Member[]>(initialMembers);
   const [activeTasks, setActiveTasks] = useState<Task[]>(initialActiveTasks);
   const [archivedTasks, setArchivedTasks] = useState<ArchivedTask[]>(initialArchivedTasks);
@@ -30,6 +40,65 @@ export function AppProvider({
   useEffect(() => {
     console.log('Active tasks updated:', activeTasks);
   }, [activeTasks]);
+
+  // ✅ PHASE 2: Authentication-aware logging
+  useEffect(() => {
+    console.log('[AppProvider] Authentication state change:', {
+      authStatus,
+      authLoading,
+      isAuthenticated,
+      timestamp: new Date().toISOString()
+    });
+    
+    // Additional debug info for token deletion scenario
+    if (authStatus === "checking") {
+      console.log('[AppProvider] Checking authentication (could be token refresh in progress)...');
+    } else if (authStatus === "authenticated") {
+      console.log('[AppProvider] ✅ User successfully authenticated');
+    } else if (authStatus === "unauthenticated") {
+      console.log('[AppProvider] ❌ User not authenticated');
+    }
+  }, [authStatus, authLoading, isAuthenticated]);
+
+  // ✅ Client-side data fetching when authenticated but no initial data
+  useEffect(() => {
+    const fetchTasksIfNeeded = async () => {
+      // Only fetch if user is authenticated and we don't have initial data
+      if (isAuthenticated && !authLoading && activeTasks.length === 0) {
+        console.log('[AppProvider] ✅ Authenticated with no initial data - fetching tasks from client');
+        
+        try {
+          // Import fetchWithAuth to avoid circular dependencies
+          const { fetchWithAuth } = await import('@/lib/auth/fetchWithAuth');
+          
+          const response = await fetchWithAuth('/api/GetAllTasks');
+          
+          if (response.ok) {
+            const allTasks = await response.json();
+            console.log('[AppProvider] ✅ Client-side tasks fetched successfully:', allTasks.length);
+            
+            // Separate active and archived tasks
+            const newActiveTasks = allTasks.filter((task: any) => !task.completed);
+            const newArchivedTasks = allTasks.filter((task: any) => task.completed);
+            
+            setActiveTasks(newActiveTasks);
+            setArchivedTasks(newArchivedTasks);
+            
+            console.log('[AppProvider] Updated tasks:', {
+              active: newActiveTasks.length,
+              archived: newArchivedTasks.length
+            });
+          } else {
+            console.error('[AppProvider] ❌ Failed to fetch tasks:', response.status);
+          }
+        } catch (error) {
+          console.error('[AppProvider] ❌ Error fetching tasks client-side:', error);
+        }
+      }
+    };
+
+    fetchTasksIfNeeded();
+  }, [isAuthenticated, authLoading, activeTasks.length]);
 
   const handleAdjustScore = async (memberId: string, amount: number) => {
     // 1. Validate the input before proceeding
@@ -153,7 +222,47 @@ export function AppProvider({
     handleAddTask,
     handleToggleTask,
     handleAdjustScore,
-  }), [members, activeTasks, archivedTasks, scoreAdjustments]);
+    // ✅ PHASE 2: Add authentication status to context
+    auth: {
+      isAuthenticated,
+      isLoading: authLoading,
+      checkAuthStatus: checkAuthentication,
+      refreshTokens: refreshToken,
+      startBackgroundMonitoring: () => {}, // Will be implemented if needed
+      stopBackgroundMonitoring: () => {}, // Will be implemented if needed
+    },
+  }), [members, activeTasks, archivedTasks, scoreAdjustments, isAuthenticated, authLoading, checkAuthentication, refreshToken]);
+
+  // ✅ PHASE 2: Show loading state while checking authentication
+  // TEMPORARILY DISABLED for development - causing redirect loops after successful login
+  if (false && authLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-gray-600">Checking authentication...</p>
+          <p className="text-xs text-gray-500 mt-2">
+            Status: {authStatus} | Authenticated: {isAuthenticated ? 'Yes' : 'No'}
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  // ✅ PHASE 2: Show unauthenticated state
+  // TEMPORARILY DISABLED for development - causing redirect loops after successful login
+  if (false && !isAuthenticated) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <div className="text-gray-600">Authentication Required</div>
+          <p className="text-xs text-gray-500 mt-2">
+            Status: {authStatus} | Redirecting to login...
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 }

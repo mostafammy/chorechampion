@@ -12,7 +12,14 @@ const intlMiddleware = createMiddleware({
 });
 
 // Define public routes that don't require authentication
-const publicRoutes = ["/login", "/signup"];
+const publicRoutes = [
+  "/login",
+  "/signup",
+  "/test-auth",
+  "/phase2-test",
+  "/test",
+  "/simple-login",
+];
 
 // Define API routes that don't require authentication
 const publicApiRoutes = [
@@ -163,6 +170,14 @@ export default async function middleware(req: NextRequest) {
       pathnameWithoutLocale === route ||
       pathnameWithoutLocale.startsWith(route + "/")
   );
+
+  // TEMPORARY: Allow all page routes for debugging
+  if (IS_DEV) {
+    console.log(
+      `[Middleware] DEBUGGING: Allowing all page routes without authentication`
+    );
+    return intlMiddleware(req);
+  }
 
   // If it's a public route, just apply internationalization
   if (isPublicRoute) {

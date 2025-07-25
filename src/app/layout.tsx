@@ -1,5 +1,5 @@
 import './globals.css';
-import { AppProvider } from '@/context/app-provider';
+import { ConditionalAppProvider } from '@/components/conditional-app-provider';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/toaster';
 import type { Metadata } from 'next';
@@ -10,7 +10,6 @@ import {MergeCompletionDate} from "@/lib/completionDateService";
 import {initialMembers} from "@/data/seed";
 import { cookies } from 'next/headers';
 import {NextIntlClientProvider} from "next-intl";
-import {refreshTokenService} from "@/lib/auth/jwt/refreshTokenService";
 
 export const metadata: Metadata = {
     title: "ChoreChampion",
@@ -56,9 +55,9 @@ export default async function RootLayout({
           defaultTheme="system"
           enableSystem
         >
-          <AppProvider>
+          <ConditionalAppProvider>
             {children}
-          </AppProvider>
+          </ConditionalAppProvider>
           <Toaster />
         </ThemeProvider>
       </body>

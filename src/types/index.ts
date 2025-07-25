@@ -1,7 +1,7 @@
-import {signupSchema} from "@/schemas/auth/signup.schema";
-import { z } from 'zod'
+import { signupSchema } from "@/schemas/auth/signup.schema";
+import { z } from "zod";
 import React from "react";
-import {loginSchema} from "@/schemas/auth/login.schema";
+import { loginSchema } from "@/schemas/auth/login.schema";
 
 export type Period = "daily" | "weekly" | "monthly";
 
@@ -24,12 +24,11 @@ export interface ScoreSummary {
 export interface ScoreLogEntry {
   delta: number;
   reason: string;
-  source: 'manual' | 'task' | 'bonus' | 'admin';
+  source: "manual" | "task" | "bonus" | "admin";
   userId: string;
   taskId?: string;
   at: string; // ISO date string
 }
-
 
 export interface AdjustScoreInput {
   userId: string;
@@ -72,6 +71,14 @@ export interface AppContextType {
   handleAddTask: (task: Task) => void;
   handleToggleTask: (taskId: string) => void;
   handleAdjustScore: (memberId: string, amount: number) => void;
+  auth: {
+    isAuthenticated: boolean | null;
+    isLoading: boolean;
+    checkAuthStatus: () => Promise<void>;
+    refreshTokens: () => Promise<boolean>;
+    startBackgroundMonitoring: () => void;
+    stopBackgroundMonitoring: () => void;
+  };
 }
 
 export interface AppProviderProps {
@@ -80,10 +87,8 @@ export interface AppProviderProps {
 
 export type { Toast } from "@/hooks/use-toast";
 
-export type SignupInputType = z.infer<typeof signupSchema>
-export type LoginInputType = z.infer<typeof loginSchema>
-
-
+export type SignupInputType = z.infer<typeof signupSchema>;
+export type LoginInputType = z.infer<typeof loginSchema>;
 
 export interface JwtPayload {
   id: string;

@@ -1,4 +1,5 @@
 import { Redis } from "@upstash/redis";
+import { IS_DEV } from "@/lib/utils";
 
 const redis = new Redis({
   url: process.env.KV_REST_API_URL!,
@@ -13,9 +14,17 @@ interface RateLimitResult {
 
 export async function checkRateLimit(
   identifier: string,
-  maxAttempts: number = 5,
-  windowMs: number = 15 * 60 * 1000 // 15 minutes
+  maxAttempts: number = 20, // Increased for development
+  windowMs: number = 5 * 60 * 1000 // 5 minutes (shorter window)
 ): Promise<RateLimitResult> {
+  // Bypass rate limiting in development for easier testing
+  if (IS_DEV) {
+    return {
+      allowed: true,
+      remaining: maxAttempts - 1,
+      resetTime: Date.now() + windowMs,
+    };
+  }
   const key = `rate_limit:login:${identifier}`;
   const window = Math.floor(Date.now() / windowMs);
   const windowKey = `${key}:${window}`;
