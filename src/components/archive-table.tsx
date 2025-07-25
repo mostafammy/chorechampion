@@ -20,6 +20,23 @@ interface ArchiveTableProps {
   members: Member[];
 }
 
+// Helper function to safely convert completedDate to Date object
+const ensureDate = (date: Date | string | null | undefined): Date => {
+  if (!date) {
+    // Return current date as fallback if date is null/undefined
+    return new Date();
+  }
+  
+  if (date instanceof Date) {
+    // Check if the Date object is valid
+    return isNaN(date.getTime()) ? new Date() : date;
+  }
+  
+  // Try to parse string date
+  const parsedDate = new Date(date);
+  return isNaN(parsedDate.getTime()) ? new Date() : parsedDate;
+};
+
 export function ArchiveTable({ archivedTasks, members }: ArchiveTableProps) {
   const t = useTranslations('ArchiveTable');
   const tPage = useTranslations('ArchivePage');
@@ -28,7 +45,12 @@ export function ArchiveTable({ archivedTasks, members }: ArchiveTableProps) {
     .map((member) => {
       const tasks = archivedTasks
         .filter((task) => task.assigneeId === member.id)
-        .sort((a, b) => b.completedDate.getTime() - a.completedDate.getTime());
+        .sort((a, b) => {
+          // Safely handle completedDate conversion to Date objects
+          const dateA = ensureDate(a.completedDate);
+          const dateB = ensureDate(b.completedDate);
+          return dateB.getTime() - dateA.getTime();
+        });
       return { ...member, tasks };
     })
     .filter((member) => member.tasks.length > 0);
@@ -87,10 +109,10 @@ export function ArchiveTable({ archivedTasks, members }: ArchiveTableProps) {
                     </TableCell>
                     <TableCell className="text-right pr-4 sm:pr-6">
                       <div className="font-medium">
-                        {format(task.completedDate, 'MMM d, yyyy')}
+                        {format(ensureDate(task.completedDate), 'MMM d, yyyy')}
                       </div>
                       <div className="text-xs text-muted-foreground">
-                        {format(task.completedDate, 'p')}
+                        {format(ensureDate(task.completedDate), 'p')}
                       </div>
                     </TableCell>
                   </TableRow>
