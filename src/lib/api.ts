@@ -8,7 +8,7 @@ const api = ky.create({
     afterResponse: [
       async (request, options, response) => {
         // If the response is 401, and we haven't already retried
-        if (response.status === 401 && options.retry === undefined) {
+        if (response.status === 401) {
           if (IS_DEV) {
             console.log('[API Client] Access token expired. Attempting to refresh...');
           }
@@ -22,7 +22,12 @@ const api = ky.create({
                 console.log('[API Client] Token refreshed successfully. Retrying original request.');
               }
               // Retry the original request. The browser will have the new access_token cookie.
-              return ky(request);
+              return api(request.url, {
+                ...request,
+                retry: 0, // disable retry logic
+                hooks: undefined, // prevent recursive hook execution
+              });
+
             }
           } catch (error) {
             if (IS_DEV) {

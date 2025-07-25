@@ -3,7 +3,7 @@ import { twMerge } from "tailwind-merge";
 import { AdjustScoreInput, Period } from "@/types";
 import { Redis } from "@upstash/redis";
 import type { Task } from "@/types";
-import {prisma} from "@/lib/prismaClient";
+import { prisma } from "@/lib/prismaClient";
 
 export function cn(...inputs: ClassValue[]): string {
   return twMerge(clsx(inputs));
@@ -371,8 +371,14 @@ export async function fetchAdjustScoreApi({
   error?: string;
 }> {
   try {
-    const res = await fetch(`${baseUrl}/api/AdjustScore`, {
+    // Import fetchWithAuth dynamically to avoid circular dependencies
+    const { fetchWithAuth } = await import("@/lib/auth/fetchWithAuth");
+
+    const response = await fetchWithAuth(`${baseUrl}/api/AdjustScore`, {
       method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({
         userId,
         delta,
@@ -380,31 +386,49 @@ export async function fetchAdjustScoreApi({
         source,
         taskId,
       }),
-      headers: { "Content-Type": "application/json" },
+      correlationId: `adjust-score-${userId}-${Date.now()}`,
+      maxRetries: 2, // Retry up to 2 times for score adjustments
+      onRefreshError: (error) => {
+        console.warn("[AdjustScore] Token refresh failed:", error);
+      },
     });
 
-    // Handle 204 No Content
-    if (res.status === 204) {
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
       return {
         success: false,
         error:
-          "No content returned from server (204). This may indicate a server error.",
+          errorData.error || `HTTP ${response.status}: ${response.statusText}`,
       };
     }
 
-    const data = await res.json().catch(() => undefined);
+    const data = await response.json();
+    return {
+      success: true,
+      data,
+    };
+  } catch (error: any) {
+    console.error("[AdjustScore] API call failed:", error);
 
-    if (!res.ok) {
+    // Handle authentication errors specifically
+    if (error.name === "SessionExpiredError") {
       return {
         success: false,
-        error: data?.error || `Request failed with status ${res.status}`,
+        error:
+          "Your session has expired. Please refresh the page and try again.",
       };
     }
-    return { success: true, data };
-  } catch (error: any) {
+
+    if (error.name === "AuthenticationError") {
+      return {
+        success: false,
+        error: "Authentication failed. Please refresh the page and try again.",
+      };
+    }
+
     return {
       success: false,
-      error: error?.message || "Network error or unexpected error occurred.",
+      error: error?.message || "Failed to adjust score. Please try again.",
     };
   }
 }

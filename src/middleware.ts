@@ -68,10 +68,34 @@ export default async function middleware(req: NextRequest) {
     const token = req.cookies.get("access_token")?.value;
 
     if (!token) {
-      if (IS_DEV)
+      if (IS_DEV) {
         console.log(
-          `[Middleware] No token for protected API route: ${pathname}`
+          `[Middleware] No access token for protected API route: ${pathname}`
         );
+        console.log(
+          `[Middleware] Checking if refresh token exists for API route...`
+        );
+      }
+
+      // Check if refresh token exists - if so, let the request through for client-side refresh
+      const refreshToken = req.cookies.get("refresh_token")?.value;
+
+      if (refreshToken) {
+        if (IS_DEV) {
+          console.log(
+            `[Middleware] Refresh token exists for API route, allowing request for client-side refresh: ${pathname}`
+          );
+        }
+        // Let the API request pass through - fetchWithAuth will handle the refresh
+        return NextResponse.next();
+      }
+
+      // No refresh token either - block the API request
+      if (IS_DEV) {
+        console.log(
+          `[Middleware] No refresh token found for API route, blocking: ${pathname}`
+        );
+      }
       return NextResponse.json(
         { error: "Unauthorized - No token provided" },
         { status: 401 }
@@ -96,9 +120,29 @@ export default async function middleware(req: NextRequest) {
     } catch (error) {
       if (IS_DEV)
         console.error(
-          `[Middleware] Invalid token for API route: ${pathname}`,
+          `[Middleware] Invalid access token for API route: ${pathname}`,
           error
         );
+
+      // Check if we have a refresh token when access token is invalid
+      const refreshToken = req.cookies.get("refresh_token")?.value;
+
+      if (refreshToken) {
+        if (IS_DEV) {
+          console.log(
+            `[Middleware] Access token invalid but refresh token exists for API route, allowing request for client-side refresh: ${pathname}`
+          );
+        }
+        // Let the API request pass through - fetchWithAuth will handle the refresh
+        return NextResponse.next();
+      }
+
+      // No refresh token - block the request
+      if (IS_DEV) {
+        console.log(
+          `[Middleware] No refresh token found for API route with invalid access token, blocking: ${pathname}`
+        );
+      }
       return NextResponse.json(
         { error: "Unauthorized - Invalid token" },
         { status: 401 }
@@ -135,17 +179,32 @@ export default async function middleware(req: NextRequest) {
   const token = req.cookies.get("access_token")?.value;
 
   if (!token) {
+    if (IS_DEV) {
+      console.log(
+        `[Middleware] No access token found for protected route: ${pathname}`
+      );
+      console.log(`[Middleware] Checking if refresh token exists...`);
+    }
 
+    // Check if refresh token exists - if so, let the client handle refresh
+    const refreshToken = req.cookies.get("refresh_token")?.value;
+
+    if (refreshToken) {
+      if (IS_DEV) {
+        console.log(
+          `[Middleware] Refresh token exists, allowing page load for client-side refresh`
+        );
+      }
+      // Let the page load and handle refresh on the client side
+      return intlMiddleware(req);
+    }
+
+    // No refresh token either - redirect to login
+    if (IS_DEV) {
+      console.log(`[Middleware] No refresh token found, redirecting to login`);
+    }
     const locale = pathname.match(/^\/(en|ar)/)?.[1] || "en";
     return NextResponse.redirect(new URL(`/${locale}/login`, req.url));
-
-    // return NextResponse.redirect(new URL(`/${locale}/login`, req.url));
-    // ⚠️ Allow the page to load, the frontend will handle refresh
-    // return NextResponse.next();
-
-    // return NextResponse.redirect(new URL(`/${locale}${pathname}`, req.url));
-    // return NextResponse.next();
-    // return NextResponse.json({ error: 'Token expired or invalid' }, { status: 401 });
   }
 
   try {
@@ -189,12 +248,28 @@ export default async function middleware(req: NextRequest) {
         error
       );
     }
-    // Token is invalid, redirect to login while preserving locale
+
+    // Check if refresh token exists before redirecting
+    const refreshToken = req.cookies.get("refresh_token")?.value;
+
+    if (refreshToken) {
+      if (IS_DEV) {
+        console.log(
+          `[Middleware] Access token invalid but refresh token exists, allowing page load for client-side refresh`
+        );
+      }
+      // Let the page load and handle refresh on the client side
+      return intlMiddleware(req);
+    }
+
+    // No refresh token - redirect to login
+    if (IS_DEV) {
+      console.log(
+        `[Middleware] No refresh token available, redirecting to login`
+      );
+    }
     const locale = pathname.match(/^\/(en|ar)/)?.[1] || "en";
     return NextResponse.redirect(new URL(`/${locale}/login`, req.url));
-    // return NextResponse.redirect(new URL(`/${locale}${pathname}`, req.url));
-    // return NextResponse.next();
-    // return NextResponse.json({ error: 'Token expired or invalid' }, { status: 401 });
   }
 }
 

@@ -9,6 +9,8 @@ import {MergeCompletionDate} from "@/lib/completionDateService";
 import getAllTasksService from "@/lib/getAllTasksService";
 import {getScoreSummary} from "@/lib/scoreService";
 import {cookies} from "next/headers";
+import {fetchWithAuthAdvanced} from "@/lib/auth/fetchWithAuth";
+import {ArchivedTask, Task} from "@/types";
 
 // Add this line to enable ISR with 60-second revalidation
 export const revalidate = 60;
@@ -37,14 +39,17 @@ export default async function LocaleLayout({
 
 
   const tasks = await getAllTasksService(); // SSR Fetch tasks from API
+    console.log(tasks, typeof tasks);
 
-  const activeTasks = tasks.filter(t => !t.completed);
-  const archivedTasks = tasks
-      .filter(t => t.completed)
-      .map(t => ({
-        ...t,
-        completedDate: new Date(),
-      }));
+
+  const activeTasks = tasks.filter((t: any) => !t.completed);
+
+  const archivedTasks: ArchivedTask[] = (tasks as Task[])
+    .filter((t: Task) => t.completed)
+    .map((t: Task) => ({
+      ...t,
+      completedDate: new Date(),
+    }));
 
     const enrichedArchivedTasks = await MergeCompletionDate(initialMembers,archivedTasks);
 
