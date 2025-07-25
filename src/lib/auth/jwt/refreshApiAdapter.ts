@@ -38,8 +38,8 @@ export class RefreshApiAdapter {
       name: "access_token",
       maxAge: 60 * 15, // 15 minutes
       secure: process.env.NODE_ENV === "production",
-      httpOnly: true,
-      sameSite: "lax",
+      httpOnly: true, // ✅ SECURITY: Always HttpOnly for access tokens
+      sameSite: "strict", // ✅ SECURITY: Strict for better CSRF protection
       path: "/",
     },
     clearTokensOnFailure: true,

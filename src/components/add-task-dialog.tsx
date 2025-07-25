@@ -1,26 +1,19 @@
 'use client';
 
-import { useState } from 'react';
+import { useForm, Controller } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { PlusCircle, Plus, Minus } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import { fetchWithAuth } from '@/lib/auth/fetchWithAuth'; // ✅ Import fetchWithAuth
 import { Button } from '@/components/ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Member, Task, Period } from '@/types';
-import { PlusCircle, Plus, Minus } from 'lucide-react';
-import { useForm, Controller } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-import { useTranslations } from 'next-intl';
 import { useToast } from '@/hooks/use-toast';
+import type { Member, Task } from '@/types';
+import { useState } from 'react';
 
 interface AddTaskDialogProps {
   members: Member[];
@@ -52,30 +45,63 @@ export function AddTaskDialog({ members, onAddTask }: AddTaskDialogProps) {
   const onSubmit = async (data: AddTaskFormValues) => {
     setLoading(true);
     try {
-        console.log(data);
-        const response = await fetch('/api/AddTask', {
+        console.log('Adding task:', data);
+        
+        // ✅ USE fetchWithAuth for automatic token refresh handling
+        const response = await fetchWithAuth('/api/AddTask', {
             method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
             body: JSON.stringify({
                 name: data.name,
                 score: data.score,
                 assigneeId: data.assigneeId,
                 period: data.period,
             }),
-            headers: {
-                'Content-Type': 'application/json',
-            },
+            // ✅ Enable automatic token refresh (default: true)
+            enableRefresh: true,
+            // ✅ Set retry limit for robustness
+            maxRetries: 1,
         });
+
+        // ✅ Proper response validation
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+            throw new Error(errorData.error || `HTTP ${response.status}: ${response.statusText}`);
+        }
+
         const task = await response.json();
+        
+        // ✅ Validate response has expected task structure
+        if (!task || !task.id) {
+            throw new Error('Invalid task response from server');
+        }
+        
         await Promise.resolve(onAddTask(task));
+        
         toast({
           title: t('taskAdded'),
           description: t('taskAddedSuccessfully') || 'Task added successfully!',
           variant: 'success',
         });
+        
         reset();
         setOpen(false);
-    }catch (errors){
-        console.error("Error adding task:", errors);
+        
+    } catch (error) {
+        console.error("Error adding task:", error);
+        
+        // ✅ Enhanced error handling with user-friendly messages
+        const errorMessage = error instanceof Error 
+            ? error.message 
+            : 'Failed to add task';
+            
+        toast({
+          title: t('error') || 'Error',
+          description: errorMessage,
+          variant: 'destructive',
+        });
     } finally {
       setLoading(false);
     }

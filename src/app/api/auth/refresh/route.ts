@@ -14,8 +14,8 @@ export async function POST(request: NextRequest) {
       name: "access_token", // ✅ FIX: Explicitly set the cookie name
       maxAge: 60 * 15, // 15 minutes
       secure: process.env.NODE_ENV === "production",
-      httpOnly: process.env.NODE_ENV === "production", // Allow visibility in development
-      sameSite: "lax",
+      httpOnly: true, // ✅ SECURITY: Always use HttpOnly for access tokens
+      sameSite: "strict", // ✅ SECURITY: Use strict for better CSRF protection
       path: "/", // ✅ FIX: Explicitly set the path
     },
     clearTokensOnFailure: true,
@@ -31,6 +31,14 @@ export async function POST(request: NextRequest) {
  */
 export async function GET(request: NextRequest) {
   return RefreshApiAdapter.handleMiddlewareRefresh(request, {
+    accessTokenCookie: {
+      name: "access_token",
+      maxAge: 60 * 15, // 15 minutes
+      secure: process.env.NODE_ENV === "production",
+      httpOnly: true, // ✅ SECURITY: Always use HttpOnly for access tokens
+      sameSite: "strict", // ✅ SECURITY: Use strict for better CSRF protection
+      path: "/",
+    },
     redirectUrls: {
       onSuccess: "/",
       onFailure: "/login",

@@ -1,6 +1,8 @@
 import { getRedis } from "@/lib/redis";
 import { nanoid } from "nanoid";
 import { IS_DEV } from "@/lib/utils";
+import { requireAuth } from "@/lib/auth/requireAuth"; // ✅ Add authentication
+import { NextRequest } from "next/server";
 import type { Task, Period, AddTaskRequest } from "@/types";
 
 function isValidPeriod(period: any): period is Period {
@@ -20,8 +22,44 @@ function isValidAddTaskRequest(body: any): body is AddTaskRequest {
   );
 }
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
+    // ✅ SECURITY: Authenticate the request first
+    const authResult = await requireAuth(request);
+
+    if (!authResult.ok) {
+      console.log("Authentication failed:", authResult.error);
+      return new Response(
+        JSON.stringify({
+          error: "Unauthorized - Authentication required",
+          errorCode: "AUTHENTICATION_REQUIRED",
+        }),
+        { status: 401 }
+      );
+    }
+
+    // Check if token refresh is needed - return special response for client-side handling
+    if (authResult.needsRefresh) {
+      console.log(
+        "Token refresh needed - returning refresh instruction to client"
+      );
+      return new Response(
+        JSON.stringify({
+          error: "Token refresh required",
+          errorCode: "TOKEN_REFRESH_REQUIRED",
+          needsRefresh: true,
+        }),
+        { status: 401 }
+      );
+    }
+
+    const authenticatedUser = authResult.user!;
+    if (IS_DEV) {
+      console.log(
+        `[AddTask] Authenticated user: ${authenticatedUser.email} (${authenticatedUser.id})`
+      );
+    }
+
     let body: unknown;
     try {
       body = await request.json();
@@ -55,6 +93,21 @@ export async function POST(request: Request) {
     const redis = getRedis();
     const taskId = `task-${nanoid(10)}`;
 
+    // ✅ SECURITY: Log task creation with authenticated user info
+    if (IS_DEV) {
+      console.log("[AddTask] Task creation request:", {
+        createdBy: authenticatedUser.email,
+        createdById: authenticatedUser.id,
+        taskData: {
+          name: body.name,
+          score: body.score,
+          assigneeId: body.assigneeId,
+          period: body.period,
+        },
+        timestamp: new Date().toISOString(),
+      });
+    }
+
     const AddTaskDataSent: Task = {
       id: taskId,
       name: body.name,
@@ -68,6 +121,13 @@ export async function POST(request: Request) {
 
     await redis.set(TaskRedisKey, JSON.stringify(AddTaskDataSent));
     await redis.lpush("task:list", taskId);
+
+    // ✅ SECURITY: Log successful task creation
+    if (IS_DEV) {
+      console.log(
+        `[AddTask] Task created successfully: ${taskId} by ${authenticatedUser.email}`
+      );
+    }
 
     // Only return the properties matching the Task type
     const responseTask: Task = {

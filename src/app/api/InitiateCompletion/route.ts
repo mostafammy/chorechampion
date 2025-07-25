@@ -1,6 +1,8 @@
 import { getRedis } from "@/lib/redis";
 import { generateCompletionKey } from "@/lib/utils";
 import { IS_DEV } from "@/lib/utils";
+import { requireAuth } from "@/lib/auth/requireAuth"; // ✅ Add authentication
+import { NextRequest } from "next/server";
 import type { InitiateCompletionRequest, Task } from "@/types";
 
 function isValidInitiateCompletionRequest(
@@ -11,8 +13,44 @@ function isValidInitiateCompletionRequest(
   );
 }
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
+    // ✅ SECURITY: Authenticate the request first
+    const authResult = await requireAuth(request);
+
+    if (!authResult.ok) {
+      console.log("Authentication failed:", authResult.error);
+      return new Response(
+        JSON.stringify({
+          error: "Unauthorized - Authentication required",
+          errorCode: "AUTHENTICATION_REQUIRED",
+        }),
+        { status: 401, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
+    // Check if token refresh is needed - return special response for client-side handling
+    if (authResult.needsRefresh) {
+      console.log(
+        "Token refresh needed - returning refresh instruction to client"
+      );
+      return new Response(
+        JSON.stringify({
+          error: "Token refresh required",
+          errorCode: "TOKEN_REFRESH_REQUIRED",
+          needsRefresh: true,
+        }),
+        { status: 401, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
+    const authenticatedUser = authResult.user!;
+    if (IS_DEV) {
+      console.log(
+        `[InitiateCompletion] Authenticated user: ${authenticatedUser.email} (${authenticatedUser.id})`
+      );
+    }
+
     const redis = getRedis();
 
     let body: unknown;
@@ -90,8 +128,31 @@ export async function POST(request: Request) {
         headers: { "Content-Type": "application/json" },
       });
     }
+
+    // ✅ SECURITY: Log task initiation with authenticated user info
+    if (IS_DEV) {
+      console.log("[InitiateCompletion] Task completion initiation:", {
+        initiatedBy: authenticatedUser.email,
+        initiatedById: authenticatedUser.id,
+        taskId: task.id,
+        taskName: task.name,
+        assigneeId: task.assigneeId,
+        score: task.score,
+        period: task.period,
+        timestamp: new Date().toISOString(),
+      });
+    }
+
     // Use the reusable function to generate the completion key
     const completionKey = generateCompletionKey(task.period, task.id);
+
+    // ✅ SECURITY: Log successful key generation
+    if (IS_DEV) {
+      console.log(
+        `[InitiateCompletion] Completion key generated: ${completionKey} by ${authenticatedUser.email}`
+      );
+    }
+
     return new Response(JSON.stringify({ completionKey }), {
       status: 200,
       headers: { "Content-Type": "application/json" },
