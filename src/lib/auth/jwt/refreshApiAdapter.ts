@@ -246,10 +246,24 @@ export class RefreshApiAdapter {
   }
 
   /**
-   * Helper method to clear authentication cookies
+   * Helper method to clear authentication cookies with proper security settings
    */
   private static clearAuthCookies(response: NextResponse): void {
-    response.cookies.delete("access_token");
-    response.cookies.delete("refresh_token");
+    // ✅ SECURITY: Clear cookies with proper security settings
+    response.cookies.set("access_token", "", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      path: "/",
+      expires: new Date(0), // Expire immediately
+    });
+    
+    response.cookies.set("refresh_token", "", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      path: "/",
+      expires: new Date(0), // Expire immediately
+    });
   }
 }
