@@ -172,12 +172,12 @@ export default async function middleware(req: NextRequest) {
   );
 
   // TEMPORARY: Allow all page routes for debugging
-  if (IS_DEV) {
-    console.log(
-      `[Middleware] DEBUGGING: Allowing all page routes without authentication`
-    );
-    return intlMiddleware(req);
-  }
+  // if (IS_DEV) {
+  //   console.log(
+  //     `[Middleware] DEBUGGING: Allowing all page routes without authentication`
+  //   );
+  //   return intlMiddleware(req);
+  // }
 
   // If it's a public route, just apply internationalization
   if (isPublicRoute) {
