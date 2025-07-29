@@ -2,11 +2,12 @@
 
 // import {  } from 'next-intl/navigation';
 import { Link,usePathname } from '@/lib/navigation'; // Import from your navigation config
-import { Archive, Home, Trophy } from 'lucide-react';
+import { Archive, Home, Trophy, LogOut, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from './theme-toggle';
 import { LanguageSwitcher } from './language-switcher';
 import { useTranslations } from 'next-intl';
+import { useToast } from '@/hooks/use-toast';
 import { Sheet, SheetTrigger, SheetContent, SheetTitle } from '@/components/ui/sheet';
 import { Menu } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -16,14 +17,82 @@ import LoadingSpinner from './loading-spinner';
 
 export function Header() {
   const router = useRouter();
-
+  const { toast } = useToast();
 
   const t = useTranslations('Header');
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [logoutLoading, setLogoutLoading] = useState(false);
+  
   console.log('typeof usePathname:', typeof usePathname);
   const pathname = usePathname(); 
   const isArchivePage = pathname.includes('/archive');
+
+  // ✅ ENTERPRISE: Logout function with proper error handling and loading states
+  const handleLogout = async (isMobile: boolean = false) => {
+    try {
+      setLogoutLoading(true);
+      
+      // Show immediate feedback to user
+      toast({
+        title: 'Logging out...',
+        description: 'Please wait while we log you out securely.',
+        variant: 'default',
+      });
+
+      // Close mobile sheet if applicable
+      if (isMobile) {
+        setOpen(false);
+      }
+
+      // Call logout API endpoint
+      const response = await fetch('/api/auth/logout', {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Logout failed: ${response.status} ${response.statusText}`);
+      }
+
+      const result = await response.json();
+
+      // Success feedback
+      toast({
+        title: 'Logged out successfully',
+        description: 'You have been securely logged out. Redirecting to login...',
+        variant: 'success',
+      });
+
+      // Add small delay for better UX before redirect
+      setTimeout(() => {
+        setLoading(true);
+        router.push('/login?message=logged-out');
+      }, 1000);
+
+    } catch (error) {
+      console.error('[Header] Logout error:', error);
+      
+      // Error feedback with fallback action
+      toast({
+        title: 'Logout Error',
+        description: 'Logout encountered an issue, but you will be redirected to login for security.',
+        variant: 'destructive',
+      });
+
+      // Even on error, redirect to login for security
+      setTimeout(() => {
+        setLoading(true);
+        router.push('/login?message=logout-error');
+      }, 1500);
+
+    } finally {
+      setLogoutLoading(false);
+    }
+  };
 
   // Hide loading spinner after navigation
   useEffect(() => {
@@ -39,7 +108,7 @@ export function Header() {
 
   return (
     <header className="bg-card border-b sticky top-0 z-50">
-      {loading && <LoadingSpinner />}
+      {(loading || logoutLoading) && <LoadingSpinner />}
       <div className="container mx-auto flex items-center justify-between p-4 ">
         <Link href="/" className="flex items-center gap-2 no-underline">
           <Trophy className="h-8 w-8 text-primary" />
@@ -71,6 +140,20 @@ export function Header() {
           </Button>
           <LanguageSwitcher />
           <ThemeToggle />
+          {/* ✅ DESKTOP LOGOUT BUTTON */}
+          <Button 
+            variant="outline" 
+            onClick={() => handleLogout(false)}
+            disabled={logoutLoading || loading}
+            className="text-destructive hover:text-destructive-foreground hover:bg-destructive"
+          >
+            {logoutLoading ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              <LogOut className="mr-2 h-4 w-4" />
+            )}
+            {logoutLoading ? 'Logging out...' : t('logout')}
+          </Button>
         </nav>
         {/* Mobile Hamburger */}
         <div className="md:hidden">
@@ -116,6 +199,22 @@ export function Header() {
                   <Archive className="mr-2 h-4 w-4" />
                   {t('archive')}
                 </Button>
+                
+                {/* ✅ MOBILE LOGOUT BUTTON */}
+                <Button 
+                  variant="outline" 
+                  className="justify-start w-full mt-4 text-destructive hover:text-destructive-foreground hover:bg-destructive"
+                  onClick={() => handleLogout(true)}
+                  disabled={logoutLoading || loading}
+                >
+                  {logoutLoading ? (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  ) : (
+                    <LogOut className="mr-2 h-4 w-4" />
+                  )}
+                  {logoutLoading ? 'Logging out...' : t('logout')}
+                </Button>
+                
                 <div className="flex gap-2 mt-4">
                   <LanguageSwitcher />
                   <ThemeToggle />

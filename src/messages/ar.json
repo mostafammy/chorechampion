@@ -2,7 +2,8 @@
   "Header": {
     "title": "بطل الأعمال",
     "dashboard": "لوحة التحكم",
-    "archive": "الأرشيف"
+    "archive": "الأرشيف",
+    "logout": "تسجيل الخروج"
   },
   "Dashboard": {
     "overallProgress": "التقدم العام",
