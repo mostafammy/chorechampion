@@ -25,14 +25,29 @@ export function AppProvider({
   initialUserRole = null, // ✅ ADD: Default to null
   initialIsAdmin = false, // ✅ ADD: Default to false
 }: AppProviderProps) {
-  // ✅ PHASE 2: Authentication Guard Integration
+  // ✅ OPTIMIZATION: Determine initial auth status from server-side data
+  const hasServerSideAuth = initialUserRole !== null;
+  const initialAuthStatus = hasServerSideAuth ? "authenticated" : "checking";
+  
+  if (hasServerSideAuth) {
+    console.log('[AppProvider] ✅ Server-side authentication detected - optimizing loading state:', {
+      userRole: initialUserRole,
+      isAdmin: initialIsAdmin,
+      skipAuthCheck: true
+    });
+  }
+  
+  // ✅ PHASE 2: Authentication Guard Integration with server-side optimization
   const { 
     authStatus, 
     isLoading: authLoading, 
     isAuthenticated, 
     checkAuthentication,
     refreshToken 
-  } = useAuthenticationGuard();
+  } = useAuthenticationGuard({
+    initialAuthStatus,
+    skipInitialCheck: hasServerSideAuth, // Skip initial check if we have server-side data
+  });
 
   const [members] = useState<Member[]>(initialMembers);
   const [activeTasks, setActiveTasks] = useState<Task[]>(initialActiveTasks);
@@ -130,8 +145,8 @@ export function AppProvider({
   // ✅ CLIENT-SIDE FALLBACK: Fetch user role if not provided server-side
   useEffect(() => {
     const fetchUserRoleIfNeeded = async () => {
-      // Only fetch if authenticated but no role provided from server
-      if (isAuthenticated && !authLoading && userRole === null) {
+      // ✅ OPTIMIZATION: Only fetch if authenticated but no role provided from server AND no server-side auth data
+      if (isAuthenticated && !authLoading && userRole === null && !hasServerSideAuth) {
         try {
           console.log('[AppProvider] ⏳ Fetching user role as client-side fallback...');
           
@@ -157,11 +172,13 @@ export function AppProvider({
           setUserRole('USER');
           setIsAdmin(false);
         }
+      } else if (hasServerSideAuth) {
+        console.log('[AppProvider] ✅ Using server-side user role - no fallback needed');
       }
     };
 
     fetchUserRoleIfNeeded();
-  }, [isAuthenticated, authLoading, userRole]);
+  }, [isAuthenticated, authLoading, userRole, hasServerSideAuth]);
 
   // ✅ CLEAR USER ROLE ON LOGOUT
   useEffect(() => {

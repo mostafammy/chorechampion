@@ -29,6 +29,11 @@ interface AuthGuardResult {
   isLoading: boolean;
 }
 
+interface AuthGuardOptions {
+  initialAuthStatus?: AuthStatus; // ✅ NEW: Allow server-side auth status
+  skipInitialCheck?: boolean; // ✅ NEW: Skip initial check if server-side data is available
+}
+
 // =====================================================
 // CORE TOKEN MANAGEMENT UTILITIES
 // =====================================================
@@ -236,8 +241,12 @@ class TokenManager {
 // REACT HOOK FOR AUTHENTICATION MANAGEMENT
 // =====================================================
 
-export function useAuthenticationGuard(): AuthGuardResult {
-  const [authStatus, setAuthStatus] = useState<AuthStatus>("checking");
+export function useAuthenticationGuard(
+  options: AuthGuardOptions = {}
+): AuthGuardResult {
+  const { initialAuthStatus = "checking", skipInitialCheck = false } = options;
+
+  const [authStatus, setAuthStatus] = useState<AuthStatus>(initialAuthStatus);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const router = useRouter();
   const backgroundIntervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -424,14 +433,21 @@ export function useAuthenticationGuard(): AuthGuardResult {
   useEffect(() => {
     mountedRef.current = true;
 
-    // Initial authentication check
-    checkAuthentication();
+    // ✅ OPTIMIZATION: Skip initial check if server-side data is available and valid
+    if (!skipInitialCheck) {
+      // Initial authentication check
+      checkAuthentication();
+    } else {
+      console.log(
+        "[useAuthenticationGuard] Skipping initial check - using server-side authentication state"
+      );
+    }
 
     return () => {
       mountedRef.current = false;
       stopBackgroundMonitoring();
     };
-  }, [checkAuthentication, stopBackgroundMonitoring]);
+  }, [checkAuthentication, stopBackgroundMonitoring, skipInitialCheck]);
 
   // Start/stop background monitoring based on auth status
   useEffect(() => {
