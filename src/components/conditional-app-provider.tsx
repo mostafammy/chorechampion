@@ -10,6 +10,8 @@ interface ConditionalAppProviderProps {
   initialActiveTasks?: Task[];
   initialArchivedTasks?: ArchivedTask[];
   initialScoreAdjustments?: Record<string, number>;
+  initialUserRole?: 'ADMIN' | 'USER' | null; // ✅ ADD: Initial user role
+  initialIsAdmin?: boolean; // ✅ ADD: Initial admin status
 }
 
 // Define public routes that don't need AppProvider authentication
@@ -19,7 +21,9 @@ export function ConditionalAppProvider({
   children, 
   initialActiveTasks = [], 
   initialArchivedTasks = [], 
-  initialScoreAdjustments = {} 
+  initialScoreAdjustments = {},
+  initialUserRole = null, // ✅ ADD: Default to null
+  initialIsAdmin = false, // ✅ ADD: Default to false
 }: ConditionalAppProviderProps) {
   const pathname = usePathname();
   
@@ -51,6 +55,8 @@ export function ConditionalAppProvider({
       initialActiveTasks={initialActiveTasks}
       initialArchivedTasks={initialArchivedTasks}
       initialScoreAdjustments={initialScoreAdjustments}
+      initialUserRole={initialUserRole} // ✅ ADD: Pass user role
+      initialIsAdmin={initialIsAdmin}   // ✅ ADD: Pass admin status
     >
       {children}
     </AppProvider>

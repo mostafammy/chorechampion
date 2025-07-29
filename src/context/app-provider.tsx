@@ -11,6 +11,8 @@ interface AppProviderProps extends BaseAppProviderProps {
   initialActiveTasks?: Task[];
   initialArchivedTasks?: ArchivedTask[];
   initialScoreAdjustments?: Record<string, number>;
+  initialUserRole?: 'ADMIN' | 'USER' | null; // ✅ ADD: Initial user role
+  initialIsAdmin?: boolean; // ✅ ADD: Initial admin status
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -20,6 +22,8 @@ export function AppProvider({
   initialActiveTasks = [],
   initialArchivedTasks = [],
   initialScoreAdjustments = {},
+  initialUserRole = null, // ✅ ADD: Default to null
+  initialIsAdmin = false, // ✅ ADD: Default to false
 }: AppProviderProps) {
   // ✅ PHASE 2: Authentication Guard Integration
   const { 
@@ -34,6 +38,10 @@ export function AppProvider({
   const [activeTasks, setActiveTasks] = useState<Task[]>(initialActiveTasks);
   const [archivedTasks, setArchivedTasks] = useState<ArchivedTask[]>(initialArchivedTasks);
   const [scoreAdjustments, setScoreAdjustments] = useState<Record<string, number>>(initialScoreAdjustments);
+  
+  // ✅ NEW: User role state with server-side initial values
+  const [userRole, setUserRole] = useState<'ADMIN' | 'USER' | null>(initialUserRole);
+  const [isAdmin, setIsAdmin] = useState<boolean>(initialIsAdmin);
 
   // Remove the useEffect that fetches tasks on mount
 
@@ -118,6 +126,51 @@ export function AppProvider({
 
     fetchTasksIfNeeded();
   }, [isAuthenticated, authLoading, activeTasks.length]);
+
+  // ✅ CLIENT-SIDE FALLBACK: Fetch user role if not provided server-side
+  useEffect(() => {
+    const fetchUserRoleIfNeeded = async () => {
+      // Only fetch if authenticated but no role provided from server
+      if (isAuthenticated && !authLoading && userRole === null) {
+        try {
+          console.log('[AppProvider] ⏳ Fetching user role as client-side fallback...');
+          
+          const { fetchWithAuth } = await import('@/lib/auth/fetchWithAuth');
+          const response = await fetchWithAuth('/api/auth/user-info', {
+            method: 'GET',
+            correlationId: `user-role-fallback-${Date.now()}`,
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            setUserRole(data.role || 'USER');
+            setIsAdmin(data.role === 'ADMIN');
+            
+            console.log('[AppProvider] ✅ User role fetched as fallback:', {
+              role: data.role,
+              isAdmin: data.role === 'ADMIN'
+            });
+          }
+        } catch (error) {
+          console.error('[AppProvider] ❌ Error fetching user role fallback:', error);
+          // Default to USER role if fetch fails
+          setUserRole('USER');
+          setIsAdmin(false);
+        }
+      }
+    };
+
+    fetchUserRoleIfNeeded();
+  }, [isAuthenticated, authLoading, userRole]);
+
+  // ✅ CLEAR USER ROLE ON LOGOUT
+  useEffect(() => {
+    if (!isAuthenticated && userRole !== null) {
+      console.log('[AppProvider] 🔄 Clearing user role on logout');
+      setUserRole(null);
+      setIsAdmin(false);
+    }
+  }, [isAuthenticated, userRole]);
 
   // ✅ REMOVED: Client-side score fetching (now handled server-side in layout)
   // Scores are now loaded server-side and passed as initialScoreAdjustments
@@ -252,8 +305,10 @@ export function AppProvider({
       refreshTokens: refreshToken,
       startBackgroundMonitoring: () => {}, // Will be implemented if needed
       stopBackgroundMonitoring: () => {}, // Will be implemented if needed
+      userRole, // ✅ ADD: User role from server-side or client-side fallback
+      isAdmin, // ✅ ADD: Admin status derived from role
     },
-  }), [members, activeTasks, archivedTasks, scoreAdjustments, isAuthenticated, authLoading, checkAuthentication, refreshToken]);
+  }), [members, activeTasks, archivedTasks, scoreAdjustments, isAuthenticated, authLoading, checkAuthentication, refreshToken, userRole, isAdmin]);
 
   // ✅ PHASE 2: Show loading state while checking authentication
   // TEMPORARILY DISABLED for development - causing redirect loops after successful login

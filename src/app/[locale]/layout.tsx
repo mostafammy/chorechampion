@@ -42,6 +42,8 @@ export default async function LocaleLayout({
   let initialActiveTasks: Task[] = [];
   let initialArchivedTasks: ArchivedTask[] = [];
   let initialScoreAdjustments: Record<string, number> = {};
+  let initialUserRole: 'ADMIN' | 'USER' | null = null; // ✅ ADD: User role
+  let initialIsAdmin: boolean = false; // ✅ ADD: Admin status
 
   try {
     // Fetch initial data for server-side rendering
@@ -50,6 +52,25 @@ export default async function LocaleLayout({
 
     if (accessToken) {
       console.log('[Layout] ✅ Access token found - fetching server-side data');
+      
+      // ✅ NEW: Decode user role from JWT token server-side
+      try {
+        const jwtPayload = JSON.parse(
+          Buffer.from(accessToken.split('.')[1], 'base64').toString()
+        );
+        
+        initialUserRole = jwtPayload.role || null;
+        initialIsAdmin = initialUserRole === 'ADMIN';
+        
+        console.log('[Layout] ✅ User role decoded from JWT:', {
+          role: initialUserRole,
+          isAdmin: initialIsAdmin,
+          userId: jwtPayload.id
+        });
+      } catch (jwtError) {
+        console.warn('[Layout] ⚠️ Failed to decode JWT for user role:', jwtError);
+        // Continue without role info - will be handled client-side as fallback
+      }
       
       // Fetch all tasks using the service directly (server-side)
       const allTasks = await getAllTasksService();
@@ -123,6 +144,8 @@ export default async function LocaleLayout({
         initialActiveTasks={initialActiveTasks}
         initialArchivedTasks={initialArchivedTasks}
         initialScoreAdjustments={initialScoreAdjustments}
+        initialUserRole={initialUserRole} // ✅ ADD: Pass user role
+        initialIsAdmin={initialIsAdmin}   // ✅ ADD: Pass admin status
       >
         {children}
       </ConditionalAppProvider>

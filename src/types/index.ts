@@ -78,6 +78,8 @@ export interface AppContextType {
     refreshTokens: () => Promise<boolean>;
     startBackgroundMonitoring: () => void;
     stopBackgroundMonitoring: () => void;
+    userRole: "ADMIN" | "USER" | null; // ✅ ADD: User role for instant access
+    isAdmin: boolean; // ✅ ADD: Admin status for quick checks
   };
 }
 
