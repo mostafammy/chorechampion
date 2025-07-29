@@ -1,4 +1,8 @@
 import { createSecureEndpoint } from "@/lib/security/secureEndpoint";
+import {
+  requireRole,
+  logSuccessfulAccess,
+} from "@/lib/security/roleValidation";
 import { getRedis } from "@/lib/redis";
 import { generateCompletionKey, IS_DEV } from "@/lib/utils";
 import { NextRequest, NextResponse } from "next/server";
@@ -12,8 +16,11 @@ import type { Task } from "@/types";
  * Initiates task completion flow by generating a secure completion key.
  * Uses SecureEndpoint framework for enterprise-grade security and performance.
  *
+ * ⚠️  ADMIN ONLY ACCESS - Only administrators can initiate task completion.
+ *
  * Features:
  * - ✅ SecureEndpoint integration with authentication & rate limiting
+ * - ✅ Admin-only role-based access control
  * - ✅ Zod validation for type-safe input validation
  * - ✅ Redis-based task retrieval with error handling
  * - ✅ Secure completion key generation
@@ -51,8 +58,9 @@ type InitiateCompletionResponse =
 /**
  * POST /api/InitiateCompletion
  *
- * ✅ Enterprise task completion initiation endpoint
+ * ✅ Enterprise task completion initiation endpoint - ADMIN ONLY
  * Generates secure completion key for task completion workflow
+ * Only administrators can initiate task completion for security and control
  */
 export const POST = createSecureEndpoint(
   {
@@ -73,7 +81,21 @@ export const POST = createSecureEndpoint(
     { user, validatedData }
   ): Promise<NextResponse<InitiateCompletionResponse>> => {
     try {
+      // ✅ SECURITY: Role-based access validation (admin-only task completion)
+      const roleCheckError = requireRole(
+        "TASK_COMPLETION",
+        "InitiateCompletion"
+      )(user);
+      if (roleCheckError) {
+        return roleCheckError as NextResponse<InitiateCompletionResponse>;
+      }
+
       const { taskId } = validatedData as InitiateCompletionRequest;
+
+      // ✅ AUDIT: Log successful admin access
+      logSuccessfulAccess(user, "TASK_COMPLETION", "InitiateCompletion", {
+        taskId,
+      });
 
       if (IS_DEV) {
         console.log("[InitiateCompletion] Processing task initiation:", {

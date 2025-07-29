@@ -7,6 +7,7 @@ import { useTranslations } from 'next-intl';
 import { useToast } from '@/hooks/use-toast';
 import { fetchWithAuth } from '@/lib/auth/fetchWithAuth'; // ✅ Replace api (ky)
 import { ScoreService } from '@/lib/api/scoreService'; // ✅ Replace fetchAdjustScoreApi
+import { useUserRole } from '@/hooks/useUserRole'; // ✅ NEW: User role detection
 import { IS_DEV } from '@/lib/utils';
 import type { Task } from '@/types';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -25,7 +26,9 @@ export function TaskList({ tasks, onToggleTask }: TaskListProps) {
   const completionKeysRef = useRef<Record<string, string>>({});
   const t = useTranslations('TaskList');
   const { toast } = useToast();
-
+  
+  // ✅ NEW: User role detection for UI behavior
+  const { isAdmin, isLoading: roleLoading } = useUserRole();
 
   // Cleanup timeouts and resources on unmount
   useEffect(() => {
@@ -45,6 +48,16 @@ export function TaskList({ tasks, onToggleTask }: TaskListProps) {
 
   const handleToggle = async (taskId: string, taskData: Task) => {
     if (timeoutsRef.current[taskId]) return;
+    
+    // ✅ EARLY WARNING: Show admin requirement immediately for better UX
+    if (!roleLoading && !isAdmin) {
+      toast({
+        title: 'Admin Access Required',
+        description: 'Only administrators can complete tasks. Please contact an admin to mark this task as complete.',
+        variant: 'destructive',
+      });
+      return;
+    }
 
     setPendingRemoval((prev) => [...prev, taskId]);
 
@@ -90,12 +103,26 @@ export function TaskList({ tasks, onToggleTask }: TaskListProps) {
       }
       
     } catch (err) {
-      // ✅ ENHANCED: Better error categorization
+      // ✅ ENHANCED: Better error categorization with admin-only detection
       const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
       
+      // Check if this is an admin-only access error
+      let userFriendlyMessage = t('failedToInitiateCompletion') || 'Failed to initiate completion';
+      let toastTitle = t('error');
+      
+      if (errorMessage.includes('Insufficient privileges') || 
+          errorMessage.includes('Admin role required') ||
+          errorMessage.includes('HTTP 403')) {
+        userFriendlyMessage = 'Only administrators can complete tasks. Please contact an admin to mark this task as complete.';
+        toastTitle = 'Admin Access Required';
+      } else if (errorMessage.includes('HTTP 401') || errorMessage.includes('unauthorized')) {
+        userFriendlyMessage = 'Please log in to complete tasks.';
+        toastTitle = 'Authentication Required';
+      }
+      
       toast({
-        title: t('error'),
-        description: t('failedToInitiateCompletion') || 'Failed to initiate completion',
+        title: toastTitle,
+        description: userFriendlyMessage,
         variant: 'destructive',
       });
       
@@ -103,6 +130,7 @@ export function TaskList({ tasks, onToggleTask }: TaskListProps) {
         console.error('[TaskList] Phase 1 failed:', {
           taskId,
           error: errorMessage,
+          userFriendlyMessage,
           timestamp: new Date().toISOString(),
         });
       }
@@ -321,16 +349,22 @@ export function TaskList({ tasks, onToggleTask }: TaskListProps) {
                     <Checkbox
                       id={task.id}
                       checked={task.completed}
+                      disabled={!roleLoading && !isAdmin && !task.completed} // ✅ Disable for non-admin users (except already completed)
                       onCheckedChange={() => handleToggle(task.id, task)}
                       aria-label={`Mark task ${task.name} as ${task.completed ? 'incomplete' : 'complete'}`}
+                      className={!isAdmin && !task.completed ? 'opacity-50' : ''} // ✅ Visual indicator for disabled state
                     />
                     <Label
                       htmlFor={task.id}
                       className={`flex-1 cursor-pointer ${
                         task.completed ? 'line-through text-muted-foreground' : 'text-foreground'
-                      }`}
+                      } ${!isAdmin && !task.completed ? 'opacity-50' : ''}`} // ✅ Dim label for non-admin
+                      title={!isAdmin && !task.completed ? 'Only administrators can complete tasks' : undefined} // ✅ Tooltip for explanation
                     >
                       {task.name}
+                      {!isAdmin && !task.completed && (
+                        <span className="ml-2 text-xs text-muted-foreground">(Admin Only)</span>
+                      )}
                     </Label>
                     <span
                       className={`font-bold text-sm px-2 py-1 rounded-md ${

@@ -2,6 +2,10 @@ import { getRedis } from "@/lib/redis";
 import { nanoid } from "nanoid";
 import { IS_DEV } from "@/lib/utils";
 import { createSecureEndpoint } from "@/lib/security/secureEndpoint";
+import {
+  requireRole,
+  logSuccessfulAccess,
+} from "@/lib/security/roleValidation";
 import { z } from "zod";
 import { NextRequest, NextResponse } from "next/server";
 import type { Task, Period, AddTaskRequest } from "@/types";
@@ -43,6 +47,19 @@ export const POST = createSecureEndpoint(
   },
   async (req: NextRequest, { user, validatedData }) => {
     try {
+      // ✅ SECURITY: Role-based access control - Admin only for task creation
+      const roleCheckError = requireRole("TASK_MANAGEMENT", "AddTask")(user);
+      if (roleCheckError) {
+        return roleCheckError;
+      }
+
+      // ✅ AUDIT: Log successful admin access
+      logSuccessfulAccess(user, "TASK_MANAGEMENT", "AddTask", {
+        taskName: validatedData.name,
+        assigneeId: validatedData.assigneeId,
+        score: validatedData.score,
+      });
+
       // ✅ Enhanced logging with authenticated user context
       if (IS_DEV) {
         console.log("[AddTask] Task creation request:", {

@@ -6,6 +6,7 @@ import { z } from 'zod';
 import { PlusCircle, Plus, Minus } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { fetchWithAuth } from '@/lib/auth/fetchWithAuth'; // ✅ Import fetchWithAuth
+import { useUserRole } from '@/hooks/useUserRole'; // ✅ NEW: User role detection
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
@@ -26,6 +27,9 @@ export function AddTaskDialog({ members, onAddTask }: AddTaskDialogProps) {
   const t = useTranslations('AddTaskDialog');
   const { toast } = useToast();
   
+  // ✅ NEW: User role detection for admin-only controls
+  const { isAdmin, isLoading: roleLoading } = useUserRole();
+  
   const formSchema = z.object({
     name: z.string().min(2, { message: t('validation.taskName') }),
     score: z.coerce.number().min(1, { message: t('validation.score') }),
@@ -43,6 +47,16 @@ export function AddTaskDialog({ members, onAddTask }: AddTaskDialogProps) {
   });
 
   const onSubmit = async (data: AddTaskFormValues) => {
+    // ✅ EARLY WARNING: Check admin role before submission
+    if (!roleLoading && !isAdmin) {
+      toast({
+        title: 'Admin Access Required',
+        description: 'Only administrators can add tasks. Please contact an admin to add new tasks.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
     setLoading(true);
     try {
         console.log('Adding task:', data);
@@ -92,14 +106,23 @@ export function AddTaskDialog({ members, onAddTask }: AddTaskDialogProps) {
     } catch (error) {
         console.error("Error adding task:", error);
         
-        // ✅ Enhanced error handling with user-friendly messages
-        const errorMessage = error instanceof Error 
-            ? error.message 
-            : 'Failed to add task';
+        // ✅ Enhanced error handling with user-friendly messages and admin-only detection
+        let userFriendlyMessage = error instanceof Error ? error.message : 'Failed to add task';
+        let toastTitle = t('error') || 'Error';
+        
+        if (userFriendlyMessage.includes('Insufficient privileges') || 
+            userFriendlyMessage.includes('Admin role required') ||
+            userFriendlyMessage.includes('HTTP 403')) {
+          userFriendlyMessage = 'Only administrators can add tasks. Please contact an admin to add new tasks.';
+          toastTitle = 'Admin Access Required';
+        } else if (userFriendlyMessage.includes('HTTP 401') || userFriendlyMessage.includes('unauthorized')) {
+          userFriendlyMessage = 'Please log in to add tasks.';
+          toastTitle = 'Authentication Required';
+        }
             
         toast({
-          title: t('error') || 'Error',
-          description: errorMessage,
+          title: toastTitle,
+          description: userFriendlyMessage,
           variant: 'destructive',
         });
     } finally {
@@ -115,9 +138,16 @@ export function AddTaskDialog({ members, onAddTask }: AddTaskDialogProps) {
       }
     }}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm">
+        <Button 
+          variant="outline" 
+          size="sm"
+          disabled={!roleLoading && !isAdmin} // ✅ Disable for non-admin users
+          className={!isAdmin ? 'opacity-50' : ''} // ✅ Visual indicator for disabled state
+          title={!isAdmin ? 'Only administrators can add tasks' : undefined} // ✅ Tooltip for explanation
+        >
           <PlusCircle className="mr-2 h-4 w-4" />
           {t('addTask')}
+          {!isAdmin && <span className="ml-1 text-xs">(Admin Only)</span>}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
