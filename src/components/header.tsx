@@ -14,6 +14,7 @@ import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import LoadingSpinner from './loading-spinner';
 import { fetchWithAuth } from '@/lib/auth/fetchWithAuth';
+import { userRoleCache } from '@/hooks/useUserRole';
 
 
 export function Header() {
@@ -45,6 +46,9 @@ export function Header() {
       if (isMobile) {
         setOpen(false);
       }
+
+      // ✅ PERFORMANCE: Clear user role cache before logout
+      userRoleCache.clear();
 
       // Use enterprise fetchWithAuth with proper configuration
       const response = await fetchWithAuth('/api/auth/logout', {
