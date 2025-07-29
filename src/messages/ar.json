@@ -13,7 +13,10 @@
   },
   "PerformanceSummary": {
     "totalPoints": "مجموع النقاط",
-    "taskProgress": "تقدم المهمة"
+    "taskProgress": "تقدم المهمة",
+    "adminAccessRequired": "مطلوب وصول المشرف",
+    "adminAccessRequiredDescription": "يمكن للمشرفين فقط تعديل النقاط. يرجى الاتصال بالمشرف لتعديل النقاط.",
+    "adminOnlyTooltip": "يمكن للمشرفين فقط تعديل النقاط"
   },
   "AddTaskDialog": {
     "addTask": "أضف مهمة",
@@ -25,6 +28,7 @@
     "frequencyLabel": "التكرار",
     "selectPersonPlaceholder": "اختر شخصًا",
     "selectPeriodPlaceholder": "اختر فترة",
+    "adminOnlyTooltip": "يمكن للمشرفين فقط إضافة المهام",
     "daily": "يومي",
     "weekly": "أسبوعي",
     "monthly": "شهري",
@@ -49,7 +53,10 @@
     "taskCompletionFailed": "فشل في إكمال المهمة.",
     "cancelled": "تم الإلغاء",
     "taskCompletionCancelled": "تم إلغاء إكمال المهمة من قبل المستخدم.",
-    "taskConfirmationFailed": "فشل في تأكيد إكمال المهمة."
+    "taskConfirmationFailed": "فشل في تأكيد إكمال المهمة.",
+    "adminOnlyTooltip": "يمكن للمشرفين فقط إكمال المهام",
+    "adminAccessRequired": "مطلوب وصول المشرف",
+    "adminAccessRequiredDescription": "يمكن للمشرفين فقط إكمال المهام. يرجى الاتصال بالمشرف لوضع علامة على هذه المهمة كمكتملة."
   },
   "ArchivePage": {
     "title": "أرشيف المهام",

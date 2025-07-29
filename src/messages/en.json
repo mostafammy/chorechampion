@@ -13,7 +13,10 @@
   },
   "PerformanceSummary": {
     "totalPoints": "Total Points",
-    "taskProgress": "Task Progress"
+    "taskProgress": "Task Progress",
+    "adminAccessRequired": "Admin Access Required",
+    "adminAccessRequiredDescription": "Only administrators can adjust scores. Please contact an admin to modify scores.",
+    "adminOnlyTooltip": "Only administrators can adjust scores"
   },
   "AddTaskDialog": {
     "addTask": "Add Task",
@@ -25,6 +28,7 @@
     "frequencyLabel": "Frequency",
     "selectPersonPlaceholder": "Select a person",
     "selectPeriodPlaceholder": "Select a period",
+    "adminOnlyTooltip": "Only administrators can add tasks",
     "daily": "Daily",
     "weekly": "Weekly",
     "monthly": "Monthly",
@@ -49,7 +53,10 @@
     "taskCompletionFailed": "Task completion failed.",
     "cancelled": "Cancelled",
     "taskCompletionCancelled": "Task completion cancelled by user.",
-    "taskConfirmationFailed": "Task confirmation failed."
+    "taskConfirmationFailed": "Task confirmation failed.",
+    "adminOnlyTooltip": "Only administrators can complete tasks",
+    "adminAccessRequired": "Admin Access Required",
+    "adminAccessRequiredDescription": "Only administrators can complete tasks. Please contact an admin to mark this task as complete."
   },
   "ArchivePage": {
     "title": "Task Archive",

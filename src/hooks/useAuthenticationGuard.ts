@@ -402,6 +402,14 @@ export function useAuthenticationGuard(
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (!document.hidden && authStatus === "authenticated") {
+        // ✅ OPTIMIZATION: Skip re-authentication if we have server-side auth data
+        if (skipInitialCheck && initialAuthStatus === "authenticated") {
+          console.log(
+            "[useAuthenticationGuard] Tab became active, but skipping auth check - using server-side data"
+          );
+          return;
+        }
+        
         console.log(
           "[useAuthenticationGuard] Tab became active, checking auth..."
         );
@@ -412,12 +420,20 @@ export function useAuthenticationGuard(
     document.addEventListener("visibilitychange", handleVisibilityChange);
     return () =>
       document.removeEventListener("visibilitychange", handleVisibilityChange);
-  }, [authStatus, checkAuthentication]);
+  }, [authStatus, checkAuthentication, skipInitialCheck, initialAuthStatus]);
 
   // Handle online/offline
   useEffect(() => {
     const handleOnline = () => {
       if (authStatus === "authenticated") {
+        // ✅ OPTIMIZATION: Skip re-authentication if we have server-side auth data
+        if (skipInitialCheck && initialAuthStatus === "authenticated") {
+          console.log(
+            "[useAuthenticationGuard] Network reconnected, but skipping auth check - using server-side data"
+          );
+          return;
+        }
+        
         console.log(
           "[useAuthenticationGuard] Network reconnected, checking auth..."
         );
@@ -427,7 +443,7 @@ export function useAuthenticationGuard(
 
     window.addEventListener("online", handleOnline);
     return () => window.removeEventListener("online", handleOnline);
-  }, [authStatus, checkAuthentication]);
+  }, [authStatus, checkAuthentication, skipInitialCheck, initialAuthStatus]);
 
   // Initialize authentication and background monitoring
   useEffect(() => {

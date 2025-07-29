@@ -180,14 +180,20 @@ export function AppProvider({
     fetchUserRoleIfNeeded();
   }, [isAuthenticated, authLoading, userRole, hasServerSideAuth]);
 
-  // ✅ CLEAR USER ROLE ON LOGOUT
+  // ✅ CLEAR USER ROLE ON LOGOUT (but protect server-side auth during tab switching)
   useEffect(() => {
     if (!isAuthenticated && userRole !== null) {
+      // ✅ SAFEGUARD: Don't clear user role if we have server-side auth and just temporarily checking
+      if (hasServerSideAuth && authStatus === "checking") {
+        console.log('[AppProvider] ⏸️ Skipping user role clear - temporary check with server-side auth');
+        return;
+      }
+      
       console.log('[AppProvider] 🔄 Clearing user role on logout');
       setUserRole(null);
       setIsAdmin(false);
     }
-  }, [isAuthenticated, userRole]);
+  }, [isAuthenticated, userRole, hasServerSideAuth, authStatus]);
 
   // ✅ REMOVED: Client-side score fetching (now handled server-side in layout)
   // Scores are now loaded server-side and passed as initialScoreAdjustments

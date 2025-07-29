@@ -52,8 +52,8 @@ export function TaskList({ tasks, onToggleTask }: TaskListProps) {
     // ✅ EARLY WARNING: Show admin requirement immediately for better UX
     if (!roleLoading && !isAdmin) {
       toast({
-        title: 'Admin Access Required',
-        description: 'Only administrators can complete tasks. Please contact an admin to mark this task as complete.',
+        title: t('adminAccessRequired'),
+        description: t('adminAccessRequiredDescription'),
         variant: 'destructive',
       });
       return;
@@ -113,8 +113,8 @@ export function TaskList({ tasks, onToggleTask }: TaskListProps) {
       if (errorMessage.includes('Insufficient privileges') || 
           errorMessage.includes('Admin role required') ||
           errorMessage.includes('HTTP 403')) {
-        userFriendlyMessage = 'Only administrators can complete tasks. Please contact an admin to mark this task as complete.';
-        toastTitle = 'Admin Access Required';
+        userFriendlyMessage = t('adminAccessRequiredDescription');
+        toastTitle = t('adminAccessRequired');
       } else if (errorMessage.includes('HTTP 401') || errorMessage.includes('unauthorized')) {
         userFriendlyMessage = 'Please log in to complete tasks.';
         toastTitle = 'Authentication Required';
@@ -359,7 +359,7 @@ export function TaskList({ tasks, onToggleTask }: TaskListProps) {
                       className={`flex-1 cursor-pointer ${
                         task.completed ? 'line-through text-muted-foreground' : 'text-foreground'
                       } ${!isAdmin && !task.completed ? 'opacity-50' : ''}`} // ✅ Dim label for non-admin
-                      title={!isAdmin && !task.completed ? 'Only administrators can complete tasks' : undefined} // ✅ Tooltip for explanation
+                      title={!isAdmin && !task.completed ? t('adminOnlyTooltip') : undefined} // ✅ Tooltip for explanation
                     >
                       {task.name}
                       {!isAdmin && !task.completed && (

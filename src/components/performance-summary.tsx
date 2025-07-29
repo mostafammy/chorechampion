@@ -34,8 +34,8 @@ export function PerformanceSummary({
   const handleScoreAdjustment = (amount: number) => {
     if (!roleLoading && !isAdmin) {
       toast({
-        title: 'Admin Access Required',
-        description: 'Only administrators can adjust scores. Please contact an admin to modify scores.',
+        title: t('adminAccessRequired'),
+        description: t('adminAccessRequiredDescription'),
         variant: 'destructive',
       });
       return;
@@ -66,7 +66,7 @@ export function PerformanceSummary({
               className={`h-8 w-8 shrink-0 rounded-full ${!isAdmin ? 'opacity-50' : ''}`} // ✅ Visual indicator for disabled state
               onClick={() => handleScoreAdjustment(-5)}
               disabled={!roleLoading && (!isAdmin || totalScore <= 0)} // ✅ Disable for non-admin users or zero score
-              title={!isAdmin ? 'Only administrators can adjust scores' : undefined} // ✅ Tooltip for explanation
+              title={!isAdmin ? t('adminOnlyTooltip') : undefined} // ✅ Tooltip for explanation
             >
               <Minus className="h-4 w-4" />
               <span className="sr-only">Decrease score by 5</span>
@@ -86,7 +86,7 @@ export function PerformanceSummary({
               className={`h-8 w-8 shrink-0 rounded-full ${!isAdmin ? 'opacity-50' : ''}`} // ✅ Visual indicator for disabled state
               onClick={() => handleScoreAdjustment(5)}
               disabled={!roleLoading && !isAdmin} // ✅ Disable for non-admin users
-              title={!isAdmin ? 'Only administrators can adjust scores' : undefined} // ✅ Tooltip for explanation
+              title={!isAdmin ? t('adminOnlyTooltip') : undefined} // ✅ Tooltip for explanation
             >
               <Plus className="h-4 w-4" />
               <span className="sr-only">Increase score by 5</span>

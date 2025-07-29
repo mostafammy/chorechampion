@@ -50,8 +50,8 @@ export function AddTaskDialog({ members, onAddTask }: AddTaskDialogProps) {
     // ✅ EARLY WARNING: Check admin role before submission
     if (!roleLoading && !isAdmin) {
       toast({
-        title: 'Admin Access Required',
-        description: 'Only administrators can add tasks. Please contact an admin to add new tasks.',
+        title: t('adminAccessRequired'),
+        description: t('adminAccessRequiredDescription'),
         variant: 'destructive',
       });
       return;
@@ -113,8 +113,8 @@ export function AddTaskDialog({ members, onAddTask }: AddTaskDialogProps) {
         if (userFriendlyMessage.includes('Insufficient privileges') || 
             userFriendlyMessage.includes('Admin role required') ||
             userFriendlyMessage.includes('HTTP 403')) {
-          userFriendlyMessage = 'Only administrators can add tasks. Please contact an admin to add new tasks.';
-          toastTitle = 'Admin Access Required';
+          userFriendlyMessage = t('adminAccessRequiredDescription');
+          toastTitle = t('adminAccessRequired');
         } else if (userFriendlyMessage.includes('HTTP 401') || userFriendlyMessage.includes('unauthorized')) {
           userFriendlyMessage = 'Please log in to add tasks.';
           toastTitle = 'Authentication Required';
@@ -143,7 +143,7 @@ export function AddTaskDialog({ members, onAddTask }: AddTaskDialogProps) {
           size="sm"
           disabled={!roleLoading && !isAdmin} // ✅ Disable for non-admin users
           className={!isAdmin ? 'opacity-50' : ''} // ✅ Visual indicator for disabled state
-          title={!isAdmin ? 'Only administrators can add tasks' : undefined} // ✅ Tooltip for explanation
+          title={!isAdmin ? t('adminOnlyTooltip') : undefined} // ✅ Tooltip for explanation
         >
           <PlusCircle className="mr-2 h-4 w-4" />
           {t('addTask')}
