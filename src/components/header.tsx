@@ -13,6 +13,7 @@ import { Menu } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import LoadingSpinner from './loading-spinner';
+import { fetchWithAuth } from '@/lib/auth/fetchWithAuth';
 
 
 export function Header() {
@@ -28,7 +29,7 @@ export function Header() {
   const pathname = usePathname(); 
   const isArchivePage = pathname.includes('/archive');
 
-  // ✅ ENTERPRISE: Logout function with proper error handling and loading states
+  // ✅ ENTERPRISE: Logout function with proper error handling and fetchWithAuth
   const handleLogout = async (isMobile: boolean = false) => {
     try {
       setLogoutLoading(true);
@@ -45,10 +46,16 @@ export function Header() {
         setOpen(false);
       }
 
-      // Call logout API endpoint
-      const response = await fetch('/api/auth/logout', {
+      // Use enterprise fetchWithAuth with proper configuration
+      const response = await fetchWithAuth('/api/auth/logout', {
         method: 'POST',
-        credentials: 'include',
+        correlationId: `logout-${Date.now()}`,
+        enableRefresh: false, // Disable refresh for logout calls
+        throwOnSessionExpiry: false, // Don't throw on 401 during logout
+        onSessionExpired: () => {
+          // Custom handler for logout-specific session expiry
+          console.log('[Header] Session already expired during logout - proceeding with redirect');
+        },
         headers: {
           'Content-Type': 'application/json',
         },
