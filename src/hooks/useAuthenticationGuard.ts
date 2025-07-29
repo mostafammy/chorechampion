@@ -24,6 +24,7 @@ interface AuthGuardResult {
   isRefreshing: boolean;
   checkAuthentication: () => Promise<void>;
   refreshToken: () => Promise<boolean>;
+  logout: () => Promise<void>; // ✅ NEW: Manual logout function
   isAuthenticated: boolean;
   isLoading: boolean;
 }
@@ -177,6 +178,58 @@ class TokenManager {
       return "logout_required";
     }
   }
+
+  /**
+   * 🚨 NEW: Centralized logout function
+   * Calls logout endpoint and clears authentication state
+   */
+  static async performLogout(): Promise<void> {
+    try {
+      console.log("[TokenManager] Performing logout...");
+
+      // Call logout endpoint to clear cookies and blacklist tokens
+      const response = await fetch("/api/auth/logout", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (response.ok) {
+        console.log("[TokenManager] Logout endpoint called successfully");
+      } else {
+        console.warn(
+          "[TokenManager] Logout endpoint returned:",
+          response.status
+        );
+      }
+    } catch (error) {
+      console.error("[TokenManager] Logout endpoint failed:", error);
+      // Continue with logout even if endpoint fails
+    }
+
+    // Reset internal state
+    this.refreshInProgress = false;
+    this.refreshPromise = null;
+    this.lastRefreshAttempt = 0;
+
+    console.log("[TokenManager] Logout completed - state reset");
+  }
+
+  /**
+   * 🔄 NEW: Handle logout_required status with actual logout
+   */
+  static async handleLogoutRequired(): Promise<void> {
+    console.log("[TokenManager] Logout required - performing logout...");
+
+    // Call logout endpoint
+    await this.performLogout();
+
+    // Redirect to login in browser environment
+    if (typeof window !== "undefined") {
+      console.log("[TokenManager] Redirecting to login page...");
+      window.location.href = "/login?message=session-expired";
+    }
+  }
 }
 
 // =====================================================
@@ -207,13 +260,13 @@ export function useAuthenticationGuard(): AuthGuardResult {
         console.log("[useAuthenticationGuard] User authenticated successfully");
         setAuthStatus("authenticated");
       } else {
-        console.log("[useAuthenticationGuard] User not authenticated");
+        console.log(
+          "[useAuthenticationGuard] User not authenticated - performing logout"
+        );
         setAuthStatus("unauthenticated");
-        // TEMPORARILY DISABLED for development - causing redirect loops after successful login
-        if (false && !IS_DEV) {
-          // Redirect to login
-          router.push("/login");
-        }
+
+        // ✅ FIXED: Actually perform logout instead of just setting state
+        await TokenManager.handleLogoutRequired();
       }
     } catch (error) {
       console.error(
@@ -222,13 +275,43 @@ export function useAuthenticationGuard(): AuthGuardResult {
       );
       if (mountedRef.current) {
         setAuthStatus("unauthenticated");
-        // TEMPORARILY DISABLED for development - causing redirect loops after successful login
-        if (false && !IS_DEV) {
-          router.push("/login");
+        // Perform logout on error
+        await TokenManager.handleLogoutRequired();
+      }
+    }
+  }, []);
+
+  // Manual logout function
+  const logout = useCallback(async (): Promise<void> => {
+    if (!mountedRef.current) return;
+
+    try {
+      console.log("[useAuthenticationGuard] Manual logout initiated");
+      setAuthStatus("checking");
+
+      await TokenManager.performLogout();
+
+      if (mountedRef.current) {
+        setAuthStatus("unauthenticated");
+
+        // Redirect to login with logout message
+        if (typeof window !== "undefined") {
+          window.location.href = "/login?message=logged-out";
+        }
+      }
+    } catch (error) {
+      console.error("[useAuthenticationGuard] Manual logout failed:", error);
+
+      if (mountedRef.current) {
+        // Force logout even on error
+        setAuthStatus("unauthenticated");
+
+        if (typeof window !== "undefined") {
+          window.location.href = "/login?message=logout-error";
         }
       }
     }
-  }, [router]);
+  }, []);
 
   // Manual refresh function
   const refreshToken = useCallback(async (): Promise<boolean> => {
@@ -245,10 +328,8 @@ export function useAuthenticationGuard(): AuthGuardResult {
         return true;
       } else if (result === "logout_required") {
         setAuthStatus("unauthenticated");
-        // TEMPORARILY DISABLED for development - causing redirect loops after successful login
-        if (false && !IS_DEV) {
-          router.push("/login");
-        }
+        // ✅ FIXED: Perform actual logout
+        await TokenManager.handleLogoutRequired();
         return false;
       } else {
         return false;
@@ -261,7 +342,7 @@ export function useAuthenticationGuard(): AuthGuardResult {
         setIsRefreshing(false);
       }
     }
-  }, [router]);
+  }, []);
 
   // Start background monitoring
   const startBackgroundMonitoring = useCallback(() => {
@@ -283,12 +364,12 @@ export function useAuthenticationGuard(): AuthGuardResult {
           );
           await refreshToken();
         } else if (status === "logout_required") {
-          console.log("[useAuthenticationGuard] Logout required");
+          console.log(
+            "[useAuthenticationGuard] Logout required - performing logout"
+          );
           setAuthStatus("unauthenticated");
-          // TEMPORARILY DISABLED for development - causing redirect loops after successful login
-          if (false && !IS_DEV) {
-            router.push("/login");
-          }
+          // ✅ FIXED: Perform actual logout
+          await TokenManager.handleLogoutRequired();
         }
       } catch (error) {
         console.error(
@@ -297,7 +378,7 @@ export function useAuthenticationGuard(): AuthGuardResult {
         );
       }
     }, 60000); // Check every minute
-  }, [refreshToken, router]);
+  }, [refreshToken]);
 
   // Stop background monitoring
   const stopBackgroundMonitoring = useCallback(() => {
@@ -366,6 +447,7 @@ export function useAuthenticationGuard(): AuthGuardResult {
     isRefreshing,
     checkAuthentication,
     refreshToken,
+    logout, // ✅ NEW: Export logout function for manual logout
     isAuthenticated: authStatus === "authenticated",
     isLoading: authStatus === "checking" || isRefreshing,
   };

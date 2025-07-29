@@ -1,175 +1,197 @@
+import { createSecureEndpoint } from "@/lib/security/secureEndpoint";
 import { getRedis } from "@/lib/redis";
-import { generateCompletionKey } from "@/lib/utils";
-import { IS_DEV } from "@/lib/utils";
-import { requireAuth } from "@/lib/auth/requireAuth"; // ✅ Add authentication
-import { NextRequest } from "next/server";
-import type { InitiateCompletionRequest, Task } from "@/types";
+import { generateCompletionKey, IS_DEV } from "@/lib/utils";
+import { NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
+import type { Task } from "@/types";
 
-function isValidInitiateCompletionRequest(
-  body: any
-): body is InitiateCompletionRequest {
-  return (
-    body && typeof body.taskId === "string" && body.taskId.trim().length > 0
-  );
+/**
+ * 🚀 Task Completion Initiation Endpoint - Enterprise Edition
+ * ===========================================================
+ *
+ * Initiates task completion flow by generating a secure completion key.
+ * Uses SecureEndpoint framework for enterprise-grade security and performance.
+ *
+ * Features:
+ * - ✅ SecureEndpoint integration with authentication & rate limiting
+ * - ✅ Zod validation for type-safe input validation
+ * - ✅ Redis-based task retrieval with error handling
+ * - ✅ Secure completion key generation
+ * - ✅ Comprehensive audit logging
+ * - ✅ Performance optimized with early returns
+ */
+
+// ✅ Enterprise input validation with Zod
+const InitiateCompletionSchema = z.object({
+  taskId: z.string().min(1, "Task ID is required and cannot be empty").trim(),
+});
+
+type InitiateCompletionRequest = z.infer<typeof InitiateCompletionSchema>;
+
+interface InitiateCompletionSuccessResponse {
+  completionKey: string;
+  taskInfo?: {
+    id: string;
+    name: string;
+    period: string;
+    score: number;
+  };
 }
 
-export async function POST(request: NextRequest) {
-  try {
-    // ✅ SECURITY: Authenticate the request first
-    const authResult = await requireAuth(request);
+interface InitiateCompletionErrorResponse {
+  error: string;
+  errorCode: string;
+  details?: string;
+}
 
-    if (!authResult.ok) {
-      console.log("Authentication failed:", authResult.error);
-      return new Response(
-        JSON.stringify({
-          error: "Unauthorized - Authentication required",
-          errorCode: "AUTHENTICATION_REQUIRED",
-        }),
-        { status: 401, headers: { "Content-Type": "application/json" } }
-      );
-    }
+type InitiateCompletionResponse =
+  | InitiateCompletionSuccessResponse
+  | InitiateCompletionErrorResponse;
 
-    // Check if token refresh is needed - return special response for client-side handling
-    if (authResult.needsRefresh) {
-      console.log(
-        "Token refresh needed - returning refresh instruction to client"
-      );
-      return new Response(
-        JSON.stringify({
-          error: "Token refresh required",
-          errorCode: "TOKEN_REFRESH_REQUIRED",
-          needsRefresh: true,
-        }),
-        { status: 401, headers: { "Content-Type": "application/json" } }
-      );
-    }
-
-    const authenticatedUser = authResult.user!;
-    if (IS_DEV) {
-      console.log(
-        `[InitiateCompletion] Authenticated user: ${authenticatedUser.email} (${authenticatedUser.id})`
-      );
-    }
-
-    const redis = getRedis();
-
-    let body: unknown;
+/**
+ * POST /api/InitiateCompletion
+ *
+ * ✅ Enterprise task completion initiation endpoint
+ * Generates secure completion key for task completion workflow
+ */
+export const POST = createSecureEndpoint(
+  {
+    requireAuth: true, // ✅ Authentication required
+    rateLimit: {
+      type: "api", // ✅ Standard API rate limiting
+      customConfig: false,
+    },
+    validation: {
+      schema: InitiateCompletionSchema, // ✅ Zod validation
+    },
+    auditLog: true, // ✅ Audit logging for task operations
+    logRequests: IS_DEV, // ✅ Request logging in development
+    corsEnabled: true, // ✅ CORS for frontend access
+  },
+  async (
+    req: NextRequest,
+    { user, validatedData }
+  ): Promise<NextResponse<InitiateCompletionResponse>> => {
     try {
-      body = await request.json();
-    } catch (e) {
-      if (IS_DEV) {
-        console.error("[InitiateCompletion] Invalid JSON:", e);
-      }
-      return new Response(JSON.stringify({ error: "Invalid JSON" }), {
-        status: 400,
-        headers: { "Content-Type": "application/json" },
-      });
-    }
+      const { taskId } = validatedData as InitiateCompletionRequest;
 
-    if (!isValidInitiateCompletionRequest(body)) {
       if (IS_DEV) {
-        console.error(
-          "[InitiateCompletion] Invalid input: taskId is required and must be a non-empty string.",
-          body
+        console.log("[InitiateCompletion] Processing task initiation:", {
+          taskId,
+          userId: user.id,
+          email: user.email,
+          timestamp: new Date().toISOString(),
+        });
+      }
+
+      // ✅ PERFORMANCE: Get Redis connection
+      const redis = getRedis();
+
+      // ✅ SCALABILITY: Retrieve task data with error handling
+      let taskStr: string | null;
+      try {
+        taskStr = await redis.get(`task:${taskId}`);
+      } catch (redisError: any) {
+        console.error("[InitiateCompletion] Redis error:", redisError);
+        return NextResponse.json(
+          {
+            error: "Database connection failed",
+            errorCode: "DATABASE_ERROR",
+          },
+          { status: 503 }
         );
       }
-      return new Response(
-        JSON.stringify({
-          error:
-            "Invalid input: taskId is required and must be a non-empty string.",
-        }),
-        {
-          status: 400,
-          headers: { "Content-Type": "application/json" },
+
+      if (!taskStr) {
+        if (IS_DEV) {
+          console.log(`[InitiateCompletion] Task not found: ${taskId}`);
         }
-      );
-    }
+        return NextResponse.json(
+          {
+            error: "Task not found",
+            errorCode: "TASK_NOT_FOUND",
+          },
+          { status: 404 }
+        );
+      }
 
-    const { taskId } = body;
-    const taskStr = await redis.get(`task:${taskId}`);
-    if (!taskStr) {
-      if (IS_DEV) {
+      // ✅ PERFORMANCE: Parse task with proper error handling
+      let task: Task;
+      try {
+        task = typeof taskStr === "string" ? JSON.parse(taskStr) : taskStr;
+      } catch (parseError: any) {
         console.error(
-          `[InitiateCompletion] Task not found for taskId: ${taskId}`
+          `[InitiateCompletion] Task parsing failed for ${taskId}:`,
+          parseError
+        );
+        return NextResponse.json(
+          {
+            error: "Task data corrupted",
+            errorCode: "TASK_DATA_CORRUPTED",
+          },
+          { status: 500 }
         );
       }
-      return new Response(JSON.stringify({ error: "Task not found" }), {
-        status: 404,
-        headers: { "Content-Type": "application/json" },
-      });
-    }
-    // Parse the task object
-    let task: Task;
-    try {
-      task = typeof taskStr === "string" ? JSON.parse(taskStr) : taskStr;
-    } catch (e) {
-      if (IS_DEV) {
-        console.error(
-          `[InitiateCompletion] Invalid JSON for task: ${taskId}`,
-          taskStr
-        );
-      }
-      return new Response(
-        JSON.stringify({ error: `Invalid JSON for task: ${taskId}` }),
-        {
-          status: 400,
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-    }
-    if (!task) {
-      if (IS_DEV) {
-        console.error(
-          `[InitiateCompletion] Task not found after parsing for taskId: ${taskId}`
-        );
-      }
-      return new Response(JSON.stringify({ error: "Task not found" }), {
-        status: 404,
-        headers: { "Content-Type": "application/json" },
-      });
-    }
 
-    // ✅ SECURITY: Log task initiation with authenticated user info
-    if (IS_DEV) {
-      console.log("[InitiateCompletion] Task completion initiation:", {
-        initiatedBy: authenticatedUser.email,
-        initiatedById: authenticatedUser.id,
-        taskId: task.id,
-        taskName: task.name,
-        assigneeId: task.assigneeId,
-        score: task.score,
-        period: task.period,
+      // ✅ SECURITY: Validate task structure
+      if (!task || !task.id || !task.period) {
+        console.error(
+          `[InitiateCompletion] Invalid task structure for ${taskId}:`,
+          task
+        );
+        return NextResponse.json(
+          {
+            error: "Invalid task data",
+            errorCode: "INVALID_TASK_DATA",
+          },
+          { status: 400 }
+        );
+      }
+
+      // ✅ PERFORMANCE: Generate completion key using optimized utility
+      const completionKey = generateCompletionKey(task.period, task.id);
+
+      // ✅ AUDIT: Log successful initiation
+      if (IS_DEV) {
+        console.log("[InitiateCompletion] Task initiation successful:", {
+          taskId: task.id,
+          taskName: task.name,
+          completionKey,
+          initiatedBy: user.email,
+          userId: user.id,
+          assigneeId: task.assigneeId,
+          score: task.score,
+          period: task.period,
+          timestamp: new Date().toISOString(),
+        });
+      }
+
+      return NextResponse.json({
+        completionKey,
+        taskInfo: {
+          id: task.id,
+          name: task.name,
+          period: task.period,
+          score: task.score,
+        },
+      });
+    } catch (error: any) {
+      // ✅ SCALABILITY: Comprehensive error handling
+      console.error("[InitiateCompletion] Unexpected error:", {
+        error: error.message,
+        stack: IS_DEV ? error.stack : undefined,
+        userId: user?.id,
         timestamp: new Date().toISOString(),
       });
-    }
 
-    // Use the reusable function to generate the completion key
-    const completionKey = generateCompletionKey(task.period, task.id);
-
-    // ✅ SECURITY: Log successful key generation
-    if (IS_DEV) {
-      console.log(
-        `[InitiateCompletion] Completion key generated: ${completionKey} by ${authenticatedUser.email}`
+      return NextResponse.json(
+        {
+          error: "Internal server error",
+          errorCode: "INTERNAL_ERROR",
+          ...(IS_DEV && { details: error.message }),
+        },
+        { status: 500 }
       );
     }
-
-    return new Response(JSON.stringify({ completionKey }), {
-      status: 200,
-      headers: { "Content-Type": "application/json" },
-    });
-  } catch (error: any) {
-    if (IS_DEV) {
-      console.error("[InitiateCompletion] Internal Error:", error);
-    }
-    if (error && typeof error === "object" && error.status && error.message) {
-      return new Response(JSON.stringify({ error: error.message }), {
-        status: error.status,
-        headers: { "Content-Type": "application/json" },
-      });
-    }
-    return new Response(JSON.stringify({ error: "Internal Server Error" }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" },
-    });
   }
-}
+);

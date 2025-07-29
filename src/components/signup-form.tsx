@@ -7,10 +7,12 @@ import { signupSchema } from "@/schemas/auth/signup.schema";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { toast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
 
 const SignupForm = () => {
   const t = useTranslations("SignupForm");
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const {
     register,
@@ -24,17 +26,36 @@ const SignupForm = () => {
     try {
       const response = await fetch("/api/auth/signup", {
         method: "POST",
+        credentials: 'include', // 🔑 CRITICAL: Include cookies for auto-login
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
       const result = await response.json();
-      if (response.ok) {
-        toast({
-          title: t("signupSuccessTitle") || "Signup successful!",
-          description: t("signupSuccessDesc") || "You can now log in.",
-          variant: "success",
-        });
-        reset();
+      
+      if (response.ok && result.success) {
+        // 🎯 Handle auto-login success
+        if (result.autoLogin && result.tokens) {
+          toast({
+            title: t("signupSuccessTitle") || "Welcome to ChoreChampion!",
+            description: result.message || "You're now logged in and ready to go!",
+            variant: "success",
+          });
+          
+          // 🚀 Redirect to home page immediately (auto-login successful)
+          router.push("/");
+          return;
+        } else {
+          // Manual login required
+          toast({
+            title: t("signupSuccessTitle") || "Account created!",
+            description: result.message || "Please log in to continue.",
+            variant: "success",
+          });
+          
+          // Redirect to login page
+          router.push("/login");
+          return;
+        }
       } else {
         toast({
           title: t("signupErrorTitle") || "Signup failed",

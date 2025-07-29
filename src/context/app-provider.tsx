@@ -74,8 +74,27 @@ export function AppProvider({
           const response = await fetchWithAuth('/api/GetAllTasks');
           
           if (response.ok) {
-            const allTasks = await response.json();
-            console.log('[AppProvider] ✅ Client-side tasks fetched successfully:', allTasks.length);
+            const responseData = await response.json();
+            
+            // Handle the new API response format with metadata
+            let allTasks: any[];
+            if (Array.isArray(responseData)) {
+              // Fallback for old format (just in case)
+              allTasks = responseData;
+              console.log('[AppProvider] ✅ Client-side tasks fetched successfully (legacy format):', allTasks.length);
+            } else if (responseData.tasks && Array.isArray(responseData.tasks)) {
+              // New format with metadata
+              allTasks = responseData.tasks;
+              console.log('[AppProvider] ✅ Client-side tasks fetched successfully:', {
+                total: responseData.totalCount,
+                active: responseData.activeCount,
+                completed: responseData.completedCount,
+                lastUpdated: responseData.lastUpdated
+              });
+            } else {
+              console.error('[AppProvider] ❌ Invalid response format:', responseData);
+              return;
+            }
             
             // Separate active and archived tasks
             const newActiveTasks = allTasks.filter((task: any) => !task.completed);
@@ -99,6 +118,9 @@ export function AppProvider({
 
     fetchTasksIfNeeded();
   }, [isAuthenticated, authLoading, activeTasks.length]);
+
+  // ✅ REMOVED: Client-side score fetching (now handled server-side in layout)
+  // Scores are now loaded server-side and passed as initialScoreAdjustments
 
   const handleAdjustScore = async (memberId: string, amount: number) => {
     // 1. Validate the input before proceeding

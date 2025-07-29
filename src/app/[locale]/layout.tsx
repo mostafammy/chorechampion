@@ -51,20 +51,63 @@ export default async function LocaleLayout({
     if (accessToken) {
       console.log('[Layout] ✅ Access token found - fetching server-side data');
       
-      // Fetch all tasks
+      // Fetch all tasks using the service directly (server-side)
       const allTasks = await getAllTasksService();
       
       // Separate active and archived tasks
       initialActiveTasks = allTasks.filter(task => !task.completed);
       initialArchivedTasks = allTasks.filter(task => task.completed) as ArchivedTask[];
       
-      // For now, use empty score adjustments (can be enhanced later)
-      initialScoreAdjustments = {};
+      // ✅ NEW: Fetch score adjustments (not total scores) for all members server-side
+      console.log('[Layout] ✅ Fetching score adjustments for all members server-side...');
+      
+      try {
+        const scorePromises = initialMembers.map(async (member) => {
+          try {
+            console.log(`[Layout] Fetching score adjustments for ${member.name} (${member.id})`);
+            const scoreData = await getScoreSummary(member.id);
+            
+            if (scoreData && typeof scoreData.adjustment === 'number') {
+              console.log(`[Layout] ✅ Score adjustments for ${member.name}: ${scoreData.adjustment}`);
+              return {
+                memberId: member.id,
+                adjustmentScore: scoreData.adjustment  // Only the manual adjustments, not total
+              };
+            } else {
+              console.warn(`[Layout] ⚠️ Invalid score adjustment data for ${member.name}:`, scoreData);
+              return {
+                memberId: member.id,
+                adjustmentScore: 0
+              };
+            }
+          } catch (error) {
+            console.error(`[Layout] ❌ Error fetching score adjustments for ${member.name}:`, error);
+            return {
+              memberId: member.id,
+              adjustmentScore: 0
+            };
+          }
+        });
+
+        const scores = await Promise.all(scorePromises);
+        
+        // Build initial score adjustments from real backend adjustment data (not total scores)
+        scores.forEach(({ memberId, adjustmentScore }) => {
+          initialScoreAdjustments[memberId] = adjustmentScore;
+        });
+        
+        console.log('[Layout] ✅ Server-side score adjustments fetched:', initialScoreAdjustments);
+        
+      } catch (error) {
+        console.error('[Layout] ❌ Error fetching score adjustments server-side:', error);
+        // Continue with empty adjustments - client will handle fetching if needed
+      }
 
       console.log('[Layout] ✅ Server-side data fetched successfully', {
         totalTasks: allTasks.length,
         activeTasks: initialActiveTasks.length,
         archivedTasks: initialArchivedTasks.length,
+        scoreAdjustmentsLoaded: Object.keys(initialScoreAdjustments).length,
       });
     } else {
       console.log('[Layout] ⚠️ No access token - client will handle data fetching');

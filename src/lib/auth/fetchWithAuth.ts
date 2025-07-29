@@ -224,23 +224,45 @@ async function attemptTokenRefreshWithNewSystem(
   try {
     const headers = new Headers();
     headers.set("X-Correlation-ID", correlationId);
+    headers.set("Content-Type", "application/json");
 
     const refreshResponse = await fetch(refreshEndpoint, {
       method: "POST",
       credentials: "include",
       headers,
+      body: JSON.stringify({}), // ✅ Send empty JSON body to satisfy content-type
     });
 
     if (refreshResponse.ok) {
       // Parse the structured response from our RefreshApiAdapter
       try {
         const refreshData: RefreshResponse = await refreshResponse.json();
-        return {
-          success: true,
-          accessToken: "token_set_via_cookie", // Token is set via cookie by server
-        };
-      } catch {
-        // Fallback for non-JSON responses
+
+        // ✅ Check if our enhanced endpoint returned success
+        if (refreshData.success) {
+          console.log(
+            "[fetchWithAuth] Token refresh successful via SecureEndpoint"
+          );
+          return {
+            success: true,
+            accessToken: "token_set_via_cookie", // Token is set via cookie by server
+          };
+        } else {
+          console.warn(
+            "[fetchWithAuth] Refresh response indicated failure:",
+            refreshData
+          );
+          return {
+            success: false,
+            error: refreshData.message || "Token refresh failed",
+            errorCode: refreshData.errorCode || "UNKNOWN_ERROR",
+          };
+        }
+      } catch (parseError) {
+        // Fallback for non-JSON responses (legacy compatibility)
+        console.log(
+          "[fetchWithAuth] Non-JSON refresh response, assuming success"
+        );
         return {
           success: true,
           accessToken: "token_set_via_cookie",
@@ -257,6 +279,7 @@ async function attemptTokenRefreshWithNewSystem(
           correlationId,
           errorCode: errorData.errorCode,
           retryCount,
+          status: refreshResponse.status,
         }
       );
 
@@ -265,13 +288,17 @@ async function attemptTokenRefreshWithNewSystem(
         error: errorData.message || "Token refresh failed",
         errorCode: errorData.errorCode || "UNKNOWN_ERROR",
       };
-    } catch {
+    } catch (parseError) {
       // Fallback for non-JSON error responses
       console.warn(
-        `[fetchWithAuth] Refresh failed with status ${refreshResponse.status}`,
+        `[fetchWithAuth] Refresh failed with status ${refreshResponse.status} (non-JSON response)`,
         {
           correlationId,
           retryCount,
+          parseError:
+            parseError instanceof Error
+              ? parseError.message
+              : String(parseError),
         }
       );
 

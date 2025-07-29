@@ -1,103 +1,126 @@
-import { loginSchema } from "@/schemas/auth/login.schema";
-import { LoginInputType } from "@/types";
+import { createSecureEndpoint } from "@/lib/security/secureEndpoint";
 import { loginService } from "@/lib/auth/loginService";
+import { generateAccessToken, generateRefreshToken } from "@/lib/auth/jwt/jwt";
+import { setAuthCookies } from "@/lib/auth/cookieService"; // ✅ BEST PRACTICE: Centralized cookie management
 import { escapeHtml, IS_DEV } from "@/lib/utils";
-import {generateAccessToken, generateRefreshToken} from "@/lib/auth/jwt/jwt";
-import {cookies} from "next/headers";
-import { checkRateLimit } from "@/lib/auth/rateLimiter";
+import { NextRequest, NextResponse } from "next/server";
+import { z } from "zod";
 
-export async function POST(req: Request) {
-  // Get client IP for rate limiting
-  const forwarded = req.headers.get("x-forwarded-for");
-  const ip = forwarded ? forwarded.split(",")[0] : req.headers.get("x-real-ip") || "unknown";
+// Enhanced validation schema with Zod (more comprehensive than loginSchema)
+const loginSchema = z.object({
+  email: z
+    .string()
+    .email("Please enter a valid email address")
+    .min(1, "Email is required")
+    .max(254, "Email is too long")
+    .trim()
+    .toLowerCase(),
+  password: z
+    .string()
+    .min(1, "Password is required")
+    .max(128, "Password is too long"),
+});
 
-  // Check rate limit
-  const rateLimitResult = await checkRateLimit(ip);
-  if (!rateLimitResult.allowed) {
-    return new Response(
-      JSON.stringify({
-        error: "Too many login attempts. Please try again later.",
-        retryAfter: Math.ceil((rateLimitResult.resetTime - Date.now()) / 1000)
-      }),
-      {
-        status: 429,
-        headers: {
-          "Content-Type": "application/json",
-          "Retry-After": Math.ceil((rateLimitResult.resetTime - Date.now()) / 1000).toString()
-        }
+// Enhanced secure login endpoint with comprehensive protection
+export const POST = createSecureEndpoint(
+  {
+    requireAuth: false, // ✅ Login doesn't require existing auth
+    rateLimit: {
+      type: "auth", // ✅ Auth-specific rate limiting (30 req/hour in prod)
+      customConfig: false, // ✅ Use default auth limits
+    },
+    validation: {
+      schema: loginSchema, // ✅ Automatic input validation
+      sanitizeHtml: true, // ✅ XSS protection
+      maxStringLength: 500, // ✅ Prevent large payload attacks
+    },
+    auditLog: true, // ✅ Comprehensive audit logging for auth events
+    logRequests: true, // ✅ Request/response logging
+    corsEnabled: true, // ✅ CORS enabled for auth endpoint
+  },
+  async (req: NextRequest, { validatedData }) => {
+    try {
+      const { email, password } = validatedData;
+
+      // ✅ Enhanced logging for auth attempts
+      if (IS_DEV) {
+        console.log("[Login] Authentication attempt:", {
+          email,
+          timestamp: new Date().toISOString(),
+          userAgent: req.headers.get("user-agent"),
+          ip:
+            req.headers.get("x-forwarded-for") ||
+            req.headers.get("x-real-ip") ||
+            "unknown",
+        });
       }
-    );
-  }
 
-  const body = await req.json();
-  const parsed = loginSchema.safeParse(body);
+      // ✅ Authenticate user with enhanced error handling
+      const user = await loginService({
+        email: escapeHtml(email),
+        password,
+      });
 
-  if (!parsed.success) {
-    if (IS_DEV) {
-      console.error("[Login] Validation failed:", parsed.error.flatten());
+      if (IS_DEV) {
+        console.log(
+          `[Login] User authenticated successfully: ${email} (${user.role})`
+        );
+      }
+
+      // ✅ Create JWT payload with user data
+      const payload = {
+        id: user.id,
+        role: user.role,
+        email: user.email,
+      };
+
+      // ✅ Generate tokens
+      const accessToken = await generateAccessToken(payload);
+      const refreshToken = await generateRefreshToken(payload);
+
+      // ✅ Set secure cookies using centralized service
+      await setAuthCookies(accessToken, refreshToken);
+
+      // ✅ Enhanced success logging
+      if (IS_DEV) {
+        console.log(
+          `[Login] Login successful: ${email} with role ${user.role}`
+        );
+      }
+
+      // ✅ Return clean response (SecureEndpoint adds security headers automatically)
+      return NextResponse.json(
+        {
+          success: true,
+          message: "Login successful",
+          user: {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            role: user.role,
+          },
+        },
+        { status: 200 }
+      );
+    } catch (error: any) {
+      // ✅ Enhanced error handling (SecureEndpoint provides context)
+      if (IS_DEV) {
+        console.error("[Login] Authentication failed:", {
+          email: validatedData.email,
+          error: error.message,
+          timestamp: new Date().toISOString(),
+        });
+      }
+
+      // ✅ Security: Don't reveal whether email exists or password is wrong
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Invalid email or password",
+          errorCode: "AUTHENTICATION_FAILED",
+        },
+        { status: 401 }
+      );
     }
-    return new Response(
-      JSON.stringify({
-        message: "Validation failed",
-        errors: parsed.error.flatten(),
-      }),
-      { status: 400, headers: { "Content-Type": "application/json" } }
-    );
   }
-
-  let { email, password }: LoginInputType = parsed.data;
-  email = escapeHtml(email.trim().toLowerCase());
-
-  try {
-    const user = await loginService({ email, password });
-    if (IS_DEV) {
-      console.log(`[Login] User logged in: ${email}`);
-    }
-
-    const payload = {
-      id: user.id,
-      role: user.role,
-      email: user.email,
-    };
-
-    const accessToken = await generateAccessToken(payload);
-    const refreshToken = await generateRefreshToken(payload);
-
-    const cookieStore = await cookies();
-
-    cookieStore.set("access_token", accessToken, {
-      httpOnly: true,
-      secure: !IS_DEV, // Non-secure in development for debugging
-      sameSite: "strict",
-      path: "/",
-      maxAge: 60 * 15, // 15 mins
-      domain: IS_DEV ? undefined : undefined, // Let browser handle domain
-    });
-
-    cookieStore.set("refresh_token", refreshToken, {
-      httpOnly: true,
-      secure: !IS_DEV, // Non-secure in development for debugging
-      sameSite: "strict",
-      path: "/",
-      maxAge: 60 * 60 * 24 * 7, // 7 days
-      domain: IS_DEV ? undefined : undefined, // Let browser handle domain
-    });
-
-
-
-    return new Response(JSON.stringify({ success: true, user }), {
-      status: 200,
-    });
-  } catch (err: any) {
-    // Record failed attempt for rate limiting
-    await checkRateLimit(`${ip}:${email}`);
-
-    if (IS_DEV) {
-      console.warn(`[Login] Failed login attempt for: ${email} from IP: ${ip}`);
-    }
-    return new Response(
-      JSON.stringify({ error: "Invalid email or password" }),
-      { status: 401, headers: { "Content-Type": "application/json" } }
-    );
-  }
-}
+);

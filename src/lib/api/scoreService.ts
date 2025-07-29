@@ -73,12 +73,27 @@ export class ScoreService {
       this.generateCorrelationId("adjust-score", input.userId);
 
     try {
+      // ✅ ENTERPRISE: Use the existing AdjustScore endpoint
+      console.log("[ScoreService] Calling AdjustScore endpoint:", {
+        userId: input.userId,
+        delta: input.delta,
+        source: input.source,
+        reason: input.reason,
+        correlationId,
+      });
+
       const response = await fetchWithAuth("/api/AdjustScore", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(input),
+        body: JSON.stringify({
+          userId: input.userId,
+          delta: input.delta,
+          reason: input.reason || "Manual adjustment",
+          source: input.source || "manual",
+          taskId: input.taskId || null,
+        }),
         correlationId,
         maxRetries: config.maxRetries,
         signal: this.createTimeoutSignal(config.timeout),
@@ -130,12 +145,18 @@ export class ScoreService {
 
   /**
    * Batch adjust scores for multiple users (useful for task completion scenarios)
+   * ✅ ENTERPRISE: Uses real AdjustScore endpoint through individual calls
    */
   static async batchAdjustScores(
     adjustments: AdjustScoreInput[],
     options: ScoreServiceOptions = {}
   ): Promise<ScoreAdjustmentResult[]> {
     const config = { ...this.DEFAULT_OPTIONS, ...options };
+
+    console.log("[ScoreService] Processing batch score adjustments:", {
+      adjustmentCount: adjustments.length,
+      userIds: adjustments.map((a) => a.userId),
+    });
 
     // Execute adjustments in parallel with controlled concurrency
     const CONCURRENCY_LIMIT = 5;

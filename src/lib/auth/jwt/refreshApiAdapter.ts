@@ -248,7 +248,11 @@ export class RefreshApiAdapter {
   /**
    * Helper method to clear authentication cookies with proper security settings
    */
-  private static clearAuthCookies(response: NextResponse): void {
+  /**
+   * ✅ PUBLIC: Clear authentication cookies with proper security settings
+   * Made public so it can be used across authentication endpoints
+   */
+  public static clearAuthCookies(response: NextResponse): void {
     // ✅ SECURITY: Clear cookies with proper security settings
     response.cookies.set("access_token", "", {
       httpOnly: true,
@@ -257,7 +261,7 @@ export class RefreshApiAdapter {
       path: "/",
       expires: new Date(0), // Expire immediately
     });
-    
+
     response.cookies.set("refresh_token", "", {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
