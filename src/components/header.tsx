@@ -2,7 +2,7 @@
 
 // import {  } from 'next-intl/navigation';
 import { Link,usePathname } from '@/lib/navigation'; // Import from your navigation config
-import { Archive, Home, Trophy, LogOut, Loader2 } from 'lucide-react';
+import { Archive, Home, Trophy, LogOut, Loader2, BarChart3 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from './theme-toggle';
 import { LanguageSwitcher } from './language-switcher';
@@ -29,6 +29,7 @@ export function Header() {
   console.log('typeof usePathname:', typeof usePathname);
   const pathname = usePathname(); 
   const isArchivePage = pathname.includes('/archive');
+  const isLeaderboardPage = pathname.includes('/leaderboard');
 
   // ✅ ENTERPRISE: Logout function with proper error handling and fetchWithAuth
   const handleLogout = async (isMobile: boolean = false) => {
@@ -127,9 +128,9 @@ export function Header() {
             {t('title')}
           </span>
         </Link>
-        {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center gap-2">
-          <Button variant={!isArchivePage ? 'secondary' : 'ghost'} asChild onClick={async (e)=>{
+        {/* Desktop Nav - ✅ UPDATED: Now switches to mobile earlier (1024px) due to button density */}
+        <nav className="hidden lg:flex items-center gap-2">
+          <Button variant={!isArchivePage && !isLeaderboardPage ? 'secondary' : 'ghost'} asChild onClick={async (e)=>{
             e.preventDefault();
             setLoading(true);
             router.push('/');
@@ -137,6 +138,16 @@ export function Header() {
             <Link href="/">
               <Home className="mr-2 h-4 w-4" />
               {t('dashboard')}
+            </Link>
+          </Button>
+          <Button variant={isLeaderboardPage ? 'secondary' : 'ghost'} asChild onClick={async (e)=>{
+            e.preventDefault();
+            setLoading(true);
+            router.push('/leaderboard');
+          }}>
+            <Link href="/leaderboard">
+              <BarChart3 className="mr-2 h-4 w-4" />
+              {t('leaderboard')}
             </Link>
           </Button>
           <Button variant={isArchivePage ? 'secondary' : 'ghost'} asChild onClick={async (e)=>{
@@ -166,8 +177,8 @@ export function Header() {
             {logoutLoading ? 'Logging out...' : t('logout')}
           </Button>
         </nav>
-        {/* Mobile Hamburger */}
-        <div className="md:hidden">
+        {/* Mobile Hamburger - ✅ UPDATED: Now shows earlier (1024px) for better UX */}
+        <div className="lg:hidden">
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon" aria-label="Open menu">
@@ -188,7 +199,7 @@ export function Header() {
                   </Link>
                 </div>
                 {/* Nav links with fade-out on click */}
-                <Button variant={!isArchivePage ? 'secondary' : 'ghost'} className="justify-start w-full" onClick={async (e) => {
+                <Button variant={!isArchivePage && !isLeaderboardPage ? 'secondary' : 'ghost'} className="justify-start w-full" onClick={async (e) => {
                   e.preventDefault();
                   setOpen(false);
                   setTimeout(() => {
@@ -198,6 +209,17 @@ export function Header() {
                 }}>
                   <Home className="mr-2 h-4 w-4" />
                   {t('dashboard')}
+                </Button>
+                <Button variant={isLeaderboardPage ? 'secondary' : 'ghost'} className="justify-start w-full" onClick={async (e) => {
+                  e.preventDefault();
+                  setOpen(false);
+                  setTimeout(() => {
+                    setLoading(true);
+                    router.push('/leaderboard');
+                  }, 350);
+                }}>
+                  <BarChart3 className="mr-2 h-4 w-4" />
+                  {t('leaderboard')}
                 </Button>
                 <Button variant={isArchivePage ? 'secondary' : 'ghost'} className="justify-start w-full" onClick={async (e) => {
                   e.preventDefault();

@@ -3,6 +3,7 @@
     "title": "بطل الأعمال",
     "dashboard": "لوحة التحكم",
     "archive": "الأرشيف",
+    "leaderboard": "لوحة المتصدرين",
     "logout": "تسجيل الخروج"
   },
   "Dashboard": {
@@ -77,6 +78,44 @@
   "Layout": {
     "title": "بطل الأعمال",
     "description": "إدارة الأعمال المنزلية بسهولة وقليل من المرح."
+  },
+  "Leaderboard": {
+    "title": "لوحة المتصدرين",
+    "description": "شاهد كيف يؤدي الجميع في تحدي الأعمال المنزلية!",
+    "totalMembers": "إجمالي الأعضاء",
+    "totalPoints": "إجمالي النقاط",
+    "averageScore": "متوسط النقاط",
+    "topPerformer": "الأداء الأفضل",
+    "mostImproved": "الأكثر تحسناً",
+    "competition": "مستوى المنافسة",
+    "daily": "يومي",
+    "weekly": "أسبوعي",
+    "monthly": "شهري",
+    "allTime": "كل الأوقات",
+    "rankings": "الترتيب",
+    "members": "أعضاء",
+    "inactive": "غير نشط",
+    "points": "نقطة",
+    "tasks": "المهام",
+    "adjustments": "التعديلات",
+    "completed": "مكتمل",
+    "progress": "التقدم",
+    "taskProgress": "تقدم المهمة",
+    "insights": "رؤى",
+    "noData": "لا توجد تصنيفات متاحة",
+    "noDataDescription": "أكمل بعض المهام لرؤية التصنيفات هنا!",
+    "refresh": "تحديث",
+    "refreshing": "جاري التحديث...",
+    "refreshSuccess": "تم تحديث لوحة المتصدرين",
+    "refreshSuccessDescription": "تم تحميل أحدث التصنيفات بنجاح.",
+    "fetchError": "خطأ في التحميل",
+    "fetchErrorDescription": "فشل في تحميل بيانات لوحة المتصدرين. يرجى المحاولة مرة أخرى.",
+    "errorTitle": "غير قادر على تحميل لوحة المتصدرين",
+    "tryAgain": "حاول مرة أخرى",
+    "lastUpdated": "آخر تحديث"
+  },
+  "LeaderboardPage": {
+    "title": "لوحة المتصدرين – بطل الأعمال"
   },
   "LoginForm": {
     "welcomeBack": "مرحبًا بعودتك",

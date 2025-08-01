@@ -3,6 +3,7 @@
     "title": "ChoreChampion",
     "dashboard": "Dashboard",
     "archive": "Archive",
+    "leaderboard": "Leaderboard",
     "logout": "Logout"
   },
   "Dashboard": {
@@ -77,6 +78,44 @@
   "Layout": {
     "title": "ChoreChampion",
     "description": "Manage household chores with ease and a little bit of fun."
+  },
+  "Leaderboard": {
+    "title": "Leaderboard",
+    "description": "See how everyone is performing in the chore challenge!",
+    "totalMembers": "Total Members",
+    "totalPoints": "Total Points",
+    "averageScore": "Average Score",
+    "topPerformer": "Top Performer",
+    "mostImproved": "Most Improved",
+    "competition": "Competition Level",
+    "daily": "Daily",
+    "weekly": "Weekly",
+    "monthly": "Monthly",
+    "allTime": "All Time",
+    "rankings": "Rankings",
+    "members": "members",
+    "inactive": "Inactive",
+    "points": "pts",
+    "tasks": "Tasks",
+    "adjustments": "Adjustments",
+    "completed": "Completed",
+    "progress": "Progress",
+    "taskProgress": "Task Progress",
+    "insights": "Insights",
+    "noData": "No Rankings Available",
+    "noDataDescription": "Complete some tasks to see rankings here!",
+    "refresh": "Refresh",
+    "refreshing": "Refreshing...",
+    "refreshSuccess": "Leaderboard Updated",
+    "refreshSuccessDescription": "Latest rankings have been loaded successfully.",
+    "fetchError": "Loading Error",
+    "fetchErrorDescription": "Failed to load leaderboard data. Please try again.",
+    "errorTitle": "Unable to Load Leaderboard",
+    "tryAgain": "Try Again",
+    "lastUpdated": "Last updated"
+  },
+  "LeaderboardPage": {
+    "title": "Leaderboard – ChoreChampion"
   },
   "LoginForm": {
     "welcomeBack": "Welcome back",

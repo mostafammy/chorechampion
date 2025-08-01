@@ -1,6 +1,9 @@
 import * as React from "react"
 
-const MOBILE_BREAKPOINT = 768
+// ✅ PRINCIPAL ENGINEER OPTIMIZATION: Dynamic breakpoint based on content density
+// Original: 768px (standard tablet breakpoint)
+// Optimized: 1024px (accounts for navigation button density)
+const MOBILE_BREAKPOINT = 1024 // ✅ Increased from 768px to 1024px
 
 export function useIsMobile(): boolean {
   const [isMobile, setIsMobile] = React.useState<boolean | undefined>(undefined)
