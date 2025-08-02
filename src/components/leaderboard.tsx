@@ -249,9 +249,18 @@ export function Leaderboard() {
   const handleInstantRefresh = () => {
     setRefreshing(true);
     
-    // Simulate refresh animation
+    // Simulate refresh animation and update timestamp
     setTimeout(() => {
       setRefreshing(false);
+      
+      // Update the leaderboard data with new timestamp
+      if (leaderboardData) {
+        setLeaderboardData({
+          ...leaderboardData,
+          lastUpdated: new Date().toISOString()
+        });
+      }
+      
       toast({
         title: t('refreshSuccess') || 'Leaderboard Updated',
         description: t('refreshSuccessDescription') || 'Rankings updated instantly from local data!',
@@ -368,185 +377,195 @@ export function Leaderboard() {
   const { leaderboard, stats } = leaderboardData;
 
   return (
-    <div className="container mx-auto space-y-6">
+    <div className="container mx-auto space-y-4 sm:space-y-6 px-4 sm:px-6 lg:px-8">
       {refreshing && <LoadingSpinner />}
       
-      {/* ✅ Enhanced Header Section */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-purple-600 via-blue-600 to-emerald-600 p-8 text-white">
+      {/* ✅ Enterprise-Grade Responsive Header Section */}
+      <div className="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br from-purple-600 via-blue-600 to-emerald-600 p-4 sm:p-6 lg:p-8 text-white">
         <div className="absolute inset-0 bg-black/20"></div>
-        <div className="absolute top-0 right-0 w-96 h-96 bg-white/10 rounded-full blur-3xl -translate-y-48 translate-x-48"></div>
-        <div className="absolute bottom-0 left-0 w-72 h-72 bg-white/5 rounded-full blur-2xl translate-y-36 -translate-x-36"></div>
+        <div className="absolute top-0 right-0 w-48 h-48 sm:w-96 sm:h-96 bg-white/10 rounded-full blur-3xl -translate-y-24 translate-x-24 sm:-translate-y-48 sm:translate-x-48"></div>
+        <div className="absolute bottom-0 left-0 w-36 h-36 sm:w-72 sm:h-72 bg-white/5 rounded-full blur-2xl translate-y-18 -translate-x-18 sm:translate-y-36 sm:-translate-x-36"></div>
         
-        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-          <div>
-            <div className="flex items-center gap-3 mb-4">
-              <div className="p-3 bg-white/20 backdrop-blur-sm rounded-xl">
-                <Trophy className="w-8 h-8 text-yellow-300" />
+        <div className="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 sm:gap-6">
+          <div className="min-w-0 flex-1">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-3 mb-3 sm:mb-4">
+              <div className="p-2 sm:p-3 bg-white/20 backdrop-blur-sm rounded-lg sm:rounded-xl flex-shrink-0">
+                <Trophy className="w-6 h-6 sm:w-8 sm:h-8 text-yellow-300" />
               </div>
-              <h1 className="text-5xl font-bold font-headline bg-gradient-to-r from-yellow-300 via-white to-yellow-300 bg-clip-text text-transparent">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold font-headline bg-gradient-to-r from-yellow-300 via-white to-yellow-300 bg-clip-text text-transparent leading-tight">
                 {t('title') || 'Leaderboard'}
               </h1>
             </div>
-            <p className="text-white/90 text-lg mb-4">
+            <p className="text-white/90 text-base sm:text-lg mb-3 sm:mb-4 leading-relaxed">
               {t('description') || 'See how everyone is performing in the chore challenge!'}
             </p>
-            <div className="flex flex-wrap items-center gap-3">
-              <Badge className="bg-gradient-to-r from-green-400 to-emerald-500 text-white border-0 px-4 py-2 text-sm font-semibold shadow-lg">
-                📊 All-Time Rankings
+            <div className="flex flex-col sm:flex-row sm:flex-wrap items-start sm:items-center gap-2 sm:gap-3">
+              <Badge className="bg-gradient-to-r from-green-400 to-emerald-500 text-white border-0 px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-semibold shadow-lg whitespace-nowrap">
+                📊 {t('allTimeRankings') || 'All-Time Rankings'}
               </Badge>
-              <Badge className="bg-gradient-to-r from-orange-400 to-pink-500 text-white border-0 px-4 py-2 text-sm font-semibold shadow-lg animate-pulse">
-                🚀 Daily/Weekly/Monthly Coming Soon
+              <Badge className="bg-gradient-to-r from-orange-400 to-pink-500 text-white border-0 px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-semibold shadow-lg animate-pulse whitespace-nowrap">
+                🚀 {t('comingSoonPeriods') || 'Daily/Weekly/Monthly Coming Soon'}
               </Badge>
             </div>
           </div>
           
-          <div className="flex flex-col sm:flex-row gap-3">
+          <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 flex-shrink-0 mt-4 lg:mt-0">
             <Button 
               onClick={handleRefresh} 
-              className="bg-white/20 backdrop-blur-sm border-white/30 text-white hover:bg-white/30 transition-all duration-300 shadow-lg"
+              className="bg-white/20 backdrop-blur-sm border-white/30 text-white hover:bg-white/30 transition-all duration-300 shadow-lg w-full sm:w-auto justify-center"
               disabled={refreshing}
               size="lg"
             >
-              <RefreshCw className={`w-5 h-5 mr-2 ${refreshing ? 'animate-spin' : ''}`} />
-              {refreshing ? (t('refreshing') || 'Refreshing...') : (t('refresh') || 'Refresh')}
+              <RefreshCw className={`w-4 h-4 sm:w-5 sm:h-5 mr-2 ${refreshing ? 'animate-spin' : ''}`} />
+              <span className="text-sm sm:text-base">{refreshing ? (t('refreshing') || 'Refreshing...') : (t('refresh') || 'Refresh')}</span>
             </Button>
           </div>
         </div>
       </div>
 
-      {/* ✅ Enhanced Statistics Overview */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card className="overflow-hidden border-0 shadow-xl bg-gradient-to-br from-blue-500 to-purple-600 text-white transform hover:scale-105 transition-all duration-300">
-          <CardContent className="p-6">
-            <div className="flex items-center gap-4">
-              <div className="p-4 bg-white/20 backdrop-blur-sm rounded-2xl">
-                <Users className="w-7 h-7 text-white" />
+      {/* ✅ Enterprise-Grade Responsive Statistics Overview */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
+        <Card className="overflow-hidden border border-blue-200/50 dark:border-blue-700/50 shadow-xl bg-gradient-to-br from-blue-50/90 via-blue-100/70 to-indigo-50/90 dark:from-blue-500 dark:via-blue-600 dark:to-purple-600 text-blue-900 dark:text-white backdrop-blur-sm transform hover:scale-105 transition-all duration-300 hover:shadow-2xl hover:shadow-blue-200/40 dark:hover:shadow-blue-500/30">
+          <CardContent className="p-4 sm:p-6">
+            <div className="flex items-center gap-3 sm:gap-4">
+              <div className="p-3 sm:p-4 bg-blue-100/80 dark:bg-white/20 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-blue-200/50 dark:border-white/30 shadow-lg flex-shrink-0">
+                <Users className="w-6 h-6 sm:w-7 sm:h-7 text-blue-600 dark:text-white" />
               </div>
-              <div>
-                <p className="text-white/80 text-sm font-medium">{t('totalMembers') || 'Total Members'}</p>
-                <p className="text-3xl font-bold">{stats.totalMembers}</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="overflow-hidden border-0 shadow-xl bg-gradient-to-br from-emerald-500 to-teal-600 text-white transform hover:scale-105 transition-all duration-300">
-          <CardContent className="p-6">
-            <div className="flex items-center gap-4">
-              <div className="p-4 bg-white/20 backdrop-blur-sm rounded-2xl">
-                <Trophy className="w-7 h-7 text-yellow-300" />
-              </div>
-              <div>
-                <p className="text-white/80 text-sm font-medium">{t('totalPoints') || 'Total Points'}</p>
-                <p className="text-3xl font-bold">{stats.totalPointsAwarded.toLocaleString()}</p>
+              <div className="min-w-0 flex-1">
+                <p className="text-blue-700/80 dark:text-white/80 text-xs sm:text-sm font-medium truncate">{t('totalMembers') || 'Total Members'}</p>
+                <p className="text-2xl sm:text-3xl font-bold text-blue-900 dark:text-white">{stats.totalMembers}</p>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="overflow-hidden border-0 shadow-xl bg-gradient-to-br from-orange-500 to-red-600 text-white transform hover:scale-105 transition-all duration-300">
-          <CardContent className="p-6">
-            <div className="flex items-center gap-4">
-              <div className="p-4 bg-white/20 backdrop-blur-sm rounded-2xl">
-                <BarChart3 className="w-7 h-7 text-white" />
+        <Card className="overflow-hidden border border-emerald-200/50 dark:border-emerald-700/50 shadow-xl bg-gradient-to-br from-emerald-50/90 via-emerald-100/70 to-teal-50/90 dark:from-emerald-500 dark:via-emerald-600 dark:to-teal-600 text-emerald-900 dark:text-white backdrop-blur-sm transform hover:scale-105 transition-all duration-300 hover:shadow-2xl hover:shadow-emerald-200/40 dark:hover:shadow-emerald-500/30">
+          <CardContent className="p-4 sm:p-6">
+            <div className="flex items-center gap-3 sm:gap-4">
+              <div className="p-3 sm:p-4 bg-emerald-100/80 dark:bg-white/20 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-emerald-200/50 dark:border-white/30 shadow-lg flex-shrink-0">
+                <Trophy className="w-6 h-6 sm:w-7 sm:h-7 text-yellow-600 dark:text-yellow-300" />
               </div>
-              <div>
-                <p className="text-white/80 text-sm font-medium">{t('averageScore') || 'Average Score'}</p>
-                <p className="text-3xl font-bold">{stats.averageScore.toFixed(1)}</p>
+              <div className="min-w-0 flex-1">
+                <p className="text-emerald-700/80 dark:text-white/80 text-xs sm:text-sm font-medium truncate">{t('totalPoints') || 'Total Points'}</p>
+                <p className="text-2xl sm:text-3xl font-bold text-emerald-900 dark:text-white">{stats.totalPointsAwarded.toLocaleString()}</p>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="overflow-hidden border-0 shadow-xl bg-gradient-to-br from-pink-500 to-purple-600 text-white transform hover:scale-105 transition-all duration-300">
-          <CardContent className="p-6">
-            <div className="flex items-center gap-4">
-              <div className="p-4 bg-white/20 backdrop-blur-sm rounded-2xl">
-                <Flame className="w-7 h-7 text-yellow-300" />
+        <Card className="overflow-hidden border border-orange-200/50 dark:border-orange-700/50 shadow-xl bg-gradient-to-br from-orange-50/90 via-orange-100/70 to-amber-50/90 dark:from-orange-500 dark:via-orange-600 dark:to-red-600 text-orange-900 dark:text-white backdrop-blur-sm transform hover:scale-105 transition-all duration-300 hover:shadow-2xl hover:shadow-orange-200/40 dark:hover:shadow-orange-500/30">
+          <CardContent className="p-4 sm:p-6">
+            <div className="flex items-center gap-3 sm:gap-4">
+              <div className="p-3 sm:p-4 bg-orange-100/80 dark:bg-white/20 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-orange-200/50 dark:border-white/30 shadow-lg flex-shrink-0">
+                <BarChart3 className="w-6 h-6 sm:w-7 sm:h-7 text-orange-600 dark:text-white" />
               </div>
-              <div>
-                <p className="text-white/80 text-sm font-medium">{t('topPerformer') || 'Top Performer'}</p>
-                <p className="text-xl font-bold truncate">{stats.topPerformer}</p>
+              <div className="min-w-0 flex-1">
+                <p className="text-orange-700/80 dark:text-white/80 text-xs sm:text-sm font-medium truncate">{t('averageScore') || 'Average Score'}</p>
+                <p className="text-2xl sm:text-3xl font-bold text-orange-900 dark:text-white">{stats.averageScore.toFixed(1)}</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      
+        <Card className="overflow-hidden border border-pink-200/50 dark:border-pink-700/50 shadow-xl bg-gradient-to-br from-pink-50/90 via-pink-100/70 to-rose-50/90 dark:from-pink-500 dark:via-pink-600 dark:to-purple-600 text-pink-900 dark:text-white backdrop-blur-sm transform hover:scale-105 transition-all duration-300 hover:shadow-2xl hover:shadow-pink-200/40 dark:hover:shadow-pink-500/30">
+          <CardContent className="p-4 sm:p-6">
+            <div className="flex items-center gap-3 sm:gap-4">
+              <div className="p-3 sm:p-4 bg-pink-100/80 dark:bg-white/20 backdrop-blur-sm rounded-xl sm:rounded-2xl border border-pink-200/50 dark:border-white/30 shadow-lg flex-shrink-0">
+                <Flame className="w-6 h-6 sm:w-7 sm:h-7 text-yellow-600 dark:text-yellow-300" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-pink-700/80 dark:text-white/80 text-xs sm:text-sm font-medium truncate">{t('topPerformer') || 'Top Performer'}</p>
+                <p className="text-lg sm:text-xl font-bold truncate text-pink-900 dark:text-white">{stats.topPerformer}</p>
               </div>
             </div>
           </CardContent>
         </Card>
       </div>
 
-      {/* ✅ Enhanced Period Selection Tabs */}
+      {/* ✅ Enterprise-Grade Responsive Period Selection Tabs */}
       <Tabs value={selectedPeriod} onValueChange={handlePeriodChange} className="w-full">
-        <TabsList className="grid w-full grid-cols-4 bg-gradient-to-r from-slate-100 to-gray-100 dark:from-slate-800 dark:to-gray-800 p-2 rounded-2xl shadow-lg">
+        <TabsList className="grid w-full h-auto grid-cols-2 sm:grid-cols-4 gap-1.5 sm:gap-2 bg-gradient-to-r from-white/80 via-slate-50/90 to-white/80 dark:from-slate-800 dark:via-gray-800 dark:to-slate-800 border border-gray-200/50 dark:border-gray-700/50 backdrop-blur-sm p-2 sm:p-3 rounded-xl sm:rounded-2xl shadow-lg shadow-gray-200/30 dark:shadow-gray-900/30 mb-4">
           <TabsTrigger 
             value="daily" 
-            className="text-sm relative rounded-xl data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-purple-600 data-[state=active]:text-white transition-all duration-300"
+            className="text-xs sm:text-sm relative rounded-lg sm:rounded-xl bg-white/60 dark:bg-transparent border border-gray-200/40 dark:border-transparent text-gray-700 dark:text-gray-300 hover:bg-white/80 hover:border-gray-300/60 dark:hover:bg-gray-700/50 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-purple-600 data-[state=active]:text-white data-[state=active]:border-transparent data-[state=active]:shadow-md transition-all duration-300 py-2 px-2 sm:px-3 flex items-center justify-center h-8"
             disabled
           >
-            <Calendar className="w-4 h-4 mr-2 opacity-50" />
-            <span className="opacity-50">{t('daily') || 'Daily'}</span>
-            <Badge className="absolute -top-2 -right-2 text-[10px] px-2 py-1 h-5 bg-gradient-to-r from-orange-400 to-pink-500 text-white border-0 animate-bounce">
-              Soon
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 min-w-0 w-full h-full">
+              <Calendar className="w-3 h-3 sm:w-4 sm:h-4 opacity-50 flex-shrink-0" />
+              <span className="opacity-50 text-xs sm:text-sm truncate">{t('daily') || 'Daily'}</span>
+            </div>
+            <Badge className="absolute -top-1 sm:-top-2 left-[45%] -translate-x-1/2 text-[8px] sm:text-[10px] px-1 sm:px-2 py-0.5 sm:py-1 h-3 sm:h-5 bg-gradient-to-r from-orange-400 to-pink-500 text-white border-0 animate-bounce shadow-lg">
+              {t('soon') || 'Soon'}
             </Badge>
           </TabsTrigger>
           <TabsTrigger 
             value="weekly" 
-            className="text-sm relative rounded-xl data-[state=active]:bg-gradient-to-r data-[state=active]:from-emerald-500 data-[state=active]:to-teal-600 data-[state=active]:text-white transition-all duration-300"
+            className="text-xs sm:text-sm relative rounded-lg sm:rounded-xl bg-white/60 dark:bg-transparent border border-gray-200/40 dark:border-transparent text-gray-700 dark:text-gray-300 hover:bg-white/80 hover:border-gray-300/60 dark:hover:bg-gray-700/50 data-[state=active]:bg-gradient-to-r data-[state=active]:from-emerald-500 data-[state=active]:to-teal-600 data-[state=active]:text-white data-[state=active]:border-transparent data-[state=active]:shadow-md transition-all duration-300 py-2 px-2 sm:px-3 flex items-center justify-center h-8"
             disabled
           >
-            <Calendar className="w-4 h-4 mr-2 opacity-50" />
-            <span className="opacity-50">{t('weekly') || 'Weekly'}</span>
-            <Badge className="absolute -top-2 -right-2 text-[10px] px-2 py-1 h-5 bg-gradient-to-r from-orange-400 to-pink-500 text-white border-0 animate-bounce">
-              Soon
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 min-w-0 w-full h-full">
+              <Calendar className="w-3 h-3 sm:w-4 sm:h-4 opacity-50 flex-shrink-0" />
+              <span className="opacity-50 text-xs sm:text-sm truncate">{t('weekly') || 'Weekly'}</span>
+            </div>
+            <Badge className="absolute -top-1 sm:-top-2 left-[45%] -translate-x-1/2 text-[8px] sm:text-[10px] px-1 sm:px-2 py-0.5 sm:py-1 h-3 sm:h-5 bg-gradient-to-r from-orange-400 to-pink-500 text-white border-0 animate-bounce shadow-lg">
+              {t('soon') || 'Soon'}
             </Badge>
           </TabsTrigger>
           <TabsTrigger 
             value="monthly" 
-            className="text-sm relative rounded-xl data-[state=active]:bg-gradient-to-r data-[state=active]:from-pink-500 data-[state=active]:to-rose-600 data-[state=active]:text-white transition-all duration-300"
+            className="text-xs sm:text-sm relative rounded-lg sm:rounded-xl bg-white/60 dark:bg-transparent border border-gray-200/40 dark:border-transparent text-gray-700 dark:text-gray-300 hover:bg-white/80 hover:border-gray-300/60 dark:hover:bg-gray-700/50 data-[state=active]:bg-gradient-to-r data-[state=active]:from-pink-500 data-[state=active]:to-rose-600 data-[state=active]:text-white data-[state=active]:border-transparent data-[state=active]:shadow-md transition-all duration-300 py-2 px-2 sm:px-3 flex items-center justify-center h-8"
             disabled
           >
-            <Calendar className="w-4 h-4 mr-2 opacity-50" />
-            <span className="opacity-50">{t('monthly') || 'Monthly'}</span>
-            <Badge className="absolute -top-2 -right-2 text-[10px] px-2 py-1 h-5 bg-gradient-to-r from-orange-400 to-pink-500 text-white border-0 animate-bounce">
-              Soon
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 min-w-0 w-full h-full">
+              <Calendar className="w-3 h-3 sm:w-4 sm:h-4 opacity-50 flex-shrink-0" />
+              <span className="opacity-50 text-xs sm:text-sm truncate">{t('monthly') || 'Monthly'}</span>
+            </div>
+            <Badge className="absolute -top-1 sm:-top-2 left-[45%] -translate-x-1/2 text-[8px] sm:text-[10px] px-1 sm:px-2 py-0.5 sm:py-1 h-3 sm:h-5 bg-gradient-to-r from-orange-400 to-pink-500 text-white border-0 animate-bounce shadow-lg">
+              {t('soon') || 'Soon'}
             </Badge>
           </TabsTrigger>
           <TabsTrigger 
             value="all-time" 
-            className="text-sm rounded-xl data-[state=active]:bg-gradient-to-r data-[state=active]:from-yellow-500 data-[state=active]:to-orange-600 data-[state=active]:text-white data-[state=active]:shadow-lg transition-all duration-300 font-semibold"
+            className="text-xs sm:text-sm rounded-lg sm:rounded-xl bg-white/60 dark:bg-transparent border border-gray-200/40 dark:border-transparent text-gray-700 dark:text-gray-300 hover:bg-white/80 hover:border-gray-300/60 dark:hover:bg-gray-700/50 data-[state=active]:bg-gradient-to-r data-[state=active]:from-yellow-500 data-[state=active]:to-orange-600 data-[state=active]:text-white data-[state=active]:border-transparent data-[state=active]:shadow-lg transition-all duration-300 font-semibold py-2 px-2 sm:px-3 col-span-2 sm:col-span-1 flex items-center justify-center h-8"
           >
-            <Trophy className="w-4 h-4 mr-2" />
-            {t('allTime') || 'All Time'}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 min-w-0 w-full h-full">
+              <Trophy className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" />
+              <span className="text-xs sm:text-sm truncate">{t('allTime') || 'All Time'}</span>
+            </div>
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value={selectedPeriod} className="space-y-4 mt-6">
-          {/* ✅ Enhanced Leaderboard Rankings */}
-          <Card className="overflow-hidden border-0 shadow-2xl bg-gradient-to-br from-slate-50 to-blue-50 dark:from-gray-900 dark:to-blue-900/20">
-            <CardHeader className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white">
-              <CardTitle className="flex items-center gap-3 text-2xl">
-                <div className="p-2 bg-white/20 backdrop-blur-sm rounded-lg">
-                  <Trophy className="w-6 h-6 text-yellow-300" />
+        <TabsContent value={selectedPeriod} className="space-y-3 sm:space-y-4 mt-4 sm:mt-6">
+          {/* ✅ Enterprise-Grade Responsive Leaderboard Rankings */}
+          <Card className="overflow-hidden border border-gray-200/60 dark:border-gray-700/60 shadow-2xl bg-gradient-to-br from-white/95 via-slate-50/80 to-white/95 dark:from-gray-900 dark:via-gray-800/50 dark:to-gray-900/80 backdrop-blur-sm">
+            <CardHeader className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white border-b border-white/20 p-4 sm:p-6">
+              <CardTitle className="flex flex-col sm:flex-row sm:items-center gap-3 text-xl sm:text-2xl">
+                <div className="flex items-center gap-3 min-w-0 flex-1">
+                  <div className="p-2 bg-white/20 backdrop-blur-sm rounded-lg border border-white/30 flex-shrink-0">
+                    <Trophy className="w-5 h-5 sm:w-6 sm:h-6 text-yellow-300" />
+                  </div>
+                  <span className="font-bold truncate">{t('rankings') || 'Rankings'}</span>
                 </div>
-                <span className="font-bold">{t('rankings') || 'Rankings'}</span>
-                <Badge className="bg-white/20 backdrop-blur-sm text-white border-white/30 px-4 py-2 text-sm font-semibold">
+                <Badge className="bg-white/20 backdrop-blur-sm text-white border-white/30 px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-semibold shadow-lg w-fit">
                   🏆 {leaderboard.length} {t('members') || 'members'}
                 </Badge>
               </CardTitle>
             </CardHeader>
-            <CardContent className="p-6">
-              <div className="space-y-4">
+            <CardContent className="p-3 sm:p-6">
+              <div className="space-y-3 sm:space-y-4">
                 <AnimatePresence>
                   {leaderboard.map((member, index) => {
-                    // Enhanced rank styling with colorful gradients
+                    // ✅ Enterprise-Grade Light/Dark Adaptive Rank Styling
                     const getRankGradient = (rank: number) => {
                       switch (rank) {
                         case 1:
-                          return 'bg-gradient-to-br from-yellow-400 via-orange-500 to-red-500 border-yellow-300 shadow-lg shadow-yellow-300/50';
+                          return 'bg-gradient-to-br from-yellow-100/80 via-yellow-200/60 to-orange-100/80 dark:from-yellow-500 dark:via-orange-600 dark:to-red-600 border-yellow-300/80 dark:border-yellow-400/60 shadow-lg shadow-yellow-300/50 dark:shadow-yellow-500/30';
                         case 2:
-                          return 'bg-gradient-to-br from-gray-300 via-gray-400 to-gray-600 border-gray-300 shadow-lg shadow-gray-300/50';
+                          return 'bg-gradient-to-br from-gray-100/80 via-gray-200/60 to-slate-100/80 dark:from-gray-400 dark:via-gray-500 dark:to-gray-700 border-gray-300/80 dark:border-gray-400/60 shadow-lg shadow-gray-300/50 dark:shadow-gray-500/30';
                         case 3:
-                          return 'bg-gradient-to-br from-amber-500 via-orange-600 to-red-600 border-amber-300 shadow-lg shadow-amber-300/50';
+                          return 'bg-gradient-to-br from-amber-100/80 via-amber-200/60 to-orange-100/80 dark:from-amber-600 dark:via-orange-700 dark:to-red-700 border-amber-300/80 dark:border-amber-400/60 shadow-lg shadow-amber-300/50 dark:shadow-amber-500/30';
                         default:
-                          return 'bg-gradient-to-br from-blue-400 via-indigo-500 to-purple-600 border-blue-300 shadow-lg shadow-blue-300/30';
+                          return 'bg-gradient-to-br from-blue-100/80 via-indigo-100/60 to-purple-100/80 dark:from-blue-500 dark:via-indigo-600 dark:to-purple-700 border-blue-300/80 dark:border-blue-400/60 shadow-lg shadow-blue-300/50 dark:shadow-blue-500/20';
                       }
                     };
 
@@ -560,31 +579,49 @@ export function Leaderboard() {
                         whileHover={{ scale: 1.02, y: -2 }}
                       >
                         <Card className={`${getRankGradient(member.rank)} border-2 transition-all duration-300 hover:shadow-2xl transform`}>
-                          <CardContent className="p-6 bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm m-1 rounded-lg">
-                            <div className="flex items-center gap-4">
-                              {/* Enhanced Rank Indicator */}
-                              <motion.div
-                                whileHover={{ scale: 1.1, rotate: 5 }}
-                                className="relative"
-                              >
-                                {renderRankIndicator(member.rank)}
-                                <div className="absolute -top-1 -right-1 text-xs font-bold text-gray-600 dark:text-gray-400">
-                                  #{member.rank}
+                          <CardContent className="p-3 sm:p-6 bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm m-1 rounded-lg border border-gray-200/60 dark:border-gray-700/60 shadow-inner shadow-gray-100/50 dark:shadow-gray-900/50">
+                            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-4">
+                              {/* ✅ Enterprise Responsive Rank Indicator */}
+                              <div className="flex items-center gap-3 sm:gap-4 w-full sm:w-auto">
+                                <motion.div
+                                  whileHover={{ scale: 1.1, rotate: 5 }}
+                                  className="relative flex-shrink-0"
+                                >
+                                  {renderRankIndicator(member.rank)}
+                                  <div className="absolute -top-0.5 sm:-top-1 -right-0.5 sm:-right-1 text-[10px] sm:text-xs font-bold text-gray-800 dark:text-gray-300 bg-white/90 dark:bg-gray-800/80 rounded-full px-1 sm:px-1.5 py-0.5 shadow-md border border-gray-300/60 dark:border-gray-600/50">
+                                    #{member.rank}
+                                  </div>
+                                </motion.div>
+
+                                {/* ✅ Enhanced Responsive Avatar */}
+                                <motion.div whileHover={{ scale: 1.1 }} className="flex-shrink-0">
+                                  <Avatar className="w-12 h-12 sm:w-14 sm:h-14 border-2 sm:border-3 border-white dark:border-gray-700 shadow-lg ring-1 sm:ring-2 ring-gray-200/50 dark:ring-gray-600/50">
+                                    <AvatarImage src={member.avatar} alt={member.name} />
+                                    <AvatarFallback className="bg-gradient-to-br from-purple-400 to-pink-500 text-white font-bold text-sm sm:text-lg">
+                                      {member.name.charAt(0).toUpperCase()}
+                                    </AvatarFallback>
+                                  </Avatar>
+                                </motion.div>
+
+                                {/* ✅ Mobile-Optimized Member Name & Score */}
+                                <div className="flex-1 min-w-0 sm:hidden">
+                                  <div className="flex items-center justify-between">
+                                    <h3 className="font-bold text-lg text-gray-900 dark:text-gray-100 truncate">
+                                      {member.name}
+                                    </h3>
+                                    <motion.div 
+                                      whileHover={{ scale: 1.05 }}
+                                      className="text-xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent"
+                                    >
+                                      {member.totalScore.toLocaleString()}
+                                      <span className="text-xs text-muted-foreground ml-1">pts</span>
+                                    </motion.div>
+                                  </div>
                                 </div>
-                              </motion.div>
+                              </div>
 
-                              {/* Enhanced Avatar */}
-                              <motion.div whileHover={{ scale: 1.1 }}>
-                                <Avatar className="w-14 h-14 border-3 border-white shadow-lg">
-                                  <AvatarImage src={member.avatar} alt={member.name} />
-                                  <AvatarFallback className="bg-gradient-to-br from-purple-400 to-pink-500 text-white font-bold text-lg">
-                                    {member.name.charAt(0).toUpperCase()}
-                                  </AvatarFallback>
-                                </Avatar>
-                              </motion.div>
-
-                              {/* Enhanced Member Info */}
-                              <div className="flex-1 min-w-0">
+                              {/* ✅ Desktop Member Info */}
+                              <div className="flex-1 min-w-0 hidden sm:block">
                                 <div className="flex items-center gap-2 mb-2">
                                   <h3 className="font-bold text-xl text-gray-900 dark:text-gray-100 truncate">
                                     {member.name}
@@ -599,7 +636,7 @@ export function Leaderboard() {
                                 <div className="flex items-center gap-4 mb-3">
                                   <motion.div 
                                     whileHover={{ scale: 1.05 }}
-                                    className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent"
+                                    className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent"
                                   >
                                     {member.totalScore.toLocaleString()}
                                     <span className="text-sm text-muted-foreground ml-1">
@@ -609,65 +646,65 @@ export function Leaderboard() {
                                   {renderTrendIndicator(member.periodStats.trend, member.periodStats.trendPercentage)}
                                 </div>
 
-                                {/* Enhanced Achievement Badges */}
+                                {/* ✅ Enhanced Achievement Badges - Responsive */}
                                 {member.achievements.badges.length > 0 && (
-                                  <div className="flex flex-wrap gap-2 mb-3">
+                                  <div className="flex flex-wrap gap-1 sm:gap-2 mb-3">
                                     {member.achievements.badges.slice(0, 3).map((badge) => renderBadge(badge))}
                                     {member.achievements.badges.length > 3 && (
-                                      <Badge className="bg-gradient-to-r from-indigo-400 to-purple-500 text-white border-0 text-xs shadow-lg">
+                                      <Badge className="bg-gradient-to-r from-indigo-400 to-purple-500 text-white border-0 text-[10px] sm:text-xs shadow-lg px-1 sm:px-2">
                                         +{member.achievements.badges.length - 3} more
                                       </Badge>
                                     )}
                                   </div>
                                 )}
 
-                                {/* Enhanced Score Breakdown */}
-                                <div className="grid grid-cols-3 gap-3 text-sm mb-3">
+                                {/* ✅ Enterprise-Grade Responsive Score Breakdown */}
+                                <div className="grid grid-cols-3 gap-2 sm:gap-3 text-sm mb-3">
                                   <motion.div 
                                     whileHover={{ scale: 1.05 }}
-                                    className="text-center p-3 bg-gradient-to-br from-green-100 to-emerald-100 dark:from-green-800/30 dark:to-emerald-800/30 rounded-lg shadow-sm"
+                                    className="text-center p-2 sm:p-3 bg-gradient-to-br from-green-50/90 via-green-100/80 to-emerald-50/90 dark:from-green-800/30 dark:to-emerald-800/30 rounded-lg shadow-sm border border-green-200/60 dark:border-green-700/50 backdrop-blur-sm"
                                   >
-                                    <div className="font-bold text-green-700 dark:text-green-300">
+                                    <div className="font-bold text-green-800 dark:text-green-300 text-sm sm:text-base">
                                       {member.scoreBreakdown.taskScore}
                                     </div>
-                                    <div className="text-green-600 dark:text-green-400 text-xs">
+                                    <div className="text-green-700 dark:text-green-400 text-[10px] sm:text-xs font-medium">
                                       {t('tasks') || 'Tasks'}
                                     </div>
                                   </motion.div>
                                   <motion.div 
                                     whileHover={{ scale: 1.05 }}
-                                    className="text-center p-3 bg-gradient-to-br from-blue-100 to-cyan-100 dark:from-blue-800/30 dark:to-cyan-800/30 rounded-lg shadow-sm"
+                                    className="text-center p-2 sm:p-3 bg-gradient-to-br from-blue-50/90 via-blue-100/80 to-cyan-50/90 dark:from-blue-800/30 dark:to-cyan-800/30 rounded-lg shadow-sm border border-blue-200/60 dark:border-blue-700/50 backdrop-blur-sm"
                                   >
-                                    <div className="font-bold text-blue-700 dark:text-blue-300">
+                                    <div className="font-bold text-blue-800 dark:text-blue-300 text-sm sm:text-base">
                                       {member.scoreBreakdown.adjustmentScore}
                                     </div>
-                                    <div className="text-blue-600 dark:text-blue-400 text-xs">
+                                    <div className="text-blue-700 dark:text-blue-400 text-[10px] sm:text-xs font-medium">
                                       {t('adjustments') || 'Adjustments'}
                                     </div>
                                   </motion.div>
                                   <motion.div 
                                     whileHover={{ scale: 1.05 }}
-                                    className="text-center p-3 bg-gradient-to-br from-purple-100 to-pink-100 dark:from-purple-800/30 dark:to-pink-800/30 rounded-lg shadow-sm"
+                                    className="text-center p-2 sm:p-3 bg-gradient-to-br from-purple-50/90 via-purple-100/80 to-pink-50/90 dark:from-purple-800/30 dark:to-pink-800/30 rounded-lg shadow-sm border border-purple-200/60 dark:border-purple-700/50 backdrop-blur-sm"
                                   >
-                                    <div className="font-bold text-purple-700 dark:text-purple-300">
+                                    <div className="font-bold text-purple-800 dark:text-purple-300 text-sm sm:text-base">
                                       {member.achievements.totalTasksCompleted}
                                     </div>
-                                    <div className="text-purple-600 dark:text-purple-400 text-xs">
+                                    <div className="text-purple-700 dark:text-purple-400 text-[10px] sm:text-xs font-medium">
                                       {t('completed') || 'Completed'}
                                     </div>
                                   </motion.div>
                                 </div>
 
-                                {/* Enhanced Progress Bar - Real Task Completion */}
+                                {/* ✅ Enhanced Progress Bar - Real Task Completion */}
                                 {member.totalPossibleScore > 0 && (
-                                  <div className="mt-4">
-                                    <div className="flex justify-between text-sm text-muted-foreground mb-2">
+                                  <div className="mt-3 sm:mt-4">
+                                    <div className="flex justify-between text-xs sm:text-sm text-muted-foreground mb-2">
                                       <span className="font-medium">{t('taskProgress') || 'Task Progress'}</span>
                                       <span className="font-bold text-indigo-600 dark:text-indigo-400">
                                         {Math.round((member.totalScore / member.totalPossibleScore) * 100)}%
                                       </span>
                                     </div>
-                                    <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 overflow-hidden shadow-inner">
+                                    <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 sm:h-3 overflow-hidden shadow-inner">
                                       <motion.div
                                         initial={{ width: 0 }}
                                         animate={{ width: `${Math.min(100, (member.totalScore / member.totalPossibleScore) * 100)}%` }}
@@ -675,9 +712,76 @@ export function Leaderboard() {
                                         className="h-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-full shadow-lg"
                                       />
                                     </div>
-                                    <div className="flex justify-between text-xs text-muted-foreground mt-1">
-                                      <span>{member.totalScore} pts earned</span>
-                                      <span>{member.totalPossibleScore} pts possible</span>
+                                    <div className="flex justify-between text-[10px] sm:text-xs text-muted-foreground mt-1">
+                                      <span>{member.totalScore} {t('ptsEarned') || 'pts earned'}</span>
+                                      <span>{member.totalPossibleScore} {t('ptsPossible') || 'pts possible'}</span>
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+
+                              {/* ✅ Mobile-Only Score Breakdown - Full Width Stacked Layout */}
+                              <div className="w-full sm:hidden mt-3 pt-3 border-t border-gray-200/60 dark:border-gray-700/60">
+                                {/* Mobile Achievement Badges */}
+                                {member.achievements.badges.length > 0 && (
+                                  <div className="flex flex-wrap gap-1 mb-3">
+                                    {member.achievements.badges.slice(0, 2).map((badge) => renderBadge(badge))}
+                                    {member.achievements.badges.length > 2 && (
+                                      <Badge className="bg-gradient-to-r from-indigo-400 to-purple-500 text-white border-0 text-[10px] shadow-lg px-1">
+                                        +{member.achievements.badges.length - 2}
+                                      </Badge>
+                                    )}
+                                  </div>
+                                )}
+
+                                {/* Mobile Score Breakdown Grid */}
+                                <div className="grid grid-cols-3 gap-2 text-xs mb-3">
+                                  <div className="text-center p-2 bg-gradient-to-br from-green-50/90 to-emerald-50/90 dark:from-green-800/30 dark:to-emerald-800/30 rounded-lg border border-green-200/60 dark:border-green-700/50">
+                                    <div className="font-bold text-green-800 dark:text-green-300 text-sm">
+                                      {member.scoreBreakdown.taskScore}
+                                    </div>
+                                    <div className="text-green-700 dark:text-green-400 text-[10px] font-medium">
+                                      {t('tasks') || 'Tasks'}
+                                    </div>
+                                  </div>
+                                  <div className="text-center p-2 bg-gradient-to-br from-blue-50/90 to-cyan-50/90 dark:from-blue-800/30 dark:to-cyan-800/30 rounded-lg border border-blue-200/60 dark:border-blue-700/50">
+                                    <div className="font-bold text-blue-800 dark:text-blue-300 text-sm">
+                                      {member.scoreBreakdown.adjustmentScore}
+                                    </div>
+                                    <div className="text-blue-700 dark:text-blue-400 text-[10px] font-medium">
+                                      {t('adjustments') || 'Adj'}
+                                    </div>
+                                  </div>
+                                  <div className="text-center p-2 bg-gradient-to-br from-purple-50/90 to-pink-50/90 dark:from-purple-800/30 dark:to-pink-800/30 rounded-lg border border-purple-200/60 dark:border-purple-700/50">
+                                    <div className="font-bold text-purple-800 dark:text-purple-300 text-sm">
+                                      {member.achievements.totalTasksCompleted}
+                                    </div>
+                                    <div className="text-purple-700 dark:text-purple-400 text-[10px] font-medium">
+                                      {t('completed') || 'Done'}
+                                    </div>
+                                  </div>
+                                </div>
+
+                                {/* Mobile Progress Bar */}
+                                {member.totalPossibleScore > 0 && (
+                                  <div>
+                                    <div className="flex justify-between text-xs text-muted-foreground mb-2">
+                                      <span className="font-medium">{t('taskProgress') || 'Progress'}</span>
+                                      <span className="font-bold text-indigo-600 dark:text-indigo-400">
+                                        {Math.round((member.totalScore / member.totalPossibleScore) * 100)}%
+                                      </span>
+                                    </div>
+                                    <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 overflow-hidden shadow-inner">
+                                      <motion.div
+                                        initial={{ width: 0 }}
+                                        animate={{ width: `${Math.min(100, (member.totalScore / member.totalPossibleScore) * 100)}%` }}
+                                        transition={{ delay: index * 0.1 + 0.5, duration: 1 }}
+                                        className="h-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-full shadow-lg"
+                                      />
+                                    </div>
+                                    <div className="flex justify-between text-[10px] text-muted-foreground mt-1">
+                                      <span>{member.totalScore} {t('earned') || 'earned'}</span>
+                                      <span>{member.totalPossibleScore} {t('possible') || 'possible'}</span>
                                     </div>
                                   </div>
                                 )}
@@ -713,10 +817,10 @@ export function Leaderboard() {
                   </p>
                   <div className="flex justify-center gap-3">
                     <Badge className="bg-gradient-to-r from-blue-500 to-purple-600 text-white border-0 px-4 py-2 text-sm font-semibold shadow-lg">
-                      🚀 Start Completing Tasks
+                      🚀 {t('startCompletingTasks') || 'Start Completing Tasks'}
                     </Badge>
                     <Badge className="bg-gradient-to-r from-emerald-500 to-teal-600 text-white border-0 px-4 py-2 text-sm font-semibold shadow-lg">
-                      🏆 Earn Points
+                      🏆 {t('earnPoints') || 'Earn Points'}
                     </Badge>
                   </div>
                 </motion.div>
@@ -724,34 +828,55 @@ export function Leaderboard() {
             </CardContent>
           </Card>
 
-          {/* ✅ Additional Stats Card */}
+          {/* ✅ Enterprise-Grade Adaptive Insights Card */}
           {stats.mostImproved && (
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <TrendingUp className="w-5 h-5 text-green-500" />
-                  {t('insights') || 'Insights'}
+            <Card className="overflow-hidden border border-gray-200/60 dark:border-gray-700/60 shadow-2xl bg-gradient-to-br from-white/95 via-slate-50/80 to-white/95 dark:from-gray-900 dark:via-gray-800/50 dark:to-gray-900/80 backdrop-blur-sm">
+              <CardHeader className="bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 text-white border-b border-white/20">
+                <CardTitle className="flex items-center gap-3 text-2xl">
+                  <div className="p-2 bg-white/20 backdrop-blur-sm rounded-lg border border-white/30">
+                    <TrendingUp className="w-6 h-6 text-emerald-200" />
+                  </div>
+                  <span className="font-bold">{t('insights') || 'Insights'}</span>
+                  <Badge className="bg-white/20 backdrop-blur-sm text-white border-white/30 px-3 py-1 text-sm font-semibold shadow-lg">
+                    📈 {t('performanceAnalytics') || 'Performance Analytics'}
+                  </Badge>
                 </CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
-                    <div className="flex items-center gap-2 mb-2">
-                      <TrendingUp className="w-4 h-4 text-green-600" />
-                      <span className="font-medium">{t('mostImproved') || 'Most Improved'}</span>
+              <CardContent className="p-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <motion.div 
+                    whileHover={{ scale: 1.02, y: -2 }}
+                    className="p-6 bg-gradient-to-br from-green-50/80 via-green-100/60 to-emerald-50/80 dark:from-green-800/30 dark:via-green-700/20 dark:to-emerald-800/30 rounded-xl shadow-lg border border-green-200/70 dark:border-green-700/50 backdrop-blur-sm"
+                  >
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="p-2 bg-green-500 dark:bg-green-600 rounded-lg shadow-md border border-green-400/50 dark:border-green-500/50">
+                        <TrendingUp className="w-5 h-5 text-white" />
+                      </div>
+                      <span className="font-bold text-lg text-green-800 dark:text-green-200">{t('mostImproved') || 'Most Improved'}</span>
                     </div>
-                    <p className="text-lg font-bold text-green-700 dark:text-green-300">{stats.mostImproved}</p>
-                  </div>
+                    <p className="text-2xl font-bold text-green-700 dark:text-green-300 mb-2">{stats.mostImproved}</p>
+                    <p className="text-sm text-green-600 dark:text-green-400">Leading the improvement charts</p>
+                  </motion.div>
 
-                  <div className="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                    <div className="flex items-center gap-2 mb-2">
-                      <Flame className="w-4 h-4 text-blue-600" />
-                      <span className="font-medium">{t('competition') || 'Competition Level'}</span>
+                  <motion.div 
+                    whileHover={{ scale: 1.02, y: -2 }}
+                    className="p-6 bg-gradient-to-br from-blue-50/80 via-blue-100/60 to-cyan-50/80 dark:from-blue-800/30 dark:via-blue-700/20 dark:to-cyan-800/30 rounded-xl shadow-lg border border-blue-200/70 dark:border-blue-700/50 backdrop-blur-sm"
+                  >
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="p-2 bg-blue-500 dark:bg-blue-600 rounded-lg shadow-md border border-blue-400/50 dark:border-blue-500/50">
+                        <Flame className="w-5 h-5 text-white" />
+                      </div>
+                      <span className="font-bold text-lg text-blue-800 dark:text-blue-200">{t('competition') || 'Competition Level'}</span>
                     </div>
-                    <p className="text-lg font-bold text-blue-700 dark:text-blue-300 capitalize">
+                    <p className="text-2xl font-bold text-blue-700 dark:text-blue-300 capitalize mb-2">
                       {stats.competitionLevel}
                     </p>
-                  </div>
+                    <p className="text-sm text-blue-600 dark:text-blue-400">
+                      {stats.competitionLevel === 'high' ? 'Fierce competition!' : 
+                       stats.competitionLevel === 'medium' ? 'Healthy rivalry' : 
+                       'Room for more engagement'}
+                    </p>
+                  </motion.div>
                 </div>
               </CardContent>
             </Card>

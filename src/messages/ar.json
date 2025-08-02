@@ -92,6 +92,7 @@
     "weekly": "أسبوعي",
     "monthly": "شهري",
     "allTime": "كل الأوقات",
+    "soon": "قريباً",
     "rankings": "الترتيب",
     "members": "أعضاء",
     "inactive": "غير نشط",
@@ -112,7 +113,21 @@
     "fetchErrorDescription": "فشل في تحميل بيانات لوحة المتصدرين. يرجى المحاولة مرة أخرى.",
     "errorTitle": "غير قادر على تحميل لوحة المتصدرين",
     "tryAgain": "حاول مرة أخرى",
-    "lastUpdated": "آخر تحديث"
+    "lastUpdated": "آخر تحديث",
+    "startCompletingTasks": "ابدأ في إكمال المهام",
+    "earnPoints": "احصل على النقاط",
+    "performanceAnalytics": "تحليلات الأداء",
+    "leadingImprovementCharts": "يتصدر مخططات التحسن",
+    "fiercerCompetition": "منافسة شديدة!",
+    "healthyRivalry": "منافسة صحية",
+    "roomForEngagement": "مجال لمزيد من المشاركة",
+    "allTimeRankings": "تصنيفات على مدى الأوقات",
+    "comingSoonPeriods": "يومي/أسبوعي/شهري قريباً",
+    "comingSoon": "قريباً",
+    "ptsEarned": "نقطة محققة",
+    "ptsPossible": "نقطة متاحة",
+    "earned": "محقق",
+    "possible": "متاح"
   },
   "LeaderboardPage": {
     "title": "لوحة المتصدرين – بطل الأعمال"

@@ -92,6 +92,7 @@
     "weekly": "Weekly",
     "monthly": "Monthly",
     "allTime": "All Time",
+    "soon": "Soon",
     "rankings": "Rankings",
     "members": "members",
     "inactive": "Inactive",
@@ -112,7 +113,21 @@
     "fetchErrorDescription": "Failed to load leaderboard data. Please try again.",
     "errorTitle": "Unable to Load Leaderboard",
     "tryAgain": "Try Again",
-    "lastUpdated": "Last updated"
+    "lastUpdated": "Last updated",
+    "startCompletingTasks": "Start Completing Tasks",
+    "earnPoints": "Earn Points",
+    "performanceAnalytics": "Performance Analytics",
+    "leadingImprovementCharts": "Leading the improvement charts",
+    "fiercerCompetition": "Fierce competition!",
+    "healthyRivalry": "Healthy rivalry",
+    "roomForEngagement": "Room for more engagement",
+    "allTimeRankings": "All-Time Rankings",
+    "comingSoonPeriods": "Daily/Weekly/Monthly Coming Soon",
+    "comingSoon": "Coming Soon",
+    "ptsEarned": "pts earned",
+    "ptsPossible": "pts possible",
+    "earned": "earned",
+    "possible": "possible"
   },
   "LeaderboardPage": {
     "title": "Leaderboard – ChoreChampion"
