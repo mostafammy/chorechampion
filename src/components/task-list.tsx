@@ -13,6 +13,8 @@ import type { Task } from '@/types';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { AnimatePresence, motion } from 'framer-motion';
+// ✅ PRINCIPAL ENGINEER: Import enterprise design system
+import { useTaskTheme, useAdminAwareTheme } from '@/lib/design-system/theme-utils';
 
 interface TaskListProps {
   tasks: Task[];
@@ -29,6 +31,10 @@ export function TaskList({ tasks, onToggleTask }: TaskListProps) {
   
   // ✅ NEW: User role detection for UI behavior
   const { isAdmin, isLoading: roleLoading } = useUserRole();
+  
+  // ✅ PRINCIPAL ENGINEER: Enterprise design system integration
+  const taskTheme = useTaskTheme();
+  const adminTheme = useAdminAwareTheme(isAdmin, roleLoading);
 
   // Cleanup timeouts and resources on unmount
   useEffect(() => {
@@ -303,7 +309,11 @@ export function TaskList({ tasks, onToggleTask }: TaskListProps) {
   };
 
   if (tasks.length === 0) {
-    return <p className="text-sm text-muted-foreground text-center py-8">{t('noTasks')}</p>;
+    return (
+      <div className={`text-center py-8 ${taskTheme.text.muted}`}>
+        <p className="text-sm">{t('noTasks')}</p>
+      </div>
+    );
   }
 
   return (
@@ -323,16 +333,27 @@ export function TaskList({ tasks, onToggleTask }: TaskListProps) {
               className="rounded-lg overflow-hidden"
             >
               <div
-                className={`flex items-center space-x-3 p-3 transition-colors relative ${
-                  isPending ? 'bg-background border' : 'bg-card'
+                className={`flex items-center space-x-3 p-4 relative transition-all duration-200 ${
+                  isPending 
+                    ? taskTheme.card.pending
+                    : task.completed 
+                      ? taskTheme.card.completed
+                      : taskTheme.card.base
                 }`}
               >
                 {isPending ? (
                   <>
                     <div className="flex-1">
-                      <span className="text-muted-foreground line-through">{task.name}</span>
+                      <span className={`line-through ${taskTheme.text.muted}`}>
+                        {task.name}
+                      </span>
                     </div>
-                    <Button variant="ghost" size="sm" onClick={() => handleUndo(task.id)}>
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      onClick={() => handleUndo(task.id)}
+                      className={`${taskTheme.text.secondary} hover:${taskTheme.text.primary} transition-colors`}
+                    >
                       <Undo2 className="mr-2 h-4 w-4" />
                       {t('undo')}
                     </Button>
@@ -341,7 +362,7 @@ export function TaskList({ tasks, onToggleTask }: TaskListProps) {
                       initial={{ width: "100%"}}
                       animate={{ width: "0%"}}
                       transition={{ duration: 5, ease: "linear" }}
-                      className="absolute bottom-0 left-0 h-1 bg-primary"
+                      className="absolute bottom-0 left-0 h-1 bg-gradient-to-r from-amber-500 to-amber-600"
                     />
                   </>
                 ) : (
@@ -349,26 +370,32 @@ export function TaskList({ tasks, onToggleTask }: TaskListProps) {
                     <Checkbox
                       id={task.id}
                       checked={task.completed}
-                      disabled={!roleLoading && !isAdmin && !task.completed} // ✅ Disable for non-admin users (except already completed)
+                      disabled={adminTheme.getAdminStyle('') !== '' && !task.completed} // ✅ Use admin theme utility
                       onCheckedChange={() => handleToggle(task.id, task)}
                       aria-label={`Mark task ${task.name} as ${task.completed ? 'incomplete' : 'complete'}`}
-                      className={!isAdmin && !task.completed ? 'opacity-50' : ''} // ✅ Visual indicator for disabled state
+                      className={adminTheme.getAdminStyle('transition-all duration-200')}
                     />
                     <Label
                       htmlFor={task.id}
-                      className={`flex-1 cursor-pointer ${
-                        task.completed ? 'line-through text-muted-foreground' : 'text-foreground'
-                      } ${!isAdmin && !task.completed ? 'opacity-50' : ''}`} // ✅ Dim label for non-admin
-                      title={!isAdmin && !task.completed ? t('adminOnlyTooltip') : undefined} // ✅ Tooltip for explanation
+                      className={`flex-1 cursor-pointer transition-all duration-200 ${
+                        task.completed 
+                          ? `line-through ${taskTheme.text.muted}` 
+                          : taskTheme.text.primary
+                      } ${adminTheme.getAdminStyle('')}`}
+                      title={adminTheme.getAdminTooltip() ? t('adminOnlyTooltip') : undefined}
                     >
                       {task.name}
                       {!isAdmin && !task.completed && (
-                        <span className="ml-2 text-xs text-muted-foreground">({t('adminOnly')})</span>
+                        <span className={`ml-2 text-xs ${taskTheme.text.muted}`}>
+                          ({t('adminOnly')})
+                        </span>
                       )}
                     </Label>
                     <span
-                      className={`font-bold text-sm px-2 py-1 rounded-md ${
-                        task.completed ? 'text-green-700 bg-green-200' : 'text-primary-foreground bg-primary'
+                      className={`font-bold text-sm px-3 py-1.5 rounded-lg transition-all duration-200 ${
+                        task.completed 
+                          ? taskTheme.score.completed
+                          : taskTheme.score.active
                       }`}
                     >
                       +{task.score}
