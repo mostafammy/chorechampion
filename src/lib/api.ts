@@ -1,25 +1,44 @@
-import ky from 'ky';
-import { IS_DEV } from './utils';
+import ky from "ky";
+import { IS_DEV } from "./utils";
 
 const api = ky.create({
-  prefixUrl: '/api',
-  credentials: 'include', // ⬅️ Needed if using cookies
+  prefixUrl: "/api",
+  credentials: "include", // ⬅️ Needed if using cookies
   hooks: {
     afterResponse: [
       async (request, options, response) => {
         // If the response is 401, and we haven't already retried
         if (response.status === 401) {
+          // ✅ FIX: Don't attempt token refresh for login/signup endpoints
+          const url = new URL(request.url);
+          const isAuthEndpoint =
+            url.pathname.includes("/auth/login") ||
+            url.pathname.includes("/auth/signup");
+
+          if (isAuthEndpoint) {
+            if (IS_DEV) {
+              console.log(
+                "[API Client] 401 on auth endpoint - not attempting refresh"
+              );
+            }
+            return response; // Return the 401 response as-is for login/signup
+          }
+
           if (IS_DEV) {
-            console.log('[API Client] Access token expired. Attempting to refresh...');
+            console.log(
+              "[API Client] Access token expired. Attempting to refresh..."
+            );
           }
           try {
             // Attempt to refresh the token.
             // We use ky.post directly to avoid an infinite loop of hooks.
-            const refreshResponse = await ky.post('/api/auth/refresh');
+            const refreshResponse = await ky.post("/api/auth/refresh");
 
             if (refreshResponse.ok) {
               if (IS_DEV) {
-                console.log('[API Client] Token refreshed successfully. Retrying original request.');
+                console.log(
+                  "[API Client] Token refreshed successfully. Retrying original request."
+                );
               }
               // Retry the original request. The browser will have the new access_token cookie.
               return api(request.url, {
@@ -27,15 +46,14 @@ const api = ky.create({
                 retry: 0, // disable retry logic
                 hooks: undefined, // prevent recursive hook execution
               });
-
             }
           } catch (error) {
             if (IS_DEV) {
-              console.error('[API Client] Failed to refresh token:', error);
+              console.error("[API Client] Failed to refresh token:", error);
             }
             // If refresh fails, redirect to login
-            if (typeof window !== 'undefined') {
-              window.location.href = '/login';
+            if (typeof window !== "undefined") {
+              window.location.href = "/login";
             }
           }
         }

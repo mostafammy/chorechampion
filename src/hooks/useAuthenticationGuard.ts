@@ -212,10 +212,8 @@ class TokenManager {
       // Continue with logout even if endpoint fails
     }
 
-    // Reset internal state
-    this.refreshInProgress = false;
-    this.refreshPromise = null;
-    this.lastRefreshAttempt = 0;
+    // Clear all authentication state and cached data
+    await this.clearAuthenticationState();
 
     console.log("[TokenManager] Logout completed - state reset");
   }
@@ -234,6 +232,37 @@ class TokenManager {
       console.log("[TokenManager] Redirecting to login page...");
       window.location.href = "/login?message=session-expired";
     }
+  }
+
+  /**
+   * 🛡️ NEW: Clear all authentication state for secure logout
+   */
+  static async clearAuthenticationState(): Promise<void> {
+    console.log("[TokenManager] Clearing all authentication state...");
+
+    // Reset internal state
+    this.refreshInProgress = false;
+    this.refreshPromise = null;
+    this.lastRefreshAttempt = 0;
+
+    // Clear any cached data that might belong to previous user
+    if (typeof window !== "undefined") {
+      // Clear localStorage
+      try {
+        localStorage.clear();
+      } catch (error) {
+        console.warn("[TokenManager] Failed to clear localStorage:", error);
+      }
+
+      // Clear sessionStorage
+      try {
+        sessionStorage.clear();
+      } catch (error) {
+        console.warn("[TokenManager] Failed to clear sessionStorage:", error);
+      }
+    }
+
+    console.log("[TokenManager] Authentication state cleared");
   }
 }
 
@@ -409,7 +438,7 @@ export function useAuthenticationGuard(
           );
           return;
         }
-        
+
         console.log(
           "[useAuthenticationGuard] Tab became active, checking auth..."
         );
@@ -433,7 +462,7 @@ export function useAuthenticationGuard(
           );
           return;
         }
-        
+
         console.log(
           "[useAuthenticationGuard] Network reconnected, checking auth..."
         );

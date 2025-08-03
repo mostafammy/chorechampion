@@ -19,18 +19,23 @@ import { loginSchema } from "@/schemas/auth/login.schema";
 import { useState } from "react";
 import { toast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
-  import api from '@/lib/api';
+import { api } from '@/lib/api-client';
 
 
 export function LoginForm({
   className,
   headerActions,
+  onLoginSuccess,
+  onLoginError,
   ...props
 }: React.ComponentPropsWithoutRef<"div"> & {
   headerActions?: React.ReactNode;
+  onLoginSuccess?: () => void;
+  onLoginError?: () => void;
 }) {
   const t = useTranslations("LoginForm");
   const [loading, setLoading] = useState(false);
+  const [loginAttempted, setLoginAttempted] = useState(false);
   const router = useRouter();
 
   const {
@@ -44,47 +49,79 @@ export function LoginForm({
 // ... existing code ...
   const onSubmit = async (data: LoginInputType) => {
     setLoading(true);
+    setLoginAttempted(true);
+    
     try {
-      const response = await api.post('auth/login', {
-        json: data,
+      const response = await api.post('auth/login', data, {
+        enableRefresh: false, // Don't try to refresh on login failures
+        throwOnSessionExpiry: false, // Handle errors manually
       });
 
-      if (response.ok) {
+      if (response) {
+        // Success case - fetchWithAuth returns the parsed JSON
         toast({
           title: t("loginSuccessTitle") || "Login successful!",
           description: t("loginSuccessDesc") || "Welcome back!",
           variant: "success",
         });
         reset();
-        // Redirect to dashboard or intended page
+        
+        // Call success callback if provided
+        onLoginSuccess?.();
+        
+        // Redirect immediately on successful login
         router.push("/");
         router.refresh(); // Ensure middleware runs
-      } else {
-        const result: { error?: string; message?: string } = await response.json();
-        toast({
-          title: t("loginErrorTitle") || "Login failed",
-          description:
-            result?.error ||
-            result?.message ||
-            t("loginErrorDesc") ||
-            "Invalid email or password.",
-          variant: "destructive",
-        });
       }
     } catch (err: any) {
-      const errorResult = await err?.response?.json();
+      // Handle all errors here (both API errors and network errors)
+      let errorMessage = t("loginErrorDesc") || "An error occurred.";
+      let errorData: any = {};
+      
+      // Extract error details from ApiError or fetch response
+      if (err.status && err.data) {
+        // ApiError from our client
+        errorData = err.data;
+        errorMessage = err.message || errorData.error || errorData.message || errorMessage;
+      } else if (err.response) {
+        // Response error
+        try {
+          errorData = await err.response.json();
+          errorMessage = errorData.error || errorData.message || errorMessage;
+        } catch {
+          errorMessage = err.message || errorMessage;
+        }
+      } else {
+        // Network error
+        errorMessage = err.message || errorMessage;
+      }
+      
       toast({
         title: t("loginErrorTitle") || "Login failed",
-        description:
-          errorResult?.error ||
-          err?.message ||
-          t("loginErrorDesc") ||
-          "An error occurred.",
+        description: errorMessage,
         variant: "destructive",
+        duration: 5000, // Show error toast for 5 seconds
       });
-    } finally {
-      setLoading(false);
+      
+      // Call error callback if provided
+      onLoginError?.();
+      
+      console.log("Login error - displaying error for 2 seconds");
+      
+      // Reset form values after network error
+      reset();
+      
+      // Wait 2 seconds before allowing another login attempt
+      setTimeout(() => {
+        setLoginAttempted(false);
+        setLoading(false);
+      }, 2000);
+      
+      return; // Exit early to prevent immediate setLoading(false)
     }
+    
+    // Only reached on successful login
+    setLoading(false);
   };
 // ... existing code ...
 
@@ -138,7 +175,7 @@ export function LoginForm({
                   type="email"
                   placeholder={t("emailPlaceholder")}
                   required
-                  disabled={loading}
+                  disabled={loading || loginAttempted}
                 />
                 {errors.email && (
                   <p className="text-red-500">{errors.email.message}</p>
@@ -159,7 +196,7 @@ export function LoginForm({
                   id="password"
                   type="password"
                   required
-                  disabled={loading}
+                  disabled={loading || loginAttempted}
                 />
                 {errors.password && (
                   <p className="text-red-500">{errors.password.message}</p>
@@ -168,7 +205,7 @@ export function LoginForm({
               <Button
                 type="submit"
                 className="w-full flex items-center justify-center"
-                disabled={loading}
+                disabled={loading || loginAttempted}
               >
                 {loading ? (
                   <span className="flex items-center gap-2">
@@ -192,7 +229,23 @@ export function LoginForm({
                         d="M4 12a8 8 0 018-8v8z"
                       ></path>
                     </svg>
-                    {t("loggingIn") || "Logging in..."}
+                    {loginAttempted && !loading 
+                      ? (t("pleaseWait") || "Please wait...") 
+                      : (t("loggingIn") || "Logging in...")
+                    }
+                  </span>
+                ) : loginAttempted ? (
+                  <span className="flex items-center gap-2">
+                    <svg
+                      className="animate-pulse h-5 w-5 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    {t("pleaseWait") || "Please wait..."}
                   </span>
                 ) : (
                   t("login")

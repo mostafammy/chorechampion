@@ -153,11 +153,21 @@
     "loginSuccessDesc": "Welcome back!",
     "loginErrorTitle": "Login failed",
     "loginErrorDesc": "Invalid email or password.",
-    "loggingIn": "Logging in..."
+    "loggingIn": "Logging in...",
+    "pleaseWait": "Please wait..."
   },
   "LoginPage": {
     "brandName": "ChoreChampion",
-    "loginTitle": "Login – ChoreChampion"
+    "loginTitle": "Login – ChoreChampion",
+    "alreadyLoggedIn": "You're already logged in",
+    "logoutToLoginDifferentUser": "You need to logout first to login as a different user. This ensures your data stays secure.",
+    "logoutAndContinue": "Logout & Login as Different User",
+    "loggingOut": "Logging out...",
+    "goToDashboard": "Continue to Dashboard",
+    "testimonial": "ChoreChampion has transformed how our family handles household tasks. It's fun, engaging, and keeps everyone motivated!",
+    "testimonialAuthor": "Sarah Johnson",
+    "signupPrompt": "Don't have an account?",
+    "signupLink": "Sign up"
   },
   "SignupForm": {
     "createAccount": "Create an account",

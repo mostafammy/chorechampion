@@ -153,11 +153,21 @@
     "loginSuccessDesc": "مرحبًا بعودتك!",
     "loginErrorTitle": "فشل تسجيل الدخول",
     "loginErrorDesc": "البريد الإلكتروني أو كلمة المرور غير صحيحة.",
-    "loggingIn": "جاري تسجيل الدخول..."
+    "loggingIn": "جاري تسجيل الدخول...",
+    "pleaseWait": "يرجى الانتظار..."
   },
   "LoginPage": {
     "brandName": "بطل الأعمال",
-    "loginTitle": "تسجيل الدخول – بطل الأعمال"
+    "loginTitle": "تسجيل الدخول – بطل الأعمال",
+    "alreadyLoggedIn": "أنت مسجل دخول بالفعل",
+    "logoutToLoginDifferentUser": "تحتاج إلى تسجيل الخروج أولاً لتسجيل الدخول كمستخدم مختلف. هذا يضمن أمان بياناتك.",
+    "logoutAndContinue": "تسجيل الخروج والدخول كمستخدم مختلف",
+    "loggingOut": "جاري تسجيل الخروج...",
+    "goToDashboard": "الانتقال إلى لوحة التحكم",
+    "testimonial": "لقد غيّر بطل الأعمال طريقة تعامل عائلتنا مع المهام المنزلية. إنه ممتع وجذاب ويحفز الجميع!",
+    "testimonialAuthor": "سارة جونسون",
+    "signupPrompt": "ليس لديك حساب؟",
+    "signupLink": "إنشاء حساب"
   },
   "SignupForm": {
     "createAccount": "إنشاء حساب",
