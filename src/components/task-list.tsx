@@ -363,7 +363,7 @@ export function TaskList({ tasks, onToggleTask }: TaskListProps) {
                     >
                       {task.name}
                       {!isAdmin && !task.completed && (
-                        <span className="ml-2 text-xs text-muted-foreground">(Admin Only)</span>
+                        <span className="ml-2 text-xs text-muted-foreground">({t('adminOnly')})</span>
                       )}
                     </Label>
                     <span

@@ -147,7 +147,7 @@ export function AddTaskDialog({ members, onAddTask }: AddTaskDialogProps) {
         >
           <PlusCircle className="mr-2 h-4 w-4" />
           {t('addTask')}
-          {!isAdmin && <span className="ml-1 text-xs">(Admin Only)</span>}
+          {!isAdmin && <span className="ml-1 text-xs">({t('adminOnly')})</span>}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">

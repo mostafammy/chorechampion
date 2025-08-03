@@ -38,8 +38,8 @@ export function Header() {
       
       // Show immediate feedback to user
       toast({
-        title: 'Logging out...',
-        description: 'Please wait while we log you out securely.',
+        title: t('loggingOut'),
+        description: t('loggingOutDescription'),
         variant: 'default',
       });
 
@@ -74,8 +74,8 @@ export function Header() {
 
       // Success feedback
       toast({
-        title: 'Logged out successfully',
-        description: 'You have been securely logged out. Redirecting to login...',
+        title: t('logoutSuccessTitle'),
+        description: t('logoutSuccessDescription'),
         variant: 'success',
       });
 
@@ -90,8 +90,8 @@ export function Header() {
       
       // Error feedback with fallback action
       toast({
-        title: 'Logout Error',
-        description: 'Logout encountered an issue, but you will be redirected to login for security.',
+        title: t('logoutError'),
+        description: t('logoutErrorDescription'),
         variant: 'destructive',
       });
 
@@ -174,7 +174,7 @@ export function Header() {
             ) : (
               <LogOut className="mr-2 h-4 w-4" />
             )}
-            {logoutLoading ? 'Logging out...' : t('logout')}
+            {logoutLoading ? t('loggingOut') : t('logout')}
           </Button>
         </nav>
         {/* Mobile Hamburger - ✅ UPDATED: Now shows earlier (1024px) for better UX */}
@@ -245,7 +245,7 @@ export function Header() {
                   ) : (
                     <LogOut className="mr-2 h-4 w-4" />
                   )}
-                  {logoutLoading ? 'Logging out...' : t('logout')}
+                  {logoutLoading ? t('loggingOut') : t('logout')}
                 </Button>
                 
                 <div className="flex gap-2 mt-4">

@@ -4,7 +4,13 @@
     "dashboard": "لوحة التحكم",
     "archive": "الأرشيف",
     "leaderboard": "لوحة المتصدرين",
-    "logout": "تسجيل الخروج"
+    "logout": "تسجيل الخروج",
+    "logoutSuccessTitle": "تم تسجيل الخروج بنجاح",
+    "logoutSuccessDescription": "تم تسجيل خروجك بأمان. جاري إعادة التوجيه لصفحة تسجيل الدخول...",
+    "loggingOut": "جاري تسجيل الخروج...",
+    "loggingOutDescription": "يرجى الانتظار بينما نقوم بتسجيل خروجك بأمان.",
+    "logoutError": "خطأ في تسجيل الخروج",
+    "logoutErrorDescription": "واجه تسجيل الخروج مشكلة، لكن سيتم إعادة توجيهك لصفحة تسجيل الدخول للأمان."
   },
   "Dashboard": {
     "overallProgress": "التقدم العام",
@@ -17,7 +23,8 @@
     "taskProgress": "تقدم المهمة",
     "adminAccessRequired": "مطلوب وصول المشرف",
     "adminAccessRequiredDescription": "يمكن للمشرفين فقط تعديل النقاط. يرجى الاتصال بالمشرف لتعديل النقاط.",
-    "adminOnlyTooltip": "يمكن للمشرفين فقط تعديل النقاط"
+    "adminOnlyTooltip": "يمكن للمشرفين فقط تعديل النقاط",
+    "adminOnly": "للمشرف فقط"
   },
   "AddTaskDialog": {
     "addTask": "أضف مهمة",
@@ -30,6 +37,7 @@
     "selectPersonPlaceholder": "اختر شخصًا",
     "selectPeriodPlaceholder": "اختر فترة",
     "adminOnlyTooltip": "يمكن للمشرفين فقط إضافة المهام",
+    "adminOnly": "للمشرف فقط",
     "daily": "يومي",
     "weekly": "أسبوعي",
     "monthly": "شهري",
@@ -57,7 +65,8 @@
     "taskConfirmationFailed": "فشل في تأكيد إكمال المهمة.",
     "adminOnlyTooltip": "يمكن للمشرفين فقط إكمال المهام",
     "adminAccessRequired": "مطلوب وصول المشرف",
-    "adminAccessRequiredDescription": "يمكن للمشرفين فقط إكمال المهام. يرجى الاتصال بالمشرف لوضع علامة على هذه المهمة كمكتملة."
+    "adminAccessRequiredDescription": "يمكن للمشرفين فقط إكمال المهام. يرجى الاتصال بالمشرف لوضع علامة على هذه المهمة كمكتملة.",
+    "adminOnly": "للمشرف فقط"
   },
   "ArchivePage": {
     "title": "أرشيف المهام",
@@ -127,7 +136,18 @@
     "ptsEarned": "نقطة محققة",
     "ptsPossible": "نقطة متاحة",
     "earned": "محقق",
-    "possible": "متاح"
+    "possible": "متاح",
+    "badges": {
+      "champion": "البطل",
+      "achiever": "المنجز",
+      "starter": "البادئ",
+      "leader": "القائد",
+      "topPerformer": "الأداء الأفضل",
+      "consistent": "المثابر",
+      "dedicated": "المخلص",
+      "bonusEarner": "كاسب المكافآت",
+      "taskMaster": "سيد المهام"
+    }
   },
   "LeaderboardPage": {
     "title": "لوحة المتصدرين – بطل الأعمال"

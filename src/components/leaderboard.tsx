@@ -26,6 +26,7 @@ import {
   RefreshCw
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { useLocale } from 'next-intl';
 import { useToast } from '@/hooks/use-toast';
 import { fetchWithAuth } from '@/lib/auth/fetchWithAuth';
 import LoadingSpinner from '@/components/loading-spinner';
@@ -33,6 +34,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { IS_DEV } from '@/lib/utils';
 import { useAppContext } from '@/context/app-provider';
 import { initialMembers } from '@/data/seed'; // ✅ ADD: Import members data
+import { LastUpdated } from '@/components/ui/last-updated'; // ✅ Enterprise Component Import
 
 // ✅ Type definitions matching the API response
 interface LeaderboardMember {
@@ -85,19 +87,6 @@ interface LeaderboardData {
   };
 }
 
-// ✅ Achievement badge configuration
-const BADGE_CONFIG = {
-  champion: { icon: Crown, color: "bg-gradient-to-r from-yellow-400 to-yellow-600", label: "Champion" },
-  achiever: { icon: Trophy, color: "bg-gradient-to-r from-blue-400 to-blue-600", label: "Achiever" },
-  starter: { icon: Star, color: "bg-gradient-to-r from-green-400 to-green-600", label: "Starter" },
-  leader: { icon: Crown, color: "bg-gradient-to-r from-purple-400 to-purple-600", label: "Leader" },
-  "top-performer": { icon: Medal, color: "bg-gradient-to-r from-orange-400 to-orange-600", label: "Top Performer" },
-  consistent: { icon: Target, color: "bg-gradient-to-r from-teal-400 to-teal-600", label: "Consistent" },
-  dedicated: { icon: Shield, color: "bg-gradient-to-r from-red-400 to-red-600", label: "Dedicated" },
-  "bonus-earner": { icon: Zap, color: "bg-gradient-to-r from-pink-400 to-pink-600", label: "Bonus Earner" },
-  "task-master": { icon: Award, color: "bg-gradient-to-r from-indigo-400 to-indigo-600", label: "Task Master" },
-};
-
 // ✅ Rank configuration for visual styling
 const RANK_CONFIG = {
   1: { icon: Trophy, color: "text-yellow-500", bgColor: "bg-yellow-50 dark:bg-yellow-900/20", borderColor: "border-yellow-200 dark:border-yellow-800" },
@@ -113,6 +102,7 @@ export function Leaderboard() {
   const [refreshing, setRefreshing] = useState(false);
 
   const t = useTranslations('Leaderboard');
+  const locale = useLocale();
   const { toast } = useToast();
   
   // ✅ MAXIMUM PERFORMANCE: Get tasks and members from AppProvider - NO API CALLS!
@@ -280,9 +270,22 @@ export function Leaderboard() {
     handleInstantRefresh();
   };
 
-  // ✅ Render achievement badge
+  // ✅ Render achievement badge with translations
   const renderBadge = (badgeType: string) => {
-    const config = BADGE_CONFIG[badgeType as keyof typeof BADGE_CONFIG];
+    // Achievement badge configuration with translations
+    const badgeConfig = {
+      champion: { icon: Crown, color: "bg-gradient-to-r from-yellow-400 to-yellow-600", label: t('badges.champion') },
+      achiever: { icon: Trophy, color: "bg-gradient-to-r from-blue-400 to-blue-600", label: t('badges.achiever') },
+      starter: { icon: Star, color: "bg-gradient-to-r from-green-400 to-green-600", label: t('badges.starter') },
+      leader: { icon: Crown, color: "bg-gradient-to-r from-purple-400 to-purple-600", label: t('badges.leader') },
+      "top-performer": { icon: Medal, color: "bg-gradient-to-r from-orange-400 to-orange-600", label: t('badges.topPerformer') },
+      consistent: { icon: Target, color: "bg-gradient-to-r from-teal-400 to-teal-600", label: t('badges.consistent') },
+      dedicated: { icon: Shield, color: "bg-gradient-to-r from-red-400 to-red-600", label: t('badges.dedicated') },
+      "bonus-earner": { icon: Zap, color: "bg-gradient-to-r from-pink-400 to-pink-600", label: t('badges.bonusEarner') },
+      "task-master": { icon: Award, color: "bg-gradient-to-r from-indigo-400 to-indigo-600", label: t('badges.taskMaster') },
+    };
+    
+    const config = badgeConfig[badgeType as keyof typeof badgeConfig];
     if (!config) return null;
 
     const Icon = config.icon;
@@ -447,7 +450,9 @@ export function Leaderboard() {
               </div>
               <div className="min-w-0 flex-1">
                 <p className="text-emerald-700/80 dark:text-white/80 text-xs sm:text-sm font-medium truncate">{t('totalPoints') || 'Total Points'}</p>
-                <p className="text-2xl sm:text-3xl font-bold text-emerald-900 dark:text-white">{stats.totalPointsAwarded.toLocaleString()}</p>
+                <p className="text-2xl sm:text-3xl font-bold text-emerald-900 dark:text-white">
+                  <bdi dir="ltr">{stats.totalPointsAwarded.toLocaleString(locale === 'ar' ? 'ar-SA' : 'en-US')}</bdi>
+                </p>
               </div>
             </div>
           </CardContent>
@@ -613,7 +618,7 @@ export function Leaderboard() {
                                       whileHover={{ scale: 1.05 }}
                                       className="text-xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent"
                                     >
-                                      {member.totalScore.toLocaleString()}
+                                      <bdi dir="ltr">{member.totalScore.toLocaleString(locale === 'ar' ? 'ar-SA' : 'en-US')}</bdi>
                                       <span className="text-xs text-muted-foreground ml-1">pts</span>
                                     </motion.div>
                                   </div>
@@ -638,7 +643,7 @@ export function Leaderboard() {
                                     whileHover={{ scale: 1.05 }}
                                     className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent"
                                   >
-                                    {member.totalScore.toLocaleString()}
+                                    <bdi dir="ltr">{member.totalScore.toLocaleString(locale === 'ar' ? 'ar-SA' : 'en-US')}</bdi>
                                     <span className="text-sm text-muted-foreground ml-1">
                                       {t('points') || 'pts'}
                                     </span>
@@ -855,7 +860,7 @@ export function Leaderboard() {
                       <span className="font-bold text-lg text-green-800 dark:text-green-200">{t('mostImproved') || 'Most Improved'}</span>
                     </div>
                     <p className="text-2xl font-bold text-green-700 dark:text-green-300 mb-2">{stats.mostImproved}</p>
-                    <p className="text-sm text-green-600 dark:text-green-400">Leading the improvement charts</p>
+                    <p className="text-sm text-green-600 dark:text-green-400">{t('leadingImprovementCharts')}</p>
                   </motion.div>
 
                   <motion.div 
@@ -872,9 +877,9 @@ export function Leaderboard() {
                       {stats.competitionLevel}
                     </p>
                     <p className="text-sm text-blue-600 dark:text-blue-400">
-                      {stats.competitionLevel === 'high' ? 'Fierce competition!' : 
-                       stats.competitionLevel === 'medium' ? 'Healthy rivalry' : 
-                       'Room for more engagement'}
+                      {stats.competitionLevel === 'high' ? t('fiercerCompetition') : 
+                       stats.competitionLevel === 'medium' ? t('healthyRivalry') : 
+                       t('roomForEngagement')}
                     </p>
                   </motion.div>
                 </div>
@@ -884,10 +889,13 @@ export function Leaderboard() {
         </TabsContent>
       </Tabs>
 
-      {/* ✅ Last Updated Info */}
-      <div className="text-center text-sm text-muted-foreground">
-        {t('lastUpdated') || 'Last updated'}: {new Date(leaderboardData.lastUpdated).toLocaleString()}
-      </div>
+      {/* ✅ Enterprise-Grade LastUpdated Component */}
+      <LastUpdated 
+        timestamp={leaderboardData.lastUpdated}
+        size="md"
+        variant="muted"
+        className="mt-4"
+      />
     </div>
   );
 }

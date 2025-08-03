@@ -4,7 +4,18 @@
     "dashboard": "Dashboard",
     "archive": "Archive",
     "leaderboard": "Leaderboard",
-    "logout": "Logout"
+    "fiercerCompetition": "Fierce competition!",
+    "healthyRivalry": "Healthy rivalry",
+    "roomForEngagement": "Room for more engagement",
+    "allTimeRankings": "All Time Rankings",
+    "comingSoonPeriods": "Daily/Weekly/Monthly Coming Soon",
+    "logout": "Logout",
+    "logoutSuccessTitle": "Logged out successfully",
+    "logoutSuccessDescription": "You have been securely logged out. Redirecting to login...",
+    "loggingOut": "Logging out...",
+    "loggingOutDescription": "Please wait while we log you out securely.",
+    "logoutError": "Logout Error",
+    "logoutErrorDescription": "Logout encountered an issue, but you will be redirected to login for security."
   },
   "Dashboard": {
     "overallProgress": "Overall Progress",
@@ -17,7 +28,8 @@
     "taskProgress": "Task Progress",
     "adminAccessRequired": "Admin Access Required",
     "adminAccessRequiredDescription": "Only administrators can adjust scores. Please contact an admin to modify scores.",
-    "adminOnlyTooltip": "Only administrators can adjust scores"
+    "adminOnlyTooltip": "Only administrators can adjust scores",
+    "adminOnly": "Admin Only"
   },
   "AddTaskDialog": {
     "addTask": "Add Task",
@@ -30,6 +42,7 @@
     "selectPersonPlaceholder": "Select a person",
     "selectPeriodPlaceholder": "Select a period",
     "adminOnlyTooltip": "Only administrators can add tasks",
+    "adminOnly": "Admin Only",
     "daily": "Daily",
     "weekly": "Weekly",
     "monthly": "Monthly",
@@ -57,7 +70,8 @@
     "taskConfirmationFailed": "Task confirmation failed.",
     "adminOnlyTooltip": "Only administrators can complete tasks",
     "adminAccessRequired": "Admin Access Required",
-    "adminAccessRequiredDescription": "Only administrators can complete tasks. Please contact an admin to mark this task as complete."
+    "adminAccessRequiredDescription": "Only administrators can complete tasks. Please contact an admin to mark this task as complete.",
+    "adminOnly": "Admin Only"
   },
   "ArchivePage": {
     "title": "Task Archive",
@@ -127,7 +141,18 @@
     "ptsEarned": "pts earned",
     "ptsPossible": "pts possible",
     "earned": "earned",
-    "possible": "possible"
+    "possible": "possible",
+    "badges": {
+      "champion": "Champion",
+      "achiever": "Achiever",
+      "starter": "Starter",
+      "leader": "Leader",
+      "topPerformer": "Top Performer",
+      "consistent": "Consistent",
+      "dedicated": "Dedicated",
+      "bonusEarner": "Bonus Earner",
+      "taskMaster": "Task Master"
+    }
   },
   "LeaderboardPage": {
     "title": "Leaderboard – ChoreChampion"

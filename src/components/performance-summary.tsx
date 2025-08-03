@@ -76,7 +76,7 @@ export function PerformanceSummary({
                 {totalScore}
               </span>
               {!isAdmin && (
-                <span className="text-xs text-muted-foreground">(Admin Only)</span>
+                <span className="text-xs text-muted-foreground">({t('adminOnly')})</span>
               )}
             </div>
             <Button
