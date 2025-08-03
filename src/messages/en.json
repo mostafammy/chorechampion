@@ -98,15 +98,41 @@
   },
   "ArchivePage": {
     "title": "Task Archive",
-    "description": "Review past achievements and performance records.",
+    "description": "Review past achievements and performance records for all family members.",
     "noTasks": "No tasks have been completed yet. Check back later!",
-    "tasksCompleted": "{count, plural, one {# task completed} other {# tasks completed}}"
+    "tasksCompleted": "{count, plural, one {# task completed} other {# tasks completed}}",
+    "totalTasksCompleted": "Total Tasks Completed",
+    "totalPointsEarned": "Total Points Earned",
+    "activeMembers": "Active Members",
+    "completedThisWeek": "Completed This Week",
+    "topPerformer": "Top Performer",
+    "recentActivity": "Recent Activity",
+    "performanceStats": "Performance Statistics",
+    "weeklyProgress": "Weekly Progress",
+    "monthlyProgress": "Monthly Progress",
+    "achievements": "Achievements Unlocked",
+    "lastUpdated": "Archive last updated"
   },
   "ArchiveTable": {
     "task": "Task",
     "period": "Period",
     "score": "Score",
-    "completed": "Completed"
+    "completed": "Completed",
+    "sortByDate": "Sort by Date",
+    "sortByScore": "Sort by Score",
+    "sortByName": "Sort by Name",
+    "filterAll": "All Time",
+    "filterToday": "Today",
+    "filterWeek": "This Week",
+    "filterMonth": "This Month",
+    "expandTasks": "Click to view tasks",
+    "collapseTasks": "Click to hide tasks",
+    "performanceBadges": {
+      "rookie": "Rookie",
+      "active": "Active",
+      "achiever": "Achiever",
+      "champion": "Champion"
+    }
   },
   "OverallProgressChart": {
     "noPoints": "No points scored yet!",

@@ -77,7 +77,17 @@ export default async function LocaleLayout({
       
       // Separate active and archived tasks
       initialActiveTasks = allTasks.filter(task => !task.completed);
-      initialArchivedTasks = allTasks.filter(task => task.completed) as ArchivedTask[];
+      const rawArchivedTasks = allTasks.filter(task => task.completed) as ArchivedTask[];
+      
+      // ✅ PRINCIPAL ENGINEER: Enrich archived tasks with real completion dates
+      console.log('[Layout] ✅ Enriching archived tasks with completion dates...');
+      try {
+        initialArchivedTasks = await MergeCompletionDate(initialMembers, rawArchivedTasks);
+        console.log(`[Layout] ✅ Successfully enriched ${initialArchivedTasks.length} archived tasks with completion dates`);
+      } catch (enrichmentError) {
+        console.warn('[Layout] ⚠️ Completion date enrichment failed, using raw archived tasks:', enrichmentError);
+        initialArchivedTasks = rawArchivedTasks;
+      }
       
       // ✅ NEW: Fetch score adjustments (not total scores) for all members server-side
       console.log('[Layout] ✅ Fetching score adjustments for all members server-side...');

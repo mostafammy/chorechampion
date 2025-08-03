@@ -93,15 +93,41 @@
   },
   "ArchivePage": {
     "title": "أرشيف المهام",
-    "description": "مراجعة الإنجازات السابقة وسجلات الأداء.",
+    "description": "مراجعة الإنجازات السابقة وسجلات الأداء لجميع أفراد العائلة.",
     "noTasks": "لم يتم إكمال أي مهام بعد. تحقق مرة أخرى لاحقًا!",
-    "tasksCompleted": "{count, plural, zero {لم تكتمل أي مهمة} one {مهمة واحدة مكتملة} two {مهمتان مكتملتان} few {مهام مكتملة} many {مهام مكتملة} other {# مهام مكتملة}}"
+    "tasksCompleted": "{count, plural, zero {لم تكتمل أي مهمة} one {مهمة واحدة مكتملة} two {مهمتان مكتملتان} few {مهام مكتملة} many {مهام مكتملة} other {# مهام مكتملة}}",
+    "totalTasksCompleted": "إجمالي المهام المكتملة",
+    "totalPointsEarned": "إجمالي النقاط المكتسبة",
+    "activeMembers": "الأعضاء النشطون",
+    "completedThisWeek": "مكتملة هذا الأسبوع",
+    "topPerformer": "الأفضل أداءً",
+    "recentActivity": "النشاط الأخير",
+    "performanceStats": "إحصائيات الأداء",
+    "weeklyProgress": "التقدم الأسبوعي",
+    "monthlyProgress": "التقدم الشهري",
+    "achievements": "الإنجازات المفتوحة",
+    "lastUpdated": "آخر تحديث للأرشيف"
   },
   "ArchiveTable": {
     "task": "المهمة",
     "period": "الفترة",
     "score": "النقاط",
-    "completed": "مكتملة"
+    "completed": "مكتملة",
+    "sortByDate": "ترتيب حسب التاريخ",
+    "sortByScore": "ترتيب حسب النقاط",
+    "sortByName": "ترتيب حسب الاسم",
+    "filterAll": "كل الأوقات",
+    "filterToday": "اليوم",
+    "filterWeek": "هذا الأسبوع",
+    "filterMonth": "هذا الشهر",
+    "expandTasks": "انقر لعرض المهام",
+    "collapseTasks": "انقر لإخفاء المهام",
+    "performanceBadges": {
+      "rookie": "مبتدئ",
+      "active": "نشط",
+      "achiever": "منجز",
+      "champion": "بطل"
+    }
   },
   "OverallProgressChart": {
     "noPoints": "لم يتم تسجيل أي نقاط بعد!",

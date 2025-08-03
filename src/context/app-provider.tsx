@@ -304,9 +304,19 @@ export function AppProvider({
   const handleToggleTask = (taskId: string) => {
     const taskToArchive = activeTasks.find((task) => task.id === taskId);
     if (taskToArchive) {
+      // ✅ PRINCIPAL ENGINEER: Use current timestamp as the real completion time
+      // This is correct for client-side task completion - the user just completed it now
+      const completionDate = new Date();
+      
+      console.log(`[AppProvider] Task completed at: ${completionDate.toISOString()}`, {
+        taskId,
+        taskName: taskToArchive.name,
+        completedAt: completionDate
+      });
+      
       setArchivedTasks((prev) => [
         ...prev,
-        { ...taskToArchive, completed: true, completedDate: new Date() },
+        { ...taskToArchive, completed: true, completedDate: completionDate },
       ]);
       setActiveTasks((prev) => prev.filter((task) => task.id !== taskId));
     }
