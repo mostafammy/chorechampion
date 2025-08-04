@@ -387,7 +387,7 @@ export function EnhancedAppProvider({
     setActiveTasks((prevTasks) => [...prevTasks, task]);
   };
 
-  const handleToggleTask = (taskId: string) => {
+  const handleToggleTask = async (taskId: string): Promise<void> => {
     const taskToArchive = activeTasks.find((task) => task.id === taskId);
     if (taskToArchive) {
       setArchivedTasks((prev) => [

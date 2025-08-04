@@ -1,129 +1,11 @@
 import { getRedis } from "@/lib/redis";
 import { generateCompletionKey, IS_DEV } from "@/lib/utils";
 import type { Task } from "@/types";
-import { initialMembers } from "@/data/seed";
 
 export class GetAllTasksError extends Error {
   constructor(public status: number, message: string) {
     super(message);
     this.name = "GetAllTasksError";
-  }
-}
-
-/**
- * ✅ PRINCIPAL ENGINEER: Enhanced completion date enrichment
- * Fetches real completion timestamps from Redis adjustment logs
- */
-async function enrichTasksWithCompletionDates(
-  allTasks: Task[],
-  completedTasks: Task[]
-): Promise<Task[]> {
-  if (completedTasks.length === 0) {
-    return allTasks;
-  }
-
-  try {
-    const redis = getRedis();
-
-    // ✅ PERFORMANCE: Batch fetch completion logs for all members
-    const allLogs = await Promise.all(
-      initialMembers.map(async (member) => {
-        try {
-          const logs = await redis.lrange(
-            `user:${member.id}:adjustment_log`,
-            0,
-            500 // Increased range for more comprehensive history
-          );
-          return logs.map((entry) =>
-            typeof entry === "string" ? JSON.parse(entry) : entry
-          );
-        } catch (error) {
-          if (IS_DEV) {
-            console.warn(
-              `[enrichTasksWithCompletionDates] Failed to fetch logs for member ${member.id}:`,
-              error
-            );
-          }
-          return [];
-        }
-      })
-    );
-
-    // ✅ SCALABILITY: Build completion date map with latest timestamps
-    const flatLogs = allLogs.flat();
-    const taskCompletionMap = new Map<string, Date>();
-
-    for (const log of flatLogs) {
-      if (log.source === "task" && log.taskId && log.at) {
-        const completionDate = new Date(log.at);
-        const existingDate = taskCompletionMap.get(log.taskId);
-
-        // Use the latest completion date if multiple exist
-        if (!existingDate || completionDate > existingDate) {
-          taskCompletionMap.set(log.taskId, completionDate);
-        }
-      }
-    }
-
-    // ✅ MAINTAINABILITY: Enrich tasks with real completion dates
-    const enrichedTasks = allTasks.map((task) => {
-      if (!task.completed) {
-        return task;
-      }
-
-      const realCompletionDate = taskCompletionMap.get(task.id);
-
-      if (realCompletionDate) {
-        return {
-          ...task,
-          completedDate: realCompletionDate,
-        };
-      }
-
-      // ✅ FALLBACK: Use task's existing completedDate or reasonable default
-      const fallbackDate = (task as any).completedDate
-        ? new Date((task as any).completedDate)
-        : new Date(
-            Date.now() - Math.floor(Math.random() * 1000 * 60 * 60 * 24 * 7)
-          ); // Random date within last week
-
-      return {
-        ...task,
-        completedDate: fallbackDate,
-      };
-    });
-
-    if (IS_DEV) {
-      const enrichedCount = enrichedTasks.filter(
-        (t) => t.completed && (t as any).completedDate
-      ).length;
-      console.log(
-        `[enrichTasksWithCompletionDates] ✅ Enriched ${enrichedCount}/${completedTasks.length} completed tasks with real completion dates`
-      );
-    }
-
-    return enrichedTasks;
-  } catch (error) {
-    if (IS_DEV) {
-      console.error(
-        "[enrichTasksWithCompletionDates] Error enriching completion dates:",
-        error
-      );
-    }
-
-    // ✅ RESILIENCE: Return original tasks with fallback dates on error
-    return allTasks.map((task) => {
-      if (!task.completed) {
-        return task;
-      }
-
-      return {
-        ...task,
-        completedDate: new Date(
-          Date.now() - Math.floor(Math.random() * 1000 * 60 * 60 * 24 * 7)
-        ),
-      };
-    });
   }
 }
 
@@ -288,23 +170,16 @@ const getAllTasksService = async (): Promise<Task[]> => {
       completed: completionResults[index] === 1,
     }));
 
-    // ✅ PRINCIPAL ENGINEER FIX: Fetch completion dates for completed tasks
-    const completedTasks = tasksWithCompletion.filter((task) => task.completed);
-    const tasksWithCompletionDates = await enrichTasksWithCompletionDates(
-      tasksWithCompletion,
-      completedTasks
-    );
-
     if (IS_DEV) {
-      const completedCount = tasksWithCompletionDates.filter(
-        (t: Task) => t.completed
+      const completedCount = tasksWithCompletion.filter(
+        (t) => t.completed
       ).length;
       console.log(
-        `[getAllTasksService] ✅ Successfully processed ${tasksWithCompletionDates.length} tasks (${completedCount} completed)`
+        `[getAllTasksService] ✅ Successfully processed ${tasksWithCompletion.length} tasks (${completedCount} completed)`
       );
     }
 
-    return tasksWithCompletionDates;
+    return tasksWithCompletion;
   } catch (error: any) {
     // ✅ SCALABILITY: Comprehensive error handling
     if (error instanceof GetAllTasksError) {

@@ -18,7 +18,7 @@ import { useTaskTheme, useAdminAwareTheme } from '@/lib/design-system/theme-util
 
 interface TaskListProps {
   tasks: Task[];
-  onToggleTask: (taskId: string) => void;
+  onToggleTask: (taskId: string) => Promise<void>;
 }
 
 export function TaskList({ tasks, onToggleTask }: TaskListProps) {
@@ -276,7 +276,7 @@ export function TaskList({ tasks, onToggleTask }: TaskListProps) {
         }
       } finally {
         // ✅ CLEANUP: Always clean up resources
-        onToggleTask(taskId);
+        await onToggleTask(taskId);
         delete timeoutsRef.current[taskId];
         delete abortControllersRef.current[taskId];
         delete completionKeysRef.current[taskId]; // Clean up completion key too

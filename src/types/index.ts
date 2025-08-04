@@ -69,7 +69,7 @@ export interface AppContextType {
   archivedTasks: ArchivedTask[];
   scoreAdjustments: Record<string, number>;
   handleAddTask: (task: Task) => void;
-  handleToggleTask: (taskId: string) => void;
+  handleToggleTask: (taskId: string) => Promise<void>;
   handleAdjustScore: (memberId: string, amount: number) => void;
   auth: {
     isAuthenticated: boolean | null;

@@ -6,6 +6,7 @@ import { initialMembers } from '@/data/seed';
 import { ScoreService } from '@/lib/api/scoreService';
 import { toast } from '@/hooks/use-toast';
 import {useAuthenticationGuard} from "@/hooks/useAuthenticationGuard";
+import { MergeCompletionDate } from '@/lib/completionDateService';
 
 interface AppProviderProps extends BaseAppProviderProps {
   initialActiveTasks?: Task[];
@@ -301,22 +302,32 @@ export function AppProvider({
     setActiveTasks((prevTasks) => [...prevTasks, task]);
   };
 
-  const handleToggleTask = (taskId: string) => {
+  const handleToggleTask = async (taskId: string) => {
     const taskToArchive = activeTasks.find((task) => task.id === taskId);
     if (taskToArchive) {
-      // ✅ PRINCIPAL ENGINEER: Use current timestamp as the real completion time
-      // This is correct for client-side task completion - the user just completed it now
-      const completionDate = new Date();
+      // ✅ PRINCIPAL ENGINEER: Get real completion date from Redis logs
+      let realCompletionDate = new Date(); // Default fallback
       
-      console.log(`[AppProvider] Task completed at: ${completionDate.toISOString()}`, {
-        taskId,
-        taskName: taskToArchive.name,
-        completedAt: completionDate
-      });
+      try {
+        console.log('[AppProvider] 🕐 Fetching real completion date for task:', taskId);
+        const completionDates = await MergeCompletionDate(
+          members, 
+          [{ ...taskToArchive, completed: true, completedDate: new Date() }]
+        );
+        
+        if (completionDates.length > 0 && completionDates[0].completedDate) {
+          realCompletionDate = completionDates[0].completedDate;
+          console.log('[AppProvider] ✅ Real completion date found:', realCompletionDate);
+        } else {
+          console.log('[AppProvider] ⚠️ No real completion date found, using current time');
+        }
+      } catch (error) {
+        console.error('[AppProvider] ❌ Failed to fetch real completion date:', error);
+      }
       
       setArchivedTasks((prev) => [
         ...prev,
-        { ...taskToArchive, completed: true, completedDate: completionDate },
+        { ...taskToArchive, completed: true, completedDate: realCompletionDate },
       ]);
       setActiveTasks((prev) => prev.filter((task) => task.id !== taskId));
     }

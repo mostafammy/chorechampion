@@ -40,41 +40,14 @@ const ArchiveMain = () => {
             return completedDate >= lastMonth;
         }).length;
         
-        // ✅ PRINCIPAL ENGINEER: Enhanced last updated date calculation with validation
+        // Find the most recent task completion date for last updated
         const mostRecentTask = archivedTasks.reduce((latest, current) => {
-            // Safely parse completion dates
-            const currentDate = current.completedDate ? new Date(current.completedDate) : new Date(0);
-            const latestDate = latest?.completedDate ? new Date(latest.completedDate) : new Date(0);
-            
-            // Validate dates before comparison
-            const isCurrentValid = !isNaN(currentDate.getTime());
-            const isLatestValid = !isNaN(latestDate.getTime());
-            
-            if (!isCurrentValid && !isLatestValid) {
-                return latest || current;
-            } else if (!isCurrentValid) {
-                return latest;
-            } else if (!isLatestValid) {
-                return current;
-            }
-            
+            const currentDate = new Date(current.completedDate || 0);
+            const latestDate = new Date(latest?.completedDate || 0);
             return currentDate > latestDate ? current : latest;
         }, archivedTasks[0]);
         
-        // ✅ ENHANCED: Robust last updated date with fallback chain
-        let lastUpdatedDate: Date;
-        if (mostRecentTask?.completedDate) {
-            const candidateDate = new Date(mostRecentTask.completedDate);
-            if (!isNaN(candidateDate.getTime())) {
-                lastUpdatedDate = candidateDate;
-            } else {
-                console.warn('[ArchiveMain] Invalid most recent task date, using current time');
-                lastUpdatedDate = new Date();
-            }
-        } else {
-            // Fallback to current time if no valid completion dates found
-            lastUpdatedDate = new Date();
-        }
+        const lastUpdatedDate = mostRecentTask?.completedDate ? new Date(mostRecentTask.completedDate) : new Date();
         
         // Top performer
         const memberTaskCounts = members.map(member => ({

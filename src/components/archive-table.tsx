@@ -46,32 +46,18 @@ interface ArchiveTableProps {
   members: Member[];
 }
 
-// ✅ PRINCIPAL ENGINEER: Enhanced date safety with intelligent fallbacks
+// Helper function to safely convert completedDate to Date object
 const ensureDate = (date: Date | string | null | undefined): Date => {
-  // Handle null/undefined cases
   if (!date) {
-    console.warn('[ArchiveTable] Missing completion date, using fallback');
-    // Use a date from the past week instead of current time for archived tasks
-    return new Date(Date.now() - Math.floor(Math.random() * 1000 * 60 * 60 * 24 * 7));
+    return new Date();
   }
   
-  // Handle Date objects
   if (date instanceof Date) {
-    if (isNaN(date.getTime())) {
-      console.warn('[ArchiveTable] Invalid Date object, using fallback');
-      return new Date(Date.now() - Math.floor(Math.random() * 1000 * 60 * 60 * 24 * 7));
-    }
-    return date;
+    return isNaN(date.getTime()) ? new Date() : date;
   }
   
-  // Handle string dates
   const parsedDate = new Date(date);
-  if (isNaN(parsedDate.getTime())) {
-    console.warn('[ArchiveTable] Invalid date string:', date, 'using fallback');
-    return new Date(Date.now() - Math.floor(Math.random() * 1000 * 60 * 60 * 24 * 7));
-  }
-  
-  return parsedDate;
+  return isNaN(parsedDate.getTime()) ? new Date() : parsedDate;
 };
 
 // ✅ Smart date formatting with relative labels

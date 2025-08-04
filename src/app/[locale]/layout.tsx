@@ -79,13 +79,14 @@ export default async function LocaleLayout({
       initialActiveTasks = allTasks.filter(task => !task.completed);
       const rawArchivedTasks = allTasks.filter(task => task.completed) as ArchivedTask[];
       
-      // ✅ PRINCIPAL ENGINEER: Enrich archived tasks with real completion dates
-      console.log('[Layout] ✅ Enriching archived tasks with completion dates...');
+      // ✅ PRINCIPAL ENGINEER: Apply real completion dates from Redis logs
+      console.log('[Layout] 🕐 Enriching archived tasks with real completion dates...');
       try {
         initialArchivedTasks = await MergeCompletionDate(initialMembers, rawArchivedTasks);
-        console.log(`[Layout] ✅ Successfully enriched ${initialArchivedTasks.length} archived tasks with completion dates`);
-      } catch (enrichmentError) {
-        console.warn('[Layout] ⚠️ Completion date enrichment failed, using raw archived tasks:', enrichmentError);
+        console.log('[Layout] ✅ Real completion dates applied successfully');
+      } catch (error) {
+        console.error('[Layout] ❌ Failed to merge completion dates:', error);
+        // Fallback to raw archived tasks without completion date enrichment
         initialArchivedTasks = rawArchivedTasks;
       }
       
