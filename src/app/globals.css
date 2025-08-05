@@ -18,8 +18,8 @@
     --secondary-foreground: 0 0% 9%;
     --muted: 0 0% 96.1%;
     --muted-foreground: 0 0% 45.1%;
-    --accent: 160 84% 42%;
-    --accent-foreground: 0 0% 98%;
+    --accent: 220 13% 95%;
+    --accent-foreground: 0 0% 9%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
     --border: 0 0% 89.8%;
@@ -43,22 +43,22 @@
   .dark {
     --background: 0 0% 3.9%;
     --foreground: 0 0% 98%;
-    --card: 0 0% 3.9%;
+    --card: 0 0% 6%;
     --card-foreground: 0 0% 98%;
-    --popover: 0 0% 3.9%;
-    --popover-foreground: 0 0% 98%;
+    --popover: 220 13% 9%;
+    --popover-foreground: 0 0% 95%;
     --primary: 243 75% 59%;
     --primary-foreground: 0 0% 98%;
-    --secondary: 0 0% 14.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 0 0% 14.9%;
+    --secondary: 220 13% 13%;
+    --secondary-foreground: 0 0% 95%;
+    --muted: 220 13% 15%;
     --muted-foreground: 0 0% 63.9%;
-    --accent: 160 84% 42%;
-    --accent-foreground: 0 0% 98%;
+    --accent: 220 13% 20%;
+    --accent-foreground: 0 0% 95%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 14.9%;
-    --input: 0 0% 14.9%;
+    --border: 220 13% 15%;
+    --input: 220 13% 15%;
     --ring: 243 75% 59%;
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
@@ -90,6 +90,136 @@
   a{
     text-decoration: none;
     color: hsl(var(--foreground));
+  }
+}
+
+/* ✅ Professional Dropdown Dark Mode Fix */
+@layer components {
+  /* Ensure dropdown menus have proper dark mode styling */
+  .dark [data-radix-dropdown-menu-content] {
+    background-color: rgb(31 41 55) !important; /* gray-800 */
+    border-color: rgb(55 65 81) !important; /* gray-700 */
+    color: rgb(243 244 246) !important; /* gray-100 */
+  }
+  
+  .dark [data-radix-dropdown-menu-item]:hover,
+  .dark [data-radix-dropdown-menu-item]:focus {
+    background-color: rgb(55 65 81) !important; /* gray-700 */
+    color: rgb(243 244 246) !important; /* gray-100 */
+  }
+  
+  /* 🎨 PROFESSIONAL UI/UX: Enhanced Light Mode Dropdown Styling */
+  [data-radix-dropdown-menu-content] {
+    background-color: rgb(255 255 255) !important; /* white */
+    border-color: rgb(229 231 235) !important; /* gray-200 */
+    color: rgb(17 24 39) !important; /* gray-900 */
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1) !important;
+  }
+  
+  /* 🎨 PROFESSIONAL UI/UX: Enhanced Light Mode Hover States with Better Contrast */
+  [data-radix-dropdown-menu-item]:hover,
+  [data-radix-dropdown-menu-item]:focus,
+  [data-radix-dropdown-menu-item][data-highlighted] {
+    background-color: rgb(241 245 249) !important; /* slate-100 - better contrast */
+    color: rgb(15 23 42) !important; /* slate-900 - enhanced readability */
+    border-radius: 6px !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 2px 4px rgb(0 0 0 / 0.05) !important;
+  }
+  
+  /* 🎨 PROFESSIONAL UI/UX: Active State Feedback */
+  [data-radix-dropdown-menu-item]:active {
+    background-color: rgb(226 232 240) !important; /* slate-200 */
+    transform: translateY(0px) !important;
+  }
+}
+
+/* 🌙 PROFESSIONAL UI/UX: Enhanced Dark Mode with Superior Visual Hierarchy */
+.dark {
+  /* Enhanced Dark Mode Container Styling */
+  [data-radix-dropdown-menu-content] {
+    background-color: rgb(30 41 59) !important; /* slate-800 - better depth */
+    border-color: rgb(51 65 85) !important; /* slate-600 - improved contrast */
+    color: rgb(248 250 252) !important; /* slate-50 - excellent readability */
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.2) !important;
+  }
+  
+  /* 🎨 CRITICAL FIX: BULLETPROOF High-Contrast Dark Mode Hover States */
+  [data-radix-dropdown-menu-item]:hover,
+  [data-radix-dropdown-menu-item]:focus,
+  [data-radix-dropdown-menu-item][data-highlighted],
+  [data-radix-dropdown-menu-item][data-state="open"],
+  [data-radix-dropdown-menu-item][data-radix-collection-item]:hover,
+  [data-radix-dropdown-menu-item][data-radix-collection-item]:focus {
+    background-color: rgb(51 65 85) !important; /* slate-600 - high contrast background */
+    color: rgb(255 255 255) !important; /* pure white text for maximum readability */
+    border-radius: 6px !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 8px rgb(0 0 0 / 0.4) !important; /* enhanced shadow for depth */
+    outline: 1px solid rgb(71 85 105) !important; /* slate-500 - subtle outline for definition */
+  }
+  
+  /* 🎨 ADDITIONAL BULLETPROOF SELECTORS: Target all possible Radix states */
+  .dark [role="menuitem"]:hover,
+  .dark [role="menuitem"]:focus,
+  .dark [role="menuitemradio"]:hover,
+  .dark [role="menuitemradio"]:focus,
+  .dark [role="menuitemcheckbox"]:hover,
+  .dark [role="menuitemcheckbox"]:focus {
+    background-color: rgb(51 65 85) !important; /* slate-600 */
+    color: rgb(255 255 255) !important;
+    border-radius: 6px !important;
+    box-shadow: 0 2px 4px rgb(0 0 0 / 0.3) !important;
+  }
+  
+  /* 🎨 ULTRA-SPECIFIC: Target Radix primitive classes directly */
+  .dark [data-radix-popper-content-wrapper] [role="menuitem"]:hover,
+  .dark [data-radix-popper-content-wrapper] [role="menuitem"]:focus {
+    background-color: rgb(51 65 85) !important;
+    color: rgb(255 255 255) !important;
+  }
+  
+  /* 🎨 COMPONENT-SPECIFIC: Target known dropdown components */
+  .dark .dropdown-menu-item:hover,
+  .dark .dropdown-menu-item:focus {
+    background-color: rgb(51 65 85) !important;
+    color: rgb(255 255 255) !important;
+  }
+  
+  /* 🎨 PROFESSIONAL UI/UX: Enhanced Active State for Dark Mode */
+  [data-radix-dropdown-menu-item]:active {
+    background-color: rgb(71 85 105) !important; /* slate-500 - distinct active state */
+    color: rgb(255 255 255) !important;
+    transform: translateY(0px) !important;
+    box-shadow: inset 0 2px 4px rgb(0 0 0 / 0.3) !important;
+  }
+  
+  /* 🎨 ACCESSIBILITY: Enhanced Focus Ring for Keyboard Navigation */
+  [data-radix-dropdown-menu-item]:focus-visible {
+    outline: 2px solid rgb(96 165 250) !important; /* blue-400 for focus visibility */
+    outline-offset: -1px !important;
+  }
+}
+
+/* 🛡️ BULLETPROOF DARK MODE: Catch-all selectors for maximum reliability */
+.dark {
+  /* Target any element with dropdown-related classes */
+  [class*="dropdown"] [role="menuitem"]:hover,
+  [class*="dropdown"] [role="menuitem"]:focus {
+    background-color: rgb(51 65 85) !important; /* slate-600 */
+    color: rgb(255 255 255) !important;
+  }
+  
+  /* Target Tailwind dark: prefixed classes */
+  .dark\:hover\:bg-gray-700:hover,
+  .dark\:focus\:bg-gray-700:focus {
+    background-color: rgb(51 65 85) !important; /* Override gray-700 with slate-600 */
+  }
+  
+  /* 🚨 EMERGENCY OVERRIDE: If nothing else works */
+  * [data-radix-dropdown-menu-item]:hover {
+    background-color: rgb(51 65 85) !important;
+    color: rgb(255 255 255) !important;
   }
 }
 

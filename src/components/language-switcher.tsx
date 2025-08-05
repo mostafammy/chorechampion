@@ -1,8 +1,8 @@
 'use client';
 
-
 import { usePathname,useRouter  } from '@/lib/navigation'; // Import from your navigation config
 import { useTransition } from 'react';
+import { cn } from "@/lib/utils";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -31,11 +31,20 @@ export function LanguageSwitcher() {
           <span className="sr-only">Toggle language</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => onSelectChange('en')}>
+      <DropdownMenuContent 
+        align="end"
+        className="bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-600 text-gray-900 dark:text-slate-50"
+      >
+        <DropdownMenuItem 
+          onClick={() => onSelectChange('en')}
+          className="hover:bg-slate-100 dark:hover:bg-slate-600 focus:bg-slate-100 dark:focus:bg-slate-600 hover:text-slate-900 dark:hover:text-white focus:text-slate-900 dark:focus:text-white"
+        >
           English
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => onSelectChange('ar')}>
+        <DropdownMenuItem 
+          onClick={() => onSelectChange('ar')}
+          className="hover:bg-slate-100 dark:hover:bg-slate-600 focus:bg-slate-100 dark:focus:bg-slate-600 hover:text-slate-900 dark:hover:text-white focus:text-slate-900 dark:focus:text-white"
+        >
           العربية
         </DropdownMenuItem>
       </DropdownMenuContent>

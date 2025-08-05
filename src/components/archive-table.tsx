@@ -36,10 +36,16 @@ import {
   Filter,
   SortAsc,
   Medal,
-  Sparkles
+  Sparkles,
+  MoreVertical,
+  Target,
+  CheckCircle,
+  User,
+  Award
 } from 'lucide-react';
-// ✅ PRINCIPAL ENGINEER: Import enterprise design system
-import { useArchiveTheme } from '@/lib/design-system/theme-utils';
+// ✅ PRINCIPAL ENGINEER: Import responsive design system
+import { useResponsiveArchive, responsiveBadges } from '@/lib/design-system/responsive-archive';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface ArchiveTableProps {
   archivedTasks: ArchivedTask[];
@@ -80,13 +86,15 @@ export function ArchiveTable({ archivedTasks, members }: ArchiveTableProps) {
   const tPage = useTranslations('ArchivePage');
   const locale = useLocale();
   
-  // ✅ PRINCIPAL ENGINEER: Enterprise design system integration
-  const archiveTheme = useArchiveTheme();
+  // ✅ PRINCIPAL ENGINEER: Responsive design system integration
+  const responsive = useResponsiveArchive();
+  const isMobile = useIsMobile();
   
-  // ✅ Enhanced state management for better UX
+  // ✅ Enhanced state management for responsive UX
   const [expandedMembers, setExpandedMembers] = useState<Set<string>>(new Set());
   const [sortBy, setSortBy] = useState<'date' | 'score' | 'name'>('date');
   const [filterPeriod, setFilterPeriod] = useState<'all' | 'today' | 'week' | 'month'>('all');
+  const [viewMode, setViewMode] = useState<'table' | 'cards'>(isMobile ? 'cards' : 'table');
 
   // ✅ Enterprise Performance Optimization: Memoized member data with statistics
   const membersWithTasks = useMemo(() => {
@@ -176,77 +184,109 @@ export function ArchiveTable({ archivedTasks, members }: ArchiveTableProps) {
     });
   };
 
-  // ✅ Enhanced empty state with visual appeal
+    // ✅ Enhanced empty state with visual appeal
   if (membersWithTasks.length === 0) {
     return (
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5 }}
-        className={archiveTheme.emptyState.container}
+        className="flex flex-col items-center justify-center py-16 sm:py-20 px-4 text-center space-y-4"
       >
-        <Archive className={archiveTheme.emptyState.icon} />
-        <h3 className={archiveTheme.emptyState.text.primary}>
-          {tPage('noTasks')}
+        <Archive className="w-16 h-16 sm:w-20 sm:h-20 text-gray-400 dark:text-gray-500" />
+        <h3 className="text-lg sm:text-xl font-semibold text-gray-700 dark:text-gray-200">
+          {tPage('emptyState.title')}
         </h3>
-        <p className={archiveTheme.emptyState.text.secondary}>
-          Complete some tasks to see your achievements here!
+        <p className="text-sm sm:text-base text-gray-600 dark:text-gray-300 max-w-md">
+          {tPage('emptyState.description')}
         </p>
       </motion.div>
     );
   }
 
   return (
-    <div className="space-y-6">
-      {/* ✅ Enhanced Controls Bar */}
-      <Card className="border-slate-200/60 dark:border-slate-700/60">
-        <CardContent className="p-4">
-          <div className="flex flex-wrap gap-4 items-center justify-between">
-            <div className="flex flex-wrap gap-2">
-              <Button
-                variant={sortBy === 'date' ? 'default' : 'outline'}
-                size="sm"
-                onClick={() => setSortBy('date')}
-                className="gap-2"
-              >
-                <Clock className="w-4 h-4" />
-                Date
-              </Button>
-              <Button
-                variant={sortBy === 'score' ? 'default' : 'outline'}
-                size="sm"
-                onClick={() => setSortBy('score')}
-                className="gap-2"
-              >
-                <Trophy className="w-4 h-4" />
-                Score
-              </Button>
-              <Button
-                variant={sortBy === 'name' ? 'default' : 'outline'}
-                size="sm"
-                onClick={() => setSortBy('name')}
-                className="gap-2"
-              >
-                <SortAsc className="w-4 h-4" />
-                Name
-              </Button>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              {['all', 'today', 'week', 'month'].map((period) => (
-                <Button
-                  key={period}
-                  variant={filterPeriod === period ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => setFilterPeriod(period as any)}
-                  className="capitalize"
-                >
-                  {period}
-                </Button>
-              ))}
-            </div>
+    <div className="space-y-4 sm:space-y-6 p-0">
+      {/* ✅ PRINCIPAL ENGINEER: Mobile-First Responsive Controls */}
+      <div className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-3 sm:p-4">
+        <div className="flex flex-col space-y-3 sm:space-y-0 sm:flex-row sm:items-center sm:justify-between">
+          {/* Sort Controls */}
+          <div className="flex flex-wrap gap-2">
+            <Button
+              variant={sortBy === 'date' ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => setSortBy('date')}
+              className="gap-1 sm:gap-2 text-xs sm:text-sm h-8 sm:h-9 px-2 sm:px-3"
+            >
+              <Clock className="w-3 h-3 sm:w-4 sm:h-4" />
+              <span className="hidden sm:inline">Date</span>
+              <span className="sm:hidden">📅</span>
+            </Button>
+            <Button
+              variant={sortBy === 'score' ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => setSortBy('score')}
+              className="gap-1 sm:gap-2 text-xs sm:text-sm h-8 sm:h-9 px-2 sm:px-3"
+            >
+              <Trophy className="w-3 h-3 sm:w-4 sm:h-4" />
+              <span className="hidden sm:inline">Score</span>
+              <span className="sm:hidden">🏆</span>
+            </Button>
+            <Button
+              variant={sortBy === 'name' ? 'default' : 'outline'}
+              size="sm"
+              onClick={() => setSortBy('name')}
+              className="gap-1 sm:gap-2 text-xs sm:text-sm h-8 sm:h-9 px-2 sm:px-3"
+            >
+              <SortAsc className="w-3 h-3 sm:w-4 sm:h-4" />
+              <span className="hidden sm:inline">Name</span>
+              <span className="sm:hidden">👤</span>
+            </Button>
           </div>
-        </CardContent>
-      </Card>
+          
+          {/* Filter Controls */}
+          <div className="flex flex-wrap gap-2">
+            {[
+              { key: 'all', label: 'All', icon: '📂' },
+              { key: 'today', label: 'Today', icon: '📅' },
+              { key: 'week', label: 'Week', icon: '📆' },
+              { key: 'month', label: 'Month', icon: '🗓️' }
+            ].map((period) => (
+              <Button
+                key={period.key}
+                variant={filterPeriod === period.key ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setFilterPeriod(period.key as any)}
+                className="text-xs sm:text-sm h-8 sm:h-9 px-2 sm:px-3"
+              >
+                <span className="sm:hidden mr-1">{period.icon}</span>
+                <span>{period.label}</span>
+              </Button>
+            ))}
+          </div>
+          
+          {/* View Mode Toggle for Small Screens */}
+          {isMobile && (
+            <div className="flex gap-2 pt-2 border-t border-gray-200 dark:border-gray-700">
+              <Button
+                variant={viewMode === 'cards' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setViewMode('cards')}
+                className="text-xs h-8 flex-1"
+              >
+                📱 Cards
+              </Button>
+              <Button
+                variant={viewMode === 'table' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setViewMode('table')}
+                className="text-xs h-8 flex-1"
+              >
+                📊 Table
+              </Button>
+            </div>
+          )}
+        </div>
+      </div>
 
       {/* ✅ Enhanced Member Cards with Animation */}
       <div className="space-y-6">
@@ -258,16 +298,16 @@ export function ArchiveTable({ archivedTasks, members }: ArchiveTableProps) {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ delay: index * 0.1, duration: 0.5 }}
-              className={`${archiveTheme.memberCard.container} ${archiveTheme.memberCard.getGradient(member.index)}`}
+              className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden"
             >
-              {/* ✅ Enhanced Member Header */}
+              {/* ✅ Enhanced Member Header with Improved Dark Mode Hover */}
               <CardHeader 
-                className={`${archiveTheme.memberHeader.container} cursor-pointer`}
+                className="p-4 sm:p-6 border-b border-gray-100 dark:border-gray-700 cursor-pointer hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors duration-200"
                 onClick={() => toggleMemberExpansion(member.id)}
               >
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-4">
-                    <Avatar className={archiveTheme.memberHeader.avatar}>
+                  <div className="flex items-center gap-3 sm:gap-4">
+                    <Avatar className="w-10 h-10 sm:w-12 sm:h-12 ring-2 ring-white dark:ring-gray-800 shadow-sm">
                       <AvatarImage 
                         src={member.avatar} 
                         alt={member.name}
@@ -277,32 +317,34 @@ export function ArchiveTable({ archivedTasks, members }: ArchiveTableProps) {
                         {member.name.charAt(0)}
                       </AvatarFallback>
                     </Avatar>
-                    <div>
-                      <div className="flex items-center gap-3">
-                        <CardTitle className={archiveTheme.memberHeader.title}>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
+                        <CardTitle className="text-base sm:text-lg font-semibold text-gray-900 dark:text-white truncate">
                           {member.name}
                         </CardTitle>
                         {index === 0 && (
-                          <div className="flex items-center gap-1 px-2 py-1 bg-gradient-to-r from-yellow-400 to-orange-500 text-white rounded-full text-xs font-bold">
+                          <div className="flex items-center gap-1 px-2 py-1 bg-gradient-to-r from-yellow-400 to-orange-500 text-white rounded-full text-xs font-bold whitespace-nowrap">
                             <Trophy className="w-3 h-3" />
-                            Top Performer
+                            <span className="hidden sm:inline">Top Performer</span>
+                            <span className="sm:hidden">🏆</span>
                           </div>
                         )}
-                        <Badge className={archiveTheme.badges.getPeriodBadge(member.stats.performanceBadge)}>
+                        <Badge className={responsiveBadges.period(member.stats.performanceBadge)}>
                           {member.stats.performanceBadge}
                         </Badge>
                       </div>
-                      <CardDescription className={archiveTheme.memberHeader.subtitle}>
-                        {tPage('tasksCompleted', { count: member.tasks.length })} • {member.stats.totalScore} points
+                      <CardDescription className="text-sm text-gray-600 dark:text-gray-300 mt-1">
+                        <span className="hidden sm:inline">{tPage('tasksCompleted', { count: member.tasks.length })} • {member.stats.totalScore} points</span>
+                        <span className="sm:hidden">{member.tasks.length} tasks • {member.stats.totalScore}pts</span>
                       </CardDescription>
                     </div>
                   </div>
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-3 sm:gap-4 flex-shrink-0">
                     <div className="text-right hidden sm:block">
-                      <div className="text-sm text-slate-600 dark:text-slate-300">
+                      <div className="text-sm font-medium text-gray-700 dark:text-gray-200">
                         Avg: {member.stats.avgScore} pts
                       </div>
-                      <div className="text-xs text-slate-500 dark:text-slate-400">
+                      <div className="text-xs text-gray-500 dark:text-gray-400">
                         Recent: {member.stats.recentTasks} tasks
                       </div>
                     </div>
@@ -310,13 +352,13 @@ export function ArchiveTable({ archivedTasks, members }: ArchiveTableProps) {
                       animate={{ rotate: expandedMembers.has(member.id) ? 180 : 0 }}
                       transition={{ duration: 0.2 }}
                     >
-                      <ChevronDown className="w-5 h-5 text-slate-400" />
+                      <ChevronDown className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
                     </motion.div>
                   </div>
                 </div>
               </CardHeader>
 
-              {/* ✅ Expandable Task Table */}
+              {/* ✅ Expandable Task Table/Cards */}
               <AnimatePresence>
                 {expandedMembers.has(member.id) && (
                   <motion.div
@@ -327,23 +369,70 @@ export function ArchiveTable({ archivedTasks, members }: ArchiveTableProps) {
                     className="overflow-hidden"
                   >
                     <CardContent className="p-0">
-                      <Table>
-                        <TableHeader>
-                          <TableRow className="hover:bg-transparent border-slate-200/40 dark:border-slate-600/40">
-                            <TableHead className="pl-6 text-slate-700 dark:text-slate-300 font-semibold">
-                              {t('task')}
-                            </TableHead>
-                            <TableHead className="hidden sm:table-cell text-slate-700 dark:text-slate-300 font-semibold">
-                              {t('period')}
-                            </TableHead>
-                            <TableHead className="text-center text-slate-700 dark:text-slate-300 font-semibold">
-                              {t('score')}
-                            </TableHead>
-                            <TableHead className="text-right pr-6 text-slate-700 dark:text-slate-300 font-semibold">
-                              {t('completed')}
-                            </TableHead>
-                          </TableRow>
-                        </TableHeader>
+                      {/* Mobile Card View */}
+                      {isMobile && viewMode === 'cards' ? (
+                        <div className="space-y-3 p-4">
+                          {member.tasks.map((task, taskIndex) => {
+                            const dateInfo = formatSmartDate(ensureDate(task.completedDate));
+                            return (
+                              <motion.div
+                                key={task.id}
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: taskIndex * 0.05, duration: 0.3 }}
+                                className="bg-gray-50 dark:bg-gray-900 rounded-lg p-3 border border-gray-200 dark:border-gray-700"
+                              >
+                                <div className="flex items-center justify-between mb-2">
+                                  <div className="flex items-center gap-2 flex-1 min-w-0">
+                                    {dateInfo.variant === 'recent' && (
+                                      <Sparkles className="w-4 h-4 text-emerald-500 flex-shrink-0" />
+                                    )}
+                                    <span className="font-medium text-gray-900 dark:text-white truncate text-sm">
+                                      {task.name}
+                                    </span>
+                                  </div>
+                                  <Badge className="bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200 border-emerald-200 dark:border-emerald-700 text-xs">
+                                    +{task.score}
+                                  </Badge>
+                                </div>
+                                <div className="flex items-center justify-between text-xs">
+                                  <div className="flex items-center gap-2">
+                                    <Badge className={`${responsiveBadges.period(task.period || 'oneTime')} text-xs py-0.5 px-1.5`}>
+                                      {task.period || 'One-time'}
+                                    </Badge>
+                                  </div>
+                                  <div className="text-right">
+                                    <div className="font-medium text-gray-900 dark:text-white">
+                                      {dateInfo.primary}
+                                    </div>
+                                    <div className="text-gray-500 dark:text-gray-400">
+                                      {dateInfo.secondary}
+                                    </div>
+                                  </div>
+                                </div>
+                              </motion.div>
+                            );
+                          })}
+                        </div>
+                      ) : (
+                        /* Desktop Table View */
+                        <Table>
+                          <TableHeader>
+                            <TableRow className="hover:bg-transparent border-gray-200 dark:border-gray-700">
+                              <TableHead className="pl-6 text-gray-700 dark:text-gray-300 font-semibold text-sm">
+                                {t('task')}
+                              </TableHead>
+                              <TableHead className="hidden sm:table-cell text-gray-700 dark:text-gray-300 font-semibold text-sm">
+                                {t('period')}
+                              </TableHead>
+                              <TableHead className="text-center text-gray-700 dark:text-gray-300 font-semibold text-sm">
+                                {t('score')}
+                              </TableHead>
+                              <TableHead className="text-right pr-6 text-gray-700 dark:text-gray-300 font-semibold text-sm">
+                                {t('completed')}
+                              </TableHead>
+                            </TableRow>
+                          </TableHeader>
                         <TableBody>
                           {member.tasks.map((task, taskIndex) => {
                             const dateInfo = formatSmartDate(ensureDate(task.completedDate));
@@ -353,31 +442,31 @@ export function ArchiveTable({ archivedTasks, members }: ArchiveTableProps) {
                                 initial={{ opacity: 0, x: -20 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 transition={{ delay: taskIndex * 0.05, duration: 0.3 }}
-                                className={archiveTheme.taskRow.container}
+                                className="hover:bg-gray-50 dark:hover:bg-slate-700 transition-colors duration-200 border-gray-100 dark:border-gray-700"
                               >
-                                <TableCell className={`font-medium pl-6 ${archiveTheme.taskRow.text.primary}`}>
+                                <TableCell className="font-medium pl-6 text-gray-900 dark:text-white">
                                   <div className="flex items-center gap-2">
                                     {dateInfo.variant === 'recent' && (
                                       <Sparkles className="w-4 h-4 text-emerald-500" />
                                     )}
-                                    {task.name}
+                                    <span className="truncate">{task.name}</span>
                                   </div>
                                 </TableCell>
                                 <TableCell className="hidden sm:table-cell">
-                                  <Badge className={archiveTheme.badges.getPeriodBadge(task.period || 'oneTime')}>
+                                  <Badge className={responsiveBadges.period(task.period || 'oneTime')}>
                                     {task.period || 'One-time'}
                                   </Badge>
                                 </TableCell>
                                 <TableCell className="text-center">
-                                  <Badge className={archiveTheme.badges.score}>
+                                  <Badge className="bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200 border-emerald-200 dark:border-emerald-700">
                                     +{task.score}
                                   </Badge>
                                 </TableCell>
                                 <TableCell className="text-right pr-6">
-                                  <div className={`font-medium ${archiveTheme.taskRow.text.primary}`}>
+                                  <div className="font-medium text-gray-900 dark:text-white text-sm">
                                     {dateInfo.primary}
                                   </div>
-                                  <div className={`text-xs ${archiveTheme.taskRow.text.muted}`}>
+                                  <div className="text-xs text-gray-500 dark:text-gray-400">
                                     {dateInfo.secondary}
                                   </div>
                                 </TableCell>
@@ -385,7 +474,8 @@ export function ArchiveTable({ archivedTasks, members }: ArchiveTableProps) {
                             );
                           })}
                         </TableBody>
-                      </Table>
+                        </Table>
+                      )}
                     </CardContent>
                   </motion.div>
                 )}
