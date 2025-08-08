@@ -28,6 +28,8 @@ import {
 import { useTranslations } from 'next-intl';
 import { useLocale } from 'next-intl';
 import { useToast } from '@/hooks/use-toast';
+// ✅ PRINCIPAL ENGINEER: Import enterprise-grade SoonBadge component
+import { SoonBadge, SoonBadgePresets } from '@/components/ui/soon-badge';
 import { fetchWithAuth } from '@/lib/auth/fetchWithAuth';
 import LoadingSpinner from '@/components/loading-spinner';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -406,9 +408,15 @@ export function Leaderboard() {
               <Badge className="bg-gradient-to-r from-green-400 to-emerald-500 text-white border-0 px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-semibold shadow-lg whitespace-nowrap">
                 📊 {t('allTimeRankings') || 'All-Time Rankings'}
               </Badge>
-              <Badge className="bg-gradient-to-r from-orange-400 to-pink-500 text-white border-0 px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-semibold shadow-lg animate-pulse whitespace-nowrap">
-                🚀 {t('comingSoonPeriods') || 'Daily/Weekly/Monthly Coming Soon'}
-              </Badge>
+              <SoonBadge
+                variant="default"
+                size="lg"
+                animation="pulse"
+                position="relative"
+                text={`🚀 ${t('comingSoonPeriods') || 'Daily/Weekly/Monthly Coming Soon'}`}
+                className="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-semibold whitespace-nowrap"
+                translationNamespace="Leaderboard"
+              />
             </div>
           </div>
           
@@ -489,45 +497,39 @@ export function Leaderboard() {
 
       {/* ✅ Enterprise-Grade Responsive Period Selection Tabs */}
       <Tabs value={selectedPeriod} onValueChange={handlePeriodChange} className="w-full">
-        <TabsList className="grid w-full h-auto grid-cols-2 sm:grid-cols-4 gap-1.5 sm:gap-2 bg-gradient-to-r from-white/80 via-slate-50/90 to-white/80 dark:from-slate-800 dark:via-gray-800 dark:to-slate-800 border border-gray-200/50 dark:border-gray-700/50 backdrop-blur-sm p-2 sm:p-3 rounded-xl sm:rounded-2xl shadow-lg shadow-gray-200/30 dark:shadow-gray-900/30 mb-4">
+        <TabsList className="grid w-full h-auto grid-cols-2 sm:grid-cols-4 gap-1.5 sm:gap-2 bg-gradient-to-r from-white/80 via-slate-50/90 to-white/80 dark:from-slate-800 dark:via-gray-800 dark:to-slate-800 border border-gray-200/50 dark:border-gray-700/50 backdrop-blur-sm p-2 sm:p-3 rounded-xl sm:rounded-2xl shadow-lg shadow-gray-200/30 dark:shadow-gray-900/30 mb-4 overflow-visible">
           <TabsTrigger 
             value="daily" 
-            className="text-xs sm:text-sm relative rounded-lg sm:rounded-xl bg-white/60 dark:bg-transparent border border-gray-200/40 dark:border-transparent text-gray-700 dark:text-gray-300 hover:bg-white/80 hover:border-gray-300/60 dark:hover:bg-gray-700/50 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-purple-600 data-[state=active]:text-white data-[state=active]:border-transparent data-[state=active]:shadow-md transition-all duration-300 py-2 px-2 sm:px-3 flex items-center justify-center h-8"
+            className="text-xs sm:text-sm relative overflow-visible rounded-lg sm:rounded-xl bg-white/60 dark:bg-transparent border border-gray-200/40 dark:border-transparent text-gray-700 dark:text-gray-300 hover:bg-white/80 hover:border-gray-300/60 dark:hover:bg-gray-700/50 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-purple-600 data-[state=active]:text-white data-[state=active]:border-transparent data-[state=active]:shadow-md transition-all duration-300 py-2 px-2 sm:px-3 flex items-center justify-center h-8"
             disabled
           >
             <div className="flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 min-w-0 w-full h-full">
               <Calendar className="w-3 h-3 sm:w-4 sm:h-4 opacity-50 flex-shrink-0" />
               <span className="opacity-50 text-xs sm:text-sm truncate">{t('daily') || 'Daily'}</span>
             </div>
-            <Badge className="absolute -top-1 sm:-top-2 left-[45%] -translate-x-1/2 text-[8px] sm:text-[10px] px-1 sm:px-2 py-0.5 sm:py-1 h-3 sm:h-5 bg-gradient-to-r from-orange-400 to-pink-500 text-white border-0 animate-bounce shadow-lg">
-              {t('soon') || 'Soon'}
-            </Badge>
+            <SoonBadge {...SoonBadgePresets.leaderboardTab} position="top-center" className={'sm:-translate-x-[350%] sm:-left-1/2 sm:-top-8'}   />
           </TabsTrigger>
           <TabsTrigger 
             value="weekly" 
-            className="text-xs sm:text-sm relative rounded-lg sm:rounded-xl bg-white/60 dark:bg-transparent border border-gray-200/40 dark:border-transparent text-gray-700 dark:text-gray-300 hover:bg-white/80 hover:border-gray-300/60 dark:hover:bg-gray-700/50 data-[state=active]:bg-gradient-to-r data-[state=active]:from-emerald-500 data-[state=active]:to-teal-600 data-[state=active]:text-white data-[state=active]:border-transparent data-[state=active]:shadow-md transition-all duration-300 py-2 px-2 sm:px-3 flex items-center justify-center h-8"
+            className="text-xs sm:text-sm relative overflow-visible rounded-lg sm:rounded-xl bg-white/60 dark:bg-transparent border border-gray-200/40 dark:border-transparent text-gray-700 dark:text-gray-300 hover:bg-white/80 hover:border-gray-300/60 dark:hover:bg-gray-700/50 data-[state=active]:bg-gradient-to-r data-[state=active]:from-emerald-500 data-[state=active]:to-teal-600 data-[state=active]:text-white data-[state=active]:border-transparent data-[state=active]:shadow-md transition-all duration-300 py-2 px-2 sm:px-3 flex items-center justify-center h-8"
             disabled
           >
             <div className="flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 min-w-0 w-full h-full">
               <Calendar className="w-3 h-3 sm:w-4 sm:h-4 opacity-50 flex-shrink-0" />
               <span className="opacity-50 text-xs sm:text-sm truncate">{t('weekly') || 'Weekly'}</span>
             </div>
-            <Badge className="absolute -top-1 sm:-top-2 left-[45%] -translate-x-1/2 text-[8px] sm:text-[10px] px-1 sm:px-2 py-0.5 sm:py-1 h-3 sm:h-5 bg-gradient-to-r from-orange-400 to-pink-500 text-white border-0 animate-bounce shadow-lg">
-              {t('soon') || 'Soon'}
-            </Badge>
+            <SoonBadge {...SoonBadgePresets.leaderboardTab} position="top-center" className={'sm:-translate-x-[350%] sm:-left-1/2 sm:-top-8'} />
           </TabsTrigger>
           <TabsTrigger 
             value="monthly" 
-            className="text-xs sm:text-sm relative rounded-lg sm:rounded-xl bg-white/60 dark:bg-transparent border border-gray-200/40 dark:border-transparent text-gray-700 dark:text-gray-300 hover:bg-white/80 hover:border-gray-300/60 dark:hover:bg-gray-700/50 data-[state=active]:bg-gradient-to-r data-[state=active]:from-pink-500 data-[state=active]:to-rose-600 data-[state=active]:text-white data-[state=active]:border-transparent data-[state=active]:shadow-md transition-all duration-300 py-2 px-2 sm:px-3 flex items-center justify-center h-8"
+            className="text-xs sm:text-sm relative overflow-visible rounded-lg sm:rounded-xl bg-white/60 dark:bg-transparent border border-gray-200/40 dark:border-transparent text-gray-700 dark:text-gray-300 hover:bg-white/80 hover:border-gray-300/60 dark:hover:bg-gray-700/50 data-[state=active]:bg-gradient-to-r data-[state=active]:from-pink-500 data-[state=active]:to-rose-600 data-[state=active]:text-white data-[state=active]:border-transparent data-[state=active]:shadow-md transition-all duration-300 py-2 px-2 sm:px-3 flex items-center justify-center h-8"
             disabled
           >
             <div className="flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 min-w-0 w-full h-full">
               <Calendar className="w-3 h-3 sm:w-4 sm:h-4 opacity-50 flex-shrink-0" />
               <span className="opacity-50 text-xs sm:text-sm truncate">{t('monthly') || 'Monthly'}</span>
             </div>
-            <Badge className="absolute -top-1 sm:-top-2 left-[45%] -translate-x-1/2 text-[8px] sm:text-[10px] px-1 sm:px-2 py-0.5 sm:py-1 h-3 sm:h-5 bg-gradient-to-r from-orange-400 to-pink-500 text-white border-0 animate-bounce shadow-lg">
-              {t('soon') || 'Soon'}
-            </Badge>
+            <SoonBadge {...SoonBadgePresets.leaderboardTab} position="top-center" className={'sm:-translate-x-[350%] sm:-left-1/2 sm:-top-8'} />
           </TabsTrigger>
           <TabsTrigger 
             value="all-time" 

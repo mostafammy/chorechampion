@@ -1,7 +1,7 @@
 'use client';
 
 import { useAppContext } from "@/context/app-provider";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { ArchiveTable } from "@/components/archive-table";
 import { useMemo } from 'react';
 import { motion } from "framer-motion";
@@ -10,11 +10,17 @@ import { Card, CardContent } from "@/components/ui/card";
 import { LastUpdated } from "@/components/ui/last-updated";
 // ✅ PRINCIPAL ENGINEER: Import responsive design system
 import { useResponsiveArchive } from '@/lib/design-system/responsive-archive';
+// ✅ PRINCIPAL ENGINEER: Import i18n numerals utility for Arabic numbers
+import { toLocaleNumerals, type SupportedLocale } from '@/lib/utils/i18n-numerals';
 import '@/app/globals.css';
+import { SoonBadge } from "./ui/soon-badge";
 
 const ArchiveMain = () => {
     const { archivedTasks, members } = useAppContext();
     const t = useTranslations('ArchivePage');
+    const tStats = useTranslations('ArchivePage.statistics');
+    const tControls = useTranslations('ArchivePage.controls');
+    const locale = useLocale() as SupportedLocale;
     
     // ✅ PRINCIPAL ENGINEER: Responsive design system integration
     const responsive = useResponsiveArchive();
@@ -99,11 +105,12 @@ const ArchiveMain = () => {
                     </div>
                     
                     {/* ✅ Mobile-First Action Button */}
-                    <div className="flex-shrink-0 sm:ml-auto">
+                    <div className="flex-shrink-0 sm:ml-auto relative overflow-visible">
+                        <SoonBadge text={'Soon'} position={"top-center"} className={'translate-x-[150%] -translate-y-full'}/>
                         <button className="inline-flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700">
                             <Clock className="w-4 h-4" />
-                            <span className="hidden sm:inline">View Timeline</span>
-                            <span className="sm:hidden">Timeline</span>
+                            <span className="hidden sm:inline">{tControls('viewTimeline')}</span>
+                            <span className="sm:hidden">{tControls('viewTimelineShort')}</span>
                         </button>
                     </div>
                 </div>
@@ -119,11 +126,11 @@ const ArchiveMain = () => {
                         >
                             <TrendingUp className="w-5 h-5 sm:w-6 sm:h-6 mx-auto mb-2 text-indigo-500" />
                             <div className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white text-center">
-                                {archiveStats.totalTasks}
+                                {toLocaleNumerals(archiveStats.totalTasks, locale)}
                             </div>
                             <div className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 text-center mt-1">
-                                <span className="hidden sm:inline">Tasks Completed</span>
-                                <span className="sm:hidden">Tasks</span>
+                                <span className="hidden sm:inline">{tStats('totalTasks')}</span>
+                                <span className="sm:hidden">{tStats('totalTasksShort')}</span>
                             </div>
                         </motion.div>
                         
@@ -135,11 +142,11 @@ const ArchiveMain = () => {
                         >
                             <Award className="w-5 h-5 sm:w-6 sm:h-6 mx-auto mb-2 text-emerald-500" />
                             <div className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white text-center">
-                                {archiveStats.totalScore}
+                                {toLocaleNumerals(archiveStats.totalScore, locale)}
                             </div>
                             <div className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 text-center mt-1">
-                                <span className="hidden sm:inline">Total Points</span>
-                                <span className="sm:hidden">Points</span>
+                                <span className="hidden sm:inline">{tStats('totalPoints')}</span>
+                                <span className="sm:hidden">{tStats('totalPointsShort')}</span>
                             </div>
                         </motion.div>
                         
@@ -151,11 +158,11 @@ const ArchiveMain = () => {
                         >
                             <Users className="w-5 h-5 sm:w-6 sm:h-6 mx-auto mb-2 text-blue-500" />
                             <div className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white text-center">
-                                {archiveStats.uniqueMembers}
+                                {toLocaleNumerals(archiveStats.uniqueMembers, locale)}
                             </div>
                             <div className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 text-center mt-1">
-                                <span className="hidden sm:inline">Active Members</span>
-                                <span className="sm:hidden">Members</span>
+                                <span className="hidden sm:inline">{tStats('activeMembers')}</span>
+                                <span className="sm:hidden">{tStats('activeMembersShort')}</span>
                             </div>
                         </motion.div>
                         
@@ -167,11 +174,11 @@ const ArchiveMain = () => {
                         >
                             <Calendar className="w-5 h-5 sm:w-6 sm:h-6 mx-auto mb-2 text-purple-500" />
                             <div className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white text-center">
-                                {archiveStats.weeklyTasks}
+                                {toLocaleNumerals(archiveStats.weeklyTasks, locale)}
                             </div>
                             <div className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 text-center mt-1">
-                                <span className="hidden sm:inline">This Week</span>
-                                <span className="sm:hidden">Week</span>
+                                <span className="hidden sm:inline">{tStats('thisWeek')}</span>
+                                <span className="sm:hidden">{tStats('thisWeekShort')}</span>
                             </div>
                         </motion.div>
                     </div>

@@ -24,6 +24,7 @@ import {
   differenceInDays 
 } from 'date-fns';
 import { useTranslations, useLocale } from 'next-intl';
+import { toLocaleNumerals, type SupportedLocale } from '@/lib/utils/i18n-numerals';
 import { 
   Calendar, 
   Trophy, 
@@ -66,12 +67,12 @@ const ensureDate = (date: Date | string | null | undefined): Date => {
   return isNaN(parsedDate.getTime()) ? new Date() : parsedDate;
 };
 
-// ✅ Smart date formatting with relative labels
-const formatSmartDate = (date: Date): { primary: string; secondary: string; variant: 'recent' | 'current' | 'old' } => {
+// ✅ Smart date formatting with relative labels and localization
+const formatSmartDate = (date: Date, tDate: any): { primary: string; secondary: string; variant: 'recent' | 'current' | 'old' } => {
   if (isToday(date)) {
-    return { primary: 'Today', secondary: format(date, 'p'), variant: 'recent' };
+    return { primary: tDate('today'), secondary: format(date, 'p'), variant: 'recent' };
   } else if (isYesterday(date)) {
-    return { primary: 'Yesterday', secondary: format(date, 'p'), variant: 'recent' };
+    return { primary: tDate('yesterday'), secondary: format(date, 'p'), variant: 'recent' };
   } else if (isThisWeek(date)) {
     return { primary: format(date, 'EEEE'), secondary: format(date, 'p'), variant: 'current' };
   } else if (isThisMonth(date)) {
@@ -84,6 +85,13 @@ const formatSmartDate = (date: Date): { primary: string; secondary: string; vari
 export function ArchiveTable({ archivedTasks, members }: ArchiveTableProps) {
   const t = useTranslations('ArchiveTable');
   const tPage = useTranslations('ArchivePage');
+  const tStats = useTranslations('ArchivePage.statistics');
+  const tSort = useTranslations('ArchiveTable.sortBy');
+  const tFilter = useTranslations('ArchiveTable.filterBy');
+  const tView = useTranslations('ArchiveTable.viewMode');
+  const tDate = useTranslations('ArchiveTable.dateLabels');
+  const tPeriods = useTranslations('ArchiveTable.periods');
+  const tBadges = useTranslations('ArchiveTable.performanceBadges');
   const locale = useLocale();
   
   // ✅ PRINCIPAL ENGINEER: Responsive design system integration
@@ -218,8 +226,8 @@ export function ArchiveTable({ archivedTasks, members }: ArchiveTableProps) {
               className="gap-1 sm:gap-2 text-xs sm:text-sm h-8 sm:h-9 px-2 sm:px-3"
             >
               <Clock className="w-3 h-3 sm:w-4 sm:h-4" />
-              <span className="hidden sm:inline">Date</span>
-              <span className="sm:hidden">📅</span>
+              <span className="hidden sm:inline">{tSort('date')}</span>
+              <span className="sm:hidden">{tSort('dateShort')}</span>
             </Button>
             <Button
               variant={sortBy === 'score' ? 'default' : 'outline'}
@@ -228,8 +236,8 @@ export function ArchiveTable({ archivedTasks, members }: ArchiveTableProps) {
               className="gap-1 sm:gap-2 text-xs sm:text-sm h-8 sm:h-9 px-2 sm:px-3"
             >
               <Trophy className="w-3 h-3 sm:w-4 sm:h-4" />
-              <span className="hidden sm:inline">Score</span>
-              <span className="sm:hidden">🏆</span>
+              <span className="hidden sm:inline">{tSort('score')}</span>
+              <span className="sm:hidden">{tSort('scoreShort')}</span>
             </Button>
             <Button
               variant={sortBy === 'name' ? 'default' : 'outline'}
@@ -238,18 +246,18 @@ export function ArchiveTable({ archivedTasks, members }: ArchiveTableProps) {
               className="gap-1 sm:gap-2 text-xs sm:text-sm h-8 sm:h-9 px-2 sm:px-3"
             >
               <SortAsc className="w-3 h-3 sm:w-4 sm:h-4" />
-              <span className="hidden sm:inline">Name</span>
-              <span className="sm:hidden">👤</span>
+              <span className="hidden sm:inline">{tSort('name')}</span>
+              <span className="sm:hidden">{tSort('nameShort')}</span>
             </Button>
           </div>
           
           {/* Filter Controls */}
           <div className="flex flex-wrap gap-2">
             {[
-              { key: 'all', label: 'All', icon: '📂' },
-              { key: 'today', label: 'Today', icon: '📅' },
-              { key: 'week', label: 'Week', icon: '📆' },
-              { key: 'month', label: 'Month', icon: '🗓️' }
+              { key: 'all', labelKey: 'all', iconKey: 'allShort' },
+              { key: 'today', labelKey: 'today', iconKey: 'todayShort' },
+              { key: 'week', labelKey: 'week', iconKey: 'weekShort' },
+              { key: 'month', labelKey: 'month', iconKey: 'monthShort' }
             ].map((period) => (
               <Button
                 key={period.key}
@@ -258,8 +266,8 @@ export function ArchiveTable({ archivedTasks, members }: ArchiveTableProps) {
                 onClick={() => setFilterPeriod(period.key as any)}
                 className="text-xs sm:text-sm h-8 sm:h-9 px-2 sm:px-3"
               >
-                <span className="sm:hidden mr-1">{period.icon}</span>
-                <span>{period.label}</span>
+                <span className="sm:hidden mr-1">{tFilter(period.iconKey)}</span>
+                <span>{tFilter(period.labelKey)}</span>
               </Button>
             ))}
           </div>
@@ -273,7 +281,7 @@ export function ArchiveTable({ archivedTasks, members }: ArchiveTableProps) {
                 onClick={() => setViewMode('cards')}
                 className="text-xs h-8 flex-1"
               >
-                📱 Cards
+                {tView('cards')}
               </Button>
               <Button
                 variant={viewMode === 'table' ? 'default' : 'outline'}
@@ -281,7 +289,7 @@ export function ArchiveTable({ archivedTasks, members }: ArchiveTableProps) {
                 onClick={() => setViewMode('table')}
                 className="text-xs h-8 flex-1"
               >
-                📊 Table
+                {tView('table')}
               </Button>
             </div>
           )}
@@ -325,27 +333,43 @@ export function ArchiveTable({ archivedTasks, members }: ArchiveTableProps) {
                         {index === 0 && (
                           <div className="flex items-center gap-1 px-2 py-1 bg-gradient-to-r from-yellow-400 to-orange-500 text-white rounded-full text-xs font-bold whitespace-nowrap">
                             <Trophy className="w-3 h-3" />
-                            <span className="hidden sm:inline">Top Performer</span>
-                            <span className="sm:hidden">🏆</span>
+                            <span className="hidden sm:inline">{t('topPerformer')}</span>
+                            <span className="sm:hidden">{t('topPerformerShort')}</span>
                           </div>
                         )}
                         <Badge className={responsiveBadges.period(member.stats.performanceBadge)}>
-                          {member.stats.performanceBadge}
+                          {tBadges(member.stats.performanceBadge)}
                         </Badge>
                       </div>
                       <CardDescription className="text-sm text-gray-600 dark:text-gray-300 mt-1">
-                        <span className="hidden sm:inline">{tPage('tasksCompleted', { count: member.tasks.length })} • {member.stats.totalScore} points</span>
-                        <span className="sm:hidden">{member.tasks.length} tasks • {member.stats.totalScore}pts</span>
+                        <span className="hidden sm:inline">
+                          {locale === 'ar' ? 
+                            `${toLocaleNumerals(member.tasks.length, locale as SupportedLocale)} مهام مكتملة • ${toLocaleNumerals(member.stats.totalScore, locale as SupportedLocale)} نقاط` :
+                            `${tPage('tasksCompleted', { count: member.tasks.length })} • ${member.stats.totalScore} ${tPage('points')}`
+                          }
+                        </span>
+                        <span className="sm:hidden">
+                          {locale === 'ar' ? 
+                            `${toLocaleNumerals(member.tasks.length, locale as SupportedLocale)} مهام • ${toLocaleNumerals(member.stats.totalScore, locale as SupportedLocale)}ن` :
+                            `${tPage('tasksCompleted', { count: member.tasks.length })} • ${member.stats.totalScore}${tPage('pointsShort')}`
+                          }
+                        </span>
                       </CardDescription>
                     </div>
                   </div>
                   <div className="flex items-center gap-3 sm:gap-4 flex-shrink-0">
                     <div className="text-right hidden sm:block">
                       <div className="text-sm font-medium text-gray-700 dark:text-gray-200">
-                        Avg: {member.stats.avgScore} pts
+                        {locale === 'ar' ? 
+                          `المتوسط: ${toLocaleNumerals(member.stats.avgScore, locale as SupportedLocale)} نقطة` :
+                          tStats('averageScore', { score: member.stats.avgScore })
+                        }
                       </div>
                       <div className="text-xs text-gray-500 dark:text-gray-400">
-                        Recent: {member.stats.recentTasks} tasks
+                        {locale === 'ar' ? 
+                          `الحديثة: ${toLocaleNumerals(member.stats.recentTasks, locale as SupportedLocale)} مهام` :
+                          tStats('recentTasks', { count: member.stats.recentTasks })
+                        }
                       </div>
                     </div>
                     <motion.div
@@ -373,7 +397,7 @@ export function ArchiveTable({ archivedTasks, members }: ArchiveTableProps) {
                       {isMobile && viewMode === 'cards' ? (
                         <div className="space-y-3 p-4">
                           {member.tasks.map((task, taskIndex) => {
-                            const dateInfo = formatSmartDate(ensureDate(task.completedDate));
+                            const dateInfo = formatSmartDate(ensureDate(task.completedDate), tDate);
                             return (
                               <motion.div
                                 key={task.id}
@@ -392,13 +416,13 @@ export function ArchiveTable({ archivedTasks, members }: ArchiveTableProps) {
                                     </span>
                                   </div>
                                   <Badge className="bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200 border-emerald-200 dark:border-emerald-700 text-xs">
-                                    +{task.score}
+                                    +{locale === 'ar' ? toLocaleNumerals(task.score, locale as SupportedLocale) : task.score}
                                   </Badge>
                                 </div>
                                 <div className="flex items-center justify-between text-xs">
                                   <div className="flex items-center gap-2">
                                     <Badge className={`${responsiveBadges.period(task.period || 'oneTime')} text-xs py-0.5 px-1.5`}>
-                                      {task.period || 'One-time'}
+                                      {tPeriods(task.period?.toLowerCase() || 'oneTime')}
                                     </Badge>
                                   </div>
                                   <div className="text-right">
@@ -435,7 +459,7 @@ export function ArchiveTable({ archivedTasks, members }: ArchiveTableProps) {
                           </TableHeader>
                         <TableBody>
                           {member.tasks.map((task, taskIndex) => {
-                            const dateInfo = formatSmartDate(ensureDate(task.completedDate));
+                            const dateInfo = formatSmartDate(ensureDate(task.completedDate), tDate);
                             return (
                               <motion.tr
                                 key={task.id}
@@ -454,12 +478,12 @@ export function ArchiveTable({ archivedTasks, members }: ArchiveTableProps) {
                                 </TableCell>
                                 <TableCell className="hidden sm:table-cell">
                                   <Badge className={responsiveBadges.period(task.period || 'oneTime')}>
-                                    {task.period || 'One-time'}
+                                    {tPeriods(task.period?.toLowerCase() || 'oneTime')}
                                   </Badge>
                                 </TableCell>
                                 <TableCell className="text-center">
                                   <Badge className="bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200 border-emerald-200 dark:border-emerald-700">
-                                    +{task.score}
+                                    +{locale === 'ar' ? toLocaleNumerals(task.score, locale as SupportedLocale) : task.score}
                                   </Badge>
                                 </TableCell>
                                 <TableCell className="text-right pr-6">

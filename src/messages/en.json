@@ -101,6 +101,9 @@
     "description": "Review past achievements and performance records for all family members.",
     "noTasks": "No tasks have been completed yet. Check back later!",
     "tasksCompleted": "{count, plural, one {# task completed} other {# tasks completed}}",
+    "tasksShort": "tasks",
+    "points": "points",
+    "pointsShort": "pts",
     "totalTasksCompleted": "Total Tasks Completed",
     "totalPointsEarned": "Total Points Earned",
     "activeMembers": "Active Members",
@@ -111,7 +114,27 @@
     "weeklyProgress": "Weekly Progress",
     "monthlyProgress": "Monthly Progress",
     "achievements": "Achievements Unlocked",
-    "lastUpdated": "Archive last updated"
+    "lastUpdated": "Archive last updated",
+    "emptyState": {
+      "title": "No Completed Tasks Yet",
+      "description": "Once family members start completing tasks, they'll appear here for you to review and celebrate achievements."
+    },
+    "statistics": {
+      "totalTasks": "Tasks Completed",
+      "totalTasksShort": "Tasks",
+      "totalPoints": "Total Points",
+      "totalPointsShort": "Points",
+      "activeMembers": "Active Members",
+      "activeMembersShort": "Members",
+      "thisWeek": "This Week",
+      "thisWeekShort": "Week",
+      "averageScore": "Avg: {score} pts",
+      "recentTasks": "Recent: {count} tasks"
+    },
+    "controls": {
+      "viewTimeline": "View Timeline",
+      "viewTimelineShort": "Timeline"
+    }
   },
   "ArchiveTable": {
     "task": "Task",
@@ -132,7 +155,41 @@
       "active": "Active",
       "achiever": "Achiever",
       "champion": "Champion"
-    }
+    },
+    "sortBy": {
+      "date": "Date",
+      "dateShort": "📅",
+      "score": "Score",
+      "scoreShort": "🏆",
+      "name": "Name",
+      "nameShort": "👤"
+    },
+    "filterBy": {
+      "all": "All",
+      "allShort": "📂",
+      "today": "Today",
+      "todayShort": "📅",
+      "week": "Week",
+      "weekShort": "📆",
+      "month": "Month",
+      "monthShort": "🗓️"
+    },
+    "viewMode": {
+      "cards": "📱 Cards",
+      "table": "📊 Table"
+    },
+    "dateLabels": {
+      "today": "Today",
+      "yesterday": "Yesterday"
+    },
+    "periods": {
+      "daily": "Daily",
+      "weekly": "Weekly",
+      "monthly": "Monthly",
+      "oneTime": "One-time"
+    },
+    "topPerformer": "Top Performer",
+    "topPerformerShort": "🏆"
   },
   "OverallProgressChart": {
     "noPoints": "No points scored yet!",
