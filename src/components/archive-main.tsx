@@ -106,7 +106,11 @@ const ArchiveMain = () => {
                     
                     {/* ✅ Mobile-First Action Button */}
                     <div className="flex-shrink-0 sm:ml-auto relative overflow-visible">
-                        <SoonBadge text={'Soon'} position={"top-center"} className={'translate-x-[150%] -translate-y-full'}/>
+                        <SoonBadge 
+                            position="top-center" 
+                            className="translate-x-[150%] -translate-y-full"
+                            translationNamespace="Leaderboard"
+                        />
                         <button className="inline-flex items-center gap-2 px-3 py-2 sm:px-4 sm:py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700">
                             <Clock className="w-4 h-4" />
                             <span className="hidden sm:inline">{tControls('viewTimeline')}</span>
