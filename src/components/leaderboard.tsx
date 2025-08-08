@@ -507,7 +507,7 @@ export function Leaderboard() {
               <Calendar className="w-3 h-3 sm:w-4 sm:h-4 opacity-50 flex-shrink-0" />
               <span className="opacity-50 text-xs sm:text-sm truncate">{t('daily') || 'Daily'}</span>
             </div>
-            <SoonBadge {...SoonBadgePresets.leaderboardTab} position="top-center" className={'sm:-translate-x-[350%] sm:-left-1/2 -left-1/2 sm:-top-8'}   />
+            <SoonBadge {...SoonBadgePresets.leaderboardTab} position="top-center" className={'sm:-translate-x-[350%] -left-1/2 sm:-top-8'}   />
           </TabsTrigger>
           <TabsTrigger 
             value="weekly" 
