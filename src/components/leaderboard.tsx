@@ -380,6 +380,7 @@ export function Leaderboard() {
   if (!leaderboardData) return null;
 
   const { leaderboard, stats } = leaderboardData;
+  const transition = "sm:-translate-x-[200%] md:-translate-x-[300%] lg:-translate-x-[400%]"
 
   return (
     <div className="container mx-auto space-y-4 sm:space-y-6 px-4 sm:px-6 lg:px-8">
@@ -507,7 +508,7 @@ export function Leaderboard() {
               <Calendar className="w-3 h-3 sm:w-4 sm:h-4 opacity-50 flex-shrink-0" />
               <span className="opacity-50 text-xs sm:text-sm truncate">{t('daily') || 'Daily'}</span>
             </div>
-            <SoonBadge {...SoonBadgePresets.leaderboardTab} position="top-center" className={'sm:-translate-x-[350%] -left-1/2 sm:-top-8'}   />
+            <SoonBadge {...SoonBadgePresets.leaderboardTab} position="top-center" className={`${transition} sm:-left-1/2 -left-1/2 sm:-top-8`}   />
           </TabsTrigger>
           <TabsTrigger 
             value="weekly" 
@@ -518,7 +519,7 @@ export function Leaderboard() {
               <Calendar className="w-3 h-3 sm:w-4 sm:h-4 opacity-50 flex-shrink-0" />
               <span className="opacity-50 text-xs sm:text-sm truncate">{t('weekly') || 'Weekly'}</span>
             </div>
-            <SoonBadge {...SoonBadgePresets.leaderboardTab} position="top-center" className={'sm:-translate-x-[350%] sm:-left-1/2 -left-1/2 sm:-top-8'} />
+            <SoonBadge {...SoonBadgePresets.leaderboardTab} position="top-center" className={`${transition} sm:-left-1/2 -left-1/2 sm:-top-8`} />
           </TabsTrigger>
           <TabsTrigger 
             value="monthly" 
@@ -529,7 +530,7 @@ export function Leaderboard() {
               <Calendar className="w-3 h-3 sm:w-4 sm:h-4 opacity-50 flex-shrink-0" />
               <span className="opacity-50 text-xs sm:text-sm truncate">{t('monthly') || 'Monthly'}</span>
             </div>
-            <SoonBadge {...SoonBadgePresets.leaderboardTab} position="top-center" className={'sm:-translate-x-[350%] sm:-left-1/2 -left-1/2 sm:-top-8'} />
+            <SoonBadge {...SoonBadgePresets.leaderboardTab} position="top-center" className={`${transition} sm:-left-1/2 -left-1/2 sm:-top-8`} />
           </TabsTrigger>
           <TabsTrigger 
             value="all-time" 
