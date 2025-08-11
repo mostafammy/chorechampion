@@ -1,0 +1,482 @@
+Date : 2025-08-11 16:03:37
+Directory : c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion
+Total : 364 files,  68791 codes, 9615 comments, 9647 blanks, all 88053 lines
+
+Languages
++--------------------+------------+------------+------------+------------+------------+
+| language           | files      | code       | comment    | blank      | total      |
++--------------------+------------+------------+------------+------------+------------+
+| TypeScript         |         98 |     16,572 |      3,598 |      2,466 |     22,636 |
+| JSON               |          7 |     15,907 |          0 |          5 |     15,912 |
+| TypeScript JSX     |         91 |     12,379 |        769 |      1,469 |     14,617 |
+| Markdown           |         59 |     11,960 |          4 |      3,897 |     15,861 |
+| JavaScript         |         89 |      8,441 |      5,178 |      1,475 |     15,094 |
+| HTML               |         13 |      3,311 |         47 |        313 |      3,671 |
+| PostCSS            |          1 |        189 |         19 |         21 |        229 |
+| JSON with Comments |          1 |         27 |          0 |          1 |         28 |
+| XML                |          5 |          5 |          0 |          0 |          5 |
++--------------------+------------+------------+------------+------------+------------+
+
+Directories
++--------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                                               | files      | code       | comment    | blank      | total      |
++--------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                                  |        364 |     68,791 |      9,615 |      9,647 |     88,053 |
+| . (Files)                                                                                                          |        152 |     35,680 |      5,236 |      4,700 |     45,616 |
+| .cursor                                                                                                            |          1 |          3 |          0 |          0 |          3 |
+| __mocks__                                                                                                          |          1 |          1 |          1 |          1 |          3 |
+| docs                                                                                                               |         14 |      3,039 |          0 |        860 |      3,899 |
+| examples                                                                                                           |          3 |        215 |        423 |         45 |        683 |
+| public                                                                                                             |          5 |          5 |          0 |          0 |          5 |
+| src                                                                                                                |        188 |     29,848 |      3,955 |      4,041 |     37,844 |
+| src (Files)                                                                                                        |          3 |        441 |         66 |         81 |        588 |
+| src\ai                                                                                                             |          2 |          6 |          1 |          3 |         10 |
+| src\app                                                                                                            |         42 |      4,094 |        574 |        538 |      5,206 |
+| src\app (Files)                                                                                                    |          3 |        237 |         39 |         26 |        302 |
+| src\app\[locale]                                                                                                   |         11 |        370 |         28 |         71 |        469 |
+| src\app\[locale] (Files)                                                                                           |          2 |        141 |         13 |         34 |        188 |
+| src\app\[locale]\archive                                                                                           |          1 |         13 |          0 |          8 |         21 |
+| src\app\[locale]\badges                                                                                            |          1 |         23 |          1 |          3 |         27 |
+| src\app\[locale]\leaderboard                                                                                       |          1 |         23 |          0 |          3 |         26 |
+| src\app\[locale]\login                                                                                             |          1 |         10 |          0 |          3 |         13 |
+| src\app\[locale]\phase2-test                                                                                       |          1 |         10 |          6 |          3 |         19 |
+| src\app\[locale]\signup                                                                                            |          1 |         64 |          1 |          8 |         73 |
+| src\app\[locale]\simple-login                                                                                      |          1 |         61 |          0 |          4 |         65 |
+| src\app\[locale]\test                                                                                              |          1 |         21 |          0 |          2 |         23 |
+| src\app\[locale]\test-auth                                                                                         |          1 |          4 |          7 |          3 |         14 |
+| src\app\api                                                                                                        |         25 |      3,306 |        506 |        423 |      4,235 |
+| src\app\api\AddTask                                                                                                |          1 |         89 |         11 |         12 |        112 |
+| src\app\api\AdjustScore                                                                                            |          2 |        474 |         72 |         68 |        614 |
+| src\app\api\ConfirmCompletion                                                                                      |          1 |        132 |         34 |         16 |        182 |
+| src\app\api\ConfirmResetCompletion                                                                                 |          1 |         97 |          4 |         11 |        112 |
+| src\app\api\GetAllTasks                                                                                            |          1 |        103 |         27 |         13 |        143 |
+| src\app\api\InitiateCompletion                                                                                     |          1 |        168 |         35 |         20 |        223 |
+| src\app\api\InternalCompletionResetTrigger                                                                         |          1 |         36 |          2 |          9 |         47 |
+| src\app\api\ResetCompletionScanning                                                                                |          1 |         95 |         28 |         18 |        141 |
+| src\app\api\auth                                                                                                   |          6 |        807 |        131 |         96 |      1,034 |
+| src\app\api\auth\login                                                                                             |          1 |        104 |         11 |         12 |        127 |
+| src\app\api\auth\logout                                                                                            |          1 |        220 |         25 |         30 |        275 |
+| src\app\api\auth\refresh                                                                                           |          1 |        129 |         22 |         12 |        163 |
+| src\app\api\auth\signup                                                                                            |          1 |        124 |         20 |         15 |        159 |
+| src\app\api\auth\token-status                                                                                      |          1 |        172 |         33 |         17 |        222 |
+| src\app\api\auth\user-info                                                                                         |          1 |         58 |         20 |         10 |         88 |
+| src\app\api\debug                                                                                                  |          5 |        510 |         37 |         61 |        608 |
+| src\app\api\debug (Files)                                                                                          |          1 |        209 |          6 |         26 |        241 |
+| src\app\api\debug\auth-test                                                                                        |          1 |         66 |          6 |          8 |         80 |
+| src\app\api\debug\redis                                                                                            |          1 |         89 |         16 |         10 |        115 |
+| src\app\api\debug\refresh                                                                                          |          1 |        124 |          8 |         15 |        147 |
+| src\app\api\debug\user-info                                                                                        |          1 |         22 |          1 |          2 |         25 |
+| src\app\api\kv                                                                                                     |          1 |         13 |          0 |          3 |         16 |
+| src\app\api\leaderboard                                                                                            |          1 |        376 |         53 |         42 |        471 |
+| src\app\api\score                                                                                                  |          2 |        367 |         64 |         42 |        473 |
+| src\app\api\score\[userId]                                                                                         |          2 |        367 |         64 |         42 |        473 |
+| src\app\api\score\[userId] (Files)                                                                                 |          1 |        147 |         31 |         18 |        196 |
+| src\app\api\score\[userId]\scoreLog                                                                                |          1 |        220 |         33 |         24 |        277 |
+| src\app\api\test-badges                                                                                            |          1 |         39 |          8 |         12 |         59 |
+| src\app\archive                                                                                                    |          1 |          4 |          0 |          2 |          6 |
+| src\app\debug                                                                                                      |          1 |        177 |          1 |         15 |        193 |
+| src\app\debug\redis                                                                                                |          1 |        177 |          1 |         15 |        193 |
+| src\app\test-auth                                                                                                  |          1 |          0 |          0 |          1 |          1 |
+| src\components                                                                                                     |         72 |     11,096 |        643 |      1,261 |     13,000 |
+| src\components (Files)                                                                                             |         26 |      5,110 |        350 |        518 |      5,978 |
+| src\components\__tests__                                                                                           |          3 |        556 |         59 |        105 |        720 |
+| src\components\pages                                                                                               |          1 |        406 |         35 |         35 |        476 |
+| src\components\ui                                                                                                  |         42 |      5,024 |        199 |        603 |      5,826 |
+| src\components\ui (Files)                                                                                          |         40 |      4,697 |        192 |        531 |      5,420 |
+| src\components\ui\__tests__                                                                                        |          2 |        327 |          7 |         72 |        406 |
+| src\context                                                                                                        |          2 |        669 |         74 |        109 |        852 |
+| src\data                                                                                                           |          1 |         93 |          1 |          6 |        100 |
+| src\hooks                                                                                                          |          7 |      1,093 |        200 |        231 |      1,524 |
+| src\lib                                                                                                            |         53 |     11,394 |      2,347 |      1,749 |     15,490 |
+| src\lib (Files)                                                                                                    |         11 |      1,258 |        225 |        187 |      1,670 |
+| src\lib\api                                                                                                        |          4 |        904 |        175 |        143 |      1,222 |
+| src\lib\auth                                                                                                       |         16 |      2,816 |        685 |        546 |      4,047 |
+| src\lib\auth (Files)                                                                                               |         11 |      2,174 |        567 |        387 |      3,128 |
+| src\lib\auth\jwt                                                                                                   |          5 |        642 |        118 |        159 |        919 |
+| src\lib\config                                                                                                     |          1 |          0 |          0 |          1 |          1 |
+| src\lib\database                                                                                                   |          1 |        395 |         99 |         46 |        540 |
+| src\lib\design-system                                                                                              |          3 |        678 |         76 |         78 |        832 |
+| src\lib\dev                                                                                                        |          1 |        248 |         35 |         39 |        322 |
+| src\lib\gamification                                                                                               |          3 |      1,355 |        128 |        134 |      1,617 |
+| src\lib\middleware                                                                                                 |          1 |        279 |         50 |         39 |        368 |
+| src\lib\redis                                                                                                      |          2 |        923 |        253 |        148 |      1,324 |
+| src\lib\security                                                                                                   |          7 |      2,043 |        358 |        281 |      2,682 |
+| src\lib\utils                                                                                                      |          3 |        495 |        263 |        107 |        865 |
+| src\lib\utils (Files)                                                                                              |          2 |        355 |        256 |         80 |        691 |
+| src\lib\utils\__tests__                                                                                            |          1 |        140 |          7 |         27 |        174 |
+| src\messages                                                                                                       |          2 |        645 |          0 |          2 |        647 |
+| src\schemas                                                                                                        |          2 |         27 |          1 |          8 |         36 |
+| src\schemas\auth                                                                                                   |          2 |         27 |          1 |          8 |         36 |
+| src\types                                                                                                          |          2 |        290 |         48 |         53 |        391 |
++--------------------------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++--------------------------------------------------------------------------------------------------------------------+--------------------+------------+------------+------------+------------+
+| filename                                                                                                           | language           | code       | comment    | blank      | total      |
++--------------------------------------------------------------------------------------------------------------------+--------------------+------------+------------+------------+------------+
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\# Code Citations.md                                     | Markdown           |      1,006 |          0 |        317 |      1,323 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\.cursor\environment.json                                | JSON               |          3 |          0 |          0 |          3 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\ADMIN_ONLY_COMPLETE_LOCKDOWN.js                         | JavaScript         |         13 |        165 |          3 |        181 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\ADMIN_UI_CONTROLS_COMPLETE.js                           | JavaScript         |        168 |        126 |         23 |        317 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\ADMIN_UX_COMPLETE_SOLUTION.js                           | JavaScript         |         20 |        187 |          3 |        210 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\API_CLIENT_COMPARISON_ANALYSIS.md                       | Markdown           |        278 |          0 |        102 |        380 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\API_DATA_FETCHING_RESTORED.js                           | JavaScript         |         29 |        104 |          9 |        142 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\ARCHIVE_COMPLETION_DATE_FIX_COMPLETE.js                 | JavaScript         |         30 |         88 |          3 |        121 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\ARCHIVE_COMPLETION_DATE_TESTING_PLAN.js                 | JavaScript         |         83 |         19 |         14 |        116 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\ARCHIVE_DROPDOWN_DARK_MODE_FIX.md                       | Markdown           |        182 |          0 |         57 |        239 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\ARCHIVE_RESPONSIVE_ENHANCEMENT_SUMMARY.md               | Markdown           |        102 |          0 |         45 |        147 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\AUTHENTICATION_DEBUG_MODE.js                            | JavaScript         |         19 |         95 |          9 |        123 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\AUTHENTICATION_ERROR_HANDLING_SOLVED.md                 | Markdown           |        171 |          0 |         63 |        234 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\AUTHENTICATION_FLOW_COMPLETE_GUIDE.md                   | Markdown           |        252 |          0 |         80 |        332 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\AUTOMATIC_TOKEN_REFRESH_SOLUTION.md                     | Markdown           |        115 |          0 |         34 |        149 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\AUTO_LOGIN_BEST_PRACTICES.md                            | Markdown           |        252 |          1 |         76 |        329 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\AUTO_LOGIN_SIGNUP_FIX.md                                | Markdown           |        210 |          3 |         77 |        290 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\BADGE_INTEGRATION_GUIDE.md                              | Markdown           |        636 |          0 |        128 |        764 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\CENTRALIZED_COOKIE_MANAGEMENT.md                        | Markdown           |        273 |          0 |         87 |        360 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\CLIENT_RATE_LIMITING_ANALYSIS.md                        | Markdown           |        156 |          0 |         49 |        205 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\COMPLETE_LOGIN_FIX.js                                   | JavaScript         |         23 |         90 |         10 |        123 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\COOKIE_CLEARING_BEST_PRACTICES.md                       | Markdown           |        132 |          0 |         47 |        179 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\COOKIE_SECURITY_BEST_PRACTICES.md                       | Markdown           |        284 |          0 |         85 |        369 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\DIAGNOSTIC_TESTING_PLAN.js                              | JavaScript         |         19 |        138 |          9 |        166 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\DIRECT_CLASS_USAGE_SUCCESS.md                           | Markdown           |         55 |          0 |         20 |         75 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\EMERGENCY_LOGIN_FIX.js                                  | JavaScript         |         18 |         75 |         10 |        103 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\ENHANCED_APP_PROVIDER_COMPATIBILITY.md                  | Markdown           |        135 |          0 |         55 |        190 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\ENHANCED_APP_PROVIDER_REAL_ENDPOINT_STATUS.md           | Markdown           |        100 |          0 |         44 |        144 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\ENTERPRISE_ARCHITECTURE_GUIDE.md                        | Markdown           |        380 |          0 |        137 |        517 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\ENTERPRISE_BADGE_INTEGRATION_COMPLETE.js                | JavaScript         |        170 |        141 |         45 |        356 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\ENTERPRISE_COMPONENT_EXTRACTION_ANALYSIS.md             | Markdown           |        220 |          0 |         66 |        286 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\ENTERPRISE_IMPLEMENTATION_SUCCESS.md                    | Markdown           |        151 |          0 |         72 |        223 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\ENTERPRISE_MIGRATION_COMPLETE.md                        | Markdown           |        170 |          0 |         65 |        235 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\ENTERPRISE_SIGNUP_COMPLETE.md                           | Markdown           |        240 |          0 |         78 |        318 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\ENVIRONMENT_LOADING_TIMING_ANALYSIS.md                  | Markdown           |        163 |          0 |         63 |        226 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\FETCHAUTH_VS_CLIENT_FEATURE_ANALYSIS.md                 | Markdown           |        229 |          0 |         69 |        298 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\FINAL_VICTORY_LOGIN_WORKING.js                          | JavaScript         |         32 |        116 |         10 |        158 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\FIXED_TOKEN_DELETION_ISSUE.js                           | JavaScript         |         46 |         79 |         14 |        139 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\GET_ALL_TASKS_ENTERPRISE_REFACTOR_SUMMARY.js            | JavaScript         |        355 |         10 |          4 |        369 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\ICON_FIXES_COMPLETE.js                                  | JavaScript         |         65 |         14 |          7 |         86 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\INTERNAL_SERVER_ERROR_RESOLVED.js                       | JavaScript         |         20 |         73 |         10 |        103 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\LEADERBOARD_IMPROVEMENTS_SUMMARY.md                     | Markdown           |        156 |          0 |         37 |        193 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\LEADERBOARD_OPTIMIZATION_ANALYSIS.js                    | JavaScript         |          1 |        174 |         22 |        197 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\LEADERBOARD_OPTIMIZATION_COMPLETE.js                    | JavaScript         |        156 |         77 |         29 |        262 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\LOGIN_ACCESS_CRISIS_RESOLVED.js                         | JavaScript         |         21 |         90 |         10 |        121 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\LOGIN_PAGE_ACCESS_FIXED.js                              | JavaScript         |         40 |        103 |         14 |        157 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\LOGOUT_COOKIE_DECISION.md                               | Markdown           |         65 |          0 |         24 |         89 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\LOGOUT_ENDPOINT_REFACTOR_SUCCESS.md                     | Markdown           |         59 |          0 |         23 |         82 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\LOGOUT_FUNCTIONALITY_COMPLETE.js                        | JavaScript         |        228 |        206 |         24 |        458 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\LOGOUT_IMPLEMENTATION_SUMMARY.js                        | JavaScript         |         24 |        264 |          4 |        292 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\MIDDLEWARE_DEBUG_BYPASS.js                              | JavaScript         |         20 |         96 |          9 |        125 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\MOBILE_BREAKPOINT_OPTIMIZATION.js                       | JavaScript         |        256 |         74 |         45 |        375 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\NEXTJS15_COMPATIBILITY_FIX.js                           | JavaScript         |         19 |         82 |         10 |        111 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\PHASE2_COMPLETE.js                                      | JavaScript         |         14 |        159 |         16 |        189 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\PHASE2_SUCCESS_CONFIRMED.js                             | JavaScript         |         29 |        109 |         16 |        154 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\PHASE2_TESTING_GUIDE.js                                 | JavaScript         |         11 |        190 |         17 |        218 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\PRINCIPAL_ENGINEER_ARCHIVE_RESPONSIVE_IMPLEMENTATION.md | Markdown           |        327 |          0 |        116 |        443 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\PRODUCTION_BEHAVIOR_RESTORED.js                         | JavaScript         |         50 |        105 |         15 |        170 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\PRODUCTION_REDIS_CRISIS_RESOLVED.md                     | Markdown           |        114 |          0 |         47 |        161 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\PROFESSIONAL_DROPDOWN_THEMING_SOLUTION.md               | Markdown           |        258 |          0 |        101 |        359 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\PROFESSIONAL_DROPDOWN_UX_ENHANCEMENT.md                 | Markdown           |        118 |          0 |         53 |        171 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\RBAC_IMPLEMENTATION_COMPLETE.js                         | JavaScript         |         19 |        172 |          3 |        194 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\README.md                                               | Markdown           |         23 |          0 |         14 |         37 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\REDIRECT_PREVENTION_FIX.js                              | JavaScript         |         44 |         66 |         13 |        123 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\REDIS_CONFIGURATION_FIX_COMPLETE.md                     | Markdown           |        139 |          0 |         58 |        197 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\REDIS_DEBUGGING_ANALYSIS.md                             | Markdown           |        116 |          0 |         47 |        163 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\REDIS_ISSUE_RESOLVED_SUCCESS.md                         | Markdown           |         84 |          0 |         36 |        120 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\REDIS_VARIABLE_REDUNDANCY_EXPLANATION.md                | Markdown           |        158 |          0 |         53 |        211 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\REDIS_WARNING_ANALYSIS_TASK_COMPLETION.md               | Markdown           |        145 |          0 |         57 |        202 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\REFRESHAPI_VS_COOKIESERVICE_ANALYSIS.md                 | Markdown           |        257 |          0 |        105 |        362 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\RESPONSIVE_ARCHIVE_COMPLETE.js                          | JavaScript         |          0 |          0 |          1 |          1 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\SCORE_ADJUSTMENTS_ONLY_CORRECTED.js                     | JavaScript         |         13 |        132 |          3 |        148 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\SCORE_BUG_ANALYSIS.md                                   | Markdown           |         42 |          0 |         23 |         65 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\SCORE_ENDPOINTS_ENTERPRISE_REFACTOR_SUMMARY.js          | JavaScript         |        413 |         10 |          4 |        427 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\SCORE_PERSISTENCE_FIX_COMPLETE.js                       | JavaScript         |         12 |        114 |          3 |        129 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\SERVER_SIDE_AUTH_OPTIMIZATION_COMPLETE.md               | Markdown           |         96 |          0 |         35 |        131 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\SERVER_SIDE_SCORE_LOADING_COMPLETE.js                   | JavaScript         |         13 |        128 |          3 |        144 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\SMART_CONDITIONAL_AUTH_SUCCESS.js                       | JavaScript         |         25 |        102 |         11 |        138 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\SMART_LOGOUT_SECURITY_FIX.js                            | JavaScript         |         72 |         86 |         20 |        178 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\SYNTAX_FIXES_COMPLETE.js                                | JavaScript         |         39 |         15 |          8 |         62 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\TASK_COMPLETION_ENTERPRISE_REFACTOR_SUMMARY.js          | JavaScript         |        395 |         10 |          4 |        409 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\TOKEN_DELETION_FIX_SUMMARY.js                           | JavaScript         |         37 |         33 |          6 |         76 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\TOKEN_REFRESH_IMPLEMENTATION.md                         | Markdown           |        100 |          0 |         34 |        134 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\TOKEN_STATUS_ENTERPRISE_REFACTOR.md                     | Markdown           |        213 |          0 |         81 |        294 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\TOKEN_STATUS_REFACTOR_SUMMARY.md                        | Markdown           |         75 |          0 |         28 |        103 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\ZERO_DELAY_LEADERBOARD_ACHIEVEMENT.js                   | JavaScript         |        153 |         96 |         33 |        282 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\__mocks__\fileMock.js                                   | JavaScript         |          1 |          1 |          1 |          3 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\aggressive-badge-fix.html                               | HTML               |        213 |         10 |         11 |        234 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\complete-auth-test.html                                 | HTML               |        317 |          0 |         28 |        345 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\components.json                                         | JSON               |         21 |          0 |          0 |         21 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\cookie-security-fix-summary.js                          | JavaScript         |         73 |          5 |          5 |         83 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\customclasses-feature-showcase.html                     | HTML               |        323 |         14 |         25 |        362 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\debug-redis.js                                          | JavaScript         |         41 |          4 |          9 |         54 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\debug-score.ts                                          | TypeScript         |         71 |          6 |         15 |         92 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\docs\ADDTASK_FETCHAUTH_REFACTOR.md                      | Markdown           |        315 |          0 |         77 |        392 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\docs\ADJUSTSCORE_SECUREENDPOINT_REFACTOR.md             | Markdown           |        260 |          0 |         55 |        315 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\docs\BUG_FIX_SUMMARY.md                                 | Markdown           |         84 |          0 |         24 |        108 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\docs\COOKIE_DEBUGGING_GUIDE.md                          | Markdown           |        150 |          0 |         60 |        210 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\docs\DEVELOPMENT_UTILITIES_GUIDE.md                     | Markdown           |        252 |          0 |         92 |        344 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\docs\ENHANCED_RATE_LIMITING_GUIDE.md                    | Markdown           |        298 |          0 |        102 |        400 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\docs\LOGIN_ENDPOINT_REFACTOR.md                         | Markdown           |        283 |          0 |         71 |        354 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\docs\LOGOUT_ENDPOINT_REFACTOR.md                        | Markdown           |        287 |          0 |         71 |        358 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\docs\PERMISSION_SYSTEM_EXPLANATION.md                   | Markdown           |        184 |          0 |         43 |        227 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\docs\ROLE_SYSTEM_GUIDE.md                               | Markdown           |        227 |          0 |         52 |        279 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\docs\SCORE_SERVICE_INTEGRATION.md                       | Markdown           |        287 |          0 |        107 |        394 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\docs\SECURE_ENDPOINT_ENHANCEMENT_GUIDE.md               | Markdown           |        269 |          0 |         61 |        330 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\docs\TOKEN_REFRESH_IMPLEMENTATION.md                    | Markdown           |        127 |          0 |         41 |        168 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\docs\blueprint.md                                       | Markdown           |         16 |          0 |          4 |         20 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\eslint.config.mjs                                       | JavaScript         |         12 |          0 |          5 |         17 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\examples\enhanced-addtask-example.ts                    | TypeScript         |        157 |         75 |         22 |        254 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\examples\rate-limiting-migration-examples.ts            | TypeScript         |          0 |        297 |         12 |        309 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\examples\secure-addtask-example.ts                      | TypeScript         |         58 |         51 |         11 |        120 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\frontend-token-management-strategy.js                   | JavaScript         |        314 |         92 |         57 |        463 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\integration-roadmap.js                                  | JavaScript         |        156 |          7 |          6 |        169 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\jest.config.js                                          | JavaScript         |         46 |         15 |         14 |         75 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\jest.setup.js                                           | JavaScript         |         76 |          8 |          8 |         92 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\next.config.ts                                          | TypeScript         |         28 |          2 |          4 |         34 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\package-lock.json                                       | JSON               |     15,133 |          0 |          1 |     15,134 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\package.json                                            | JSON               |         96 |          0 |          1 |         97 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\phase2-integration-complete.js                          | JavaScript         |         25 |        141 |         13 |        179 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\postcss.config.cjs                                      | JavaScript         |          6 |          0 |          1 |          7 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\public\file.svg                                         | XML                |          1 |          0 |          0 |          1 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\public\globe.svg                                        | XML                |          1 |          0 |          0 |          1 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\public\next.svg                                         | XML                |          1 |          0 |          0 |          1 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\public\vercel.svg                                       | XML                |          1 |          0 |          0 |          1 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\public\window.svg                                       | XML                |          1 |          0 |          0 |          1 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\redis-test.js                                           | JavaScript         |         21 |          4 |          7 |         32 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\ai\dev.ts                                           | TypeScript         |          0 |          1 |          1 |          2 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\ai\genkit.ts                                        | TypeScript         |          6 |          0 |          2 |          8 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\app\[locale]\archive\page.tsx                       | TypeScript JSX     |         13 |          0 |          8 |         21 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\app\[locale]\badges\page.tsx                        | TypeScript JSX     |         23 |          1 |          3 |         27 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\app\[locale]\layout.tsx                             | TypeScript JSX     |        129 |         13 |         24 |        166 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\app\[locale]\leaderboard\page.tsx                   | TypeScript JSX     |         23 |          0 |          3 |         26 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\app\[locale]\login\page.tsx                         | TypeScript JSX     |         10 |          0 |          3 |         13 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\app\[locale]\page.tsx                               | TypeScript JSX     |         12 |          0 |         10 |         22 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\app\[locale]\phase2-test\page.tsx                   | TypeScript JSX     |         10 |          6 |          3 |         19 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\app\[locale]\signup\page.tsx                        | TypeScript JSX     |         64 |          1 |          8 |         73 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\app\[locale]\simple-login\page.tsx                  | TypeScript JSX     |         61 |          0 |          4 |         65 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\app\[locale]\test-auth\page.tsx                     | TypeScript JSX     |          4 |          7 |          3 |         14 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\app\[locale]\test\page.tsx                          | TypeScript JSX     |         21 |          0 |          2 |         23 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\app\api\AddTask\route.ts                            | TypeScript         |         89 |         11 |         12 |        112 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\app\api\AdjustScore\route.ts                        | TypeScript         |        144 |         15 |         15 |        174 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\app\api\AdjustScore\secure-route.ts                 | TypeScript         |        330 |         57 |         53 |        440 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\app\api\ConfirmCompletion\route.ts                  | TypeScript         |        132 |         34 |         16 |        182 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\app\api\ConfirmResetCompletion\route.ts             | TypeScript         |         97 |          4 |         11 |        112 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\app\api\GetAllTasks\route.ts                        | TypeScript         |        103 |         27 |         13 |        143 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\app\api\InitiateCompletion\route.ts                 | TypeScript         |        168 |         35 |         20 |        223 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\app\api\InternalCompletionResetTrigger\route.ts     | TypeScript         |         36 |          2 |          9 |         47 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\app\api\ResetCompletionScanning\route.ts            | TypeScript         |         95 |         28 |         18 |        141 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\app\api\auth\login\route.ts                         | TypeScript         |        104 |         11 |         12 |        127 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\app\api\auth\logout\route.ts                        | TypeScript         |        220 |         25 |         30 |        275 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\app\api\auth\refresh\route.ts                       | TypeScript         |        129 |         22 |         12 |        163 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\app\api\auth\signup\route.ts                        | TypeScript         |        124 |         20 |         15 |        159 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\app\api\auth\token-status\route.ts                  | TypeScript         |        172 |         33 |         17 |        222 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\app\api\auth\user-info\route.ts                     | TypeScript         |         58 |         20 |         10 |         88 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\app\api\debug\auth-test\route.ts                    | TypeScript         |         66 |          6 |          8 |         80 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\app\api\debug\redis\route.ts                        | TypeScript         |         89 |         16 |         10 |        115 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\app\api\debug\refresh\route.ts                      | TypeScript         |        124 |          8 |         15 |        147 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\app\api\debug\route.ts                              | TypeScript         |        209 |          6 |         26 |        241 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\app\api\debug\user-info\route.ts                    | TypeScript         |         22 |          1 |          2 |         25 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\app\api\kv\route.ts                                 | TypeScript         |         13 |          0 |          3 |         16 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\app\api\leaderboard\route.ts                        | TypeScript         |        376 |         53 |         42 |        471 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\app\api\score\[userId]\route.ts                     | TypeScript         |        147 |         31 |         18 |        196 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\app\api\score\[userId]\scoreLog\route.ts            | TypeScript         |        220 |         33 |         24 |        277 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\app\api\test-badges\route.ts                        | TypeScript         |         39 |          8 |         12 |         59 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\app\archive\page.tsx                                | TypeScript JSX     |          4 |          0 |          2 |          6 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\app\debug\redis\page.tsx                            | TypeScript JSX     |        177 |          1 |         15 |        193 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\app\globals.css                                     | PostCSS            |        189 |         19 |         21 |        229 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\app\layout.tsx                                      | TypeScript JSX     |         44 |         20 |          3 |         67 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\app\page.tsx                                        | TypeScript JSX     |          4 |          0 |          2 |          6 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\app\test-auth\page.tsx                              | TypeScript JSX     |          0 |          0 |          1 |          1 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\__tests__\archive-main.test.tsx          | TypeScript JSX     |        263 |         22 |         47 |        332 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\__tests__\archive-table-simple.test.tsx  | TypeScript JSX     |         98 |         15 |         20 |        133 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\__tests__\archive-table.test.tsx         | TypeScript JSX     |        195 |         22 |         38 |        255 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\add-task-dialog.tsx                      | TypeScript JSX     |        233 |          8 |         22 |        263 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\archive-main.tsx                         | TypeScript JSX     |        189 |         13 |         22 |        224 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\archive-table.tsx                        | TypeScript JSX     |        470 |         20 |         24 |        514 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\auth-guard-example.tsx                   | TypeScript JSX     |        216 |         29 |         33 |        278 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\auth-wrapper.tsx                         | TypeScript JSX     |        112 |         15 |         25 |        152 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\conditional-app-provider.tsx             | TypeScript JSX     |         49 |          5 |         11 |         65 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\dashboard.tsx                            | TypeScript JSX     |        318 |         13 |         22 |        353 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\enhanced-archive.tsx                     | TypeScript JSX     |        316 |         34 |         40 |        390 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\enhanced-leaderboard.tsx                 | TypeScript JSX     |        284 |         25 |         27 |        336 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\enhanced-member-card.tsx                 | TypeScript JSX     |        184 |         27 |         21 |        232 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\header.tsx                               | TypeScript JSX     |        221 |         19 |         23 |        263 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\language-switcher.tsx                    | TypeScript JSX     |         49 |          0 |          5 |         54 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\leaderboard-clean.tsx                    | TypeScript JSX     |         30 |          1 |          6 |         37 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\leaderboard.tsx                          | TypeScript JSX     |        796 |         42 |         67 |        905 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\loading-spinner.tsx                      | TypeScript JSX     |          7 |          0 |          2 |          9 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\login-form.tsx                           | TypeScript JSX     |        236 |         16 |         19 |        271 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\login-page-client.tsx                    | TypeScript JSX     |        222 |         17 |         22 |        261 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\overall-progress-chart.tsx               | TypeScript JSX     |         60 |          0 |          8 |         68 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\pages\BadgePage.tsx                      | TypeScript JSX     |        406 |         35 |         35 |        476 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\performance-summary.tsx                  | TypeScript JSX     |        116 |          4 |         10 |        130 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\phase2-auth-test.tsx                     | TypeScript JSX     |        297 |         18 |         31 |        346 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\responsive-archive-table.tsx             | TypeScript JSX     |          0 |          0 |          1 |          1 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\signup-form.tsx                          | TypeScript JSX     |        158 |          4 |          8 |        170 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\step2-auth-test.tsx                      | TypeScript JSX     |        134 |         14 |         16 |        164 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\task-list.tsx                            | TypeScript JSX     |        342 |         26 |         45 |        413 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\theme-provider.tsx                       | TypeScript JSX     |          7 |          0 |          3 |         10 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\theme-toggle.tsx                         | TypeScript JSX     |         64 |          0 |          5 |         69 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\ui\__tests__\last-updated.test.tsx       | TypeScript JSX     |        228 |          5 |         48 |        281 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\ui\__tests__\soon-badge.test.tsx         | TypeScript JSX     |         99 |          2 |         24 |        125 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\ui\accordion.tsx                         | TypeScript JSX     |         50 |          0 |          9 |         59 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\ui\alert-dialog.tsx                      | TypeScript JSX     |        127 |          0 |         15 |        142 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\ui\alert.tsx                             | TypeScript JSX     |         53 |          0 |          7 |         60 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\ui\avatar.tsx                            | TypeScript JSX     |         44 |          0 |          7 |         51 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\ui\badge-display.tsx                     | TypeScript JSX     |        453 |         36 |         41 |        530 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\ui\badge.tsx                             | TypeScript JSX     |         31 |          0 |          6 |         37 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\ui\button.tsx                            | TypeScript JSX     |         51 |          0 |          6 |         57 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\ui\calendar.tsx                          | TypeScript JSX     |         65 |          0 |          6 |         71 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\ui\card.tsx                              | TypeScript JSX     |         71 |          0 |          9 |         80 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\ui\carousel.tsx                          | TypeScript JSX     |        232 |          0 |         31 |        263 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\ui\chart.tsx                             | TypeScript JSX     |        327 |          2 |         37 |        366 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\ui\checkbox.tsx                          | TypeScript JSX     |         26 |          0 |          5 |         31 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\ui\collapsible.tsx                       | TypeScript JSX     |          6 |          0 |          6 |         12 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\ui\dialog.tsx                            | TypeScript JSX     |        109 |          0 |         14 |        123 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\ui\dropdown-menu.tsx                     | TypeScript JSX     |        201 |         21 |         19 |        241 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\ui\form.tsx                              | TypeScript JSX     |        153 |          0 |         26 |        179 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\ui\input.tsx                             | TypeScript JSX     |         19 |          0 |          4 |         23 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\ui\label.tsx                             | TypeScript JSX     |         21 |          0 |          6 |         27 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\ui\last-updated.stories.tsx              | TypeScript JSX     |        245 |         12 |         15 |        272 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\ui\last-updated.tsx                      | TypeScript JSX     |         85 |         43 |         14 |        142 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\ui\menubar.tsx                           | TypeScript JSX     |        237 |          0 |         20 |        257 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\ui\popover.tsx                           | TypeScript JSX     |         25 |          0 |          7 |         32 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\ui\progress.tsx                          | TypeScript JSX     |         51 |          2 |          6 |         59 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\ui\radio-group.tsx                       | TypeScript JSX     |         39 |          0 |          6 |         45 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\ui\scroll-area.tsx                       | TypeScript JSX     |         43 |          0 |          6 |         49 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\ui\select.tsx                            | TypeScript JSX     |        146 |          0 |         15 |        161 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\ui\separator.tsx                         | TypeScript JSX     |         27 |          0 |          5 |         32 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\ui\sheet.tsx                             | TypeScript JSX     |        125 |          0 |         16 |        141 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\ui\sidebar.tsx                           | TypeScript JSX     |        697 |         12 |         55 |        764 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\ui\skeleton.tsx                          | TypeScript JSX     |         13 |          0 |          3 |         16 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\ui\slider.tsx                            | TypeScript JSX     |         24 |          0 |          5 |         29 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\ui\soon-badge.stories.tsx                | TypeScript JSX     |        335 |          1 |         14 |        350 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\ui\soon-badge.tsx                        | TypeScript JSX     |        195 |         63 |         36 |        294 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\ui\switch.tsx                            | TypeScript JSX     |         25 |          0 |          5 |         30 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\ui\table.tsx                             | TypeScript JSX     |        107 |          0 |         11 |        118 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\ui\tabs.tsx                              | TypeScript JSX     |         48 |          0 |          8 |         56 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\ui\textarea.tsx                          | TypeScript JSX     |         18 |          0 |          4 |         22 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\ui\toast.tsx                             | TypeScript JSX     |        118 |          0 |         14 |        132 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\ui\toaster.tsx                           | TypeScript JSX     |         32 |          0 |          4 |         36 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\components\ui\tooltip.tsx                           | TypeScript JSX     |         23 |          0 |          8 |         31 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\context\app-provider.tsx                            | TypeScript JSX     |        312 |         35 |         51 |        398 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\context\enhanced-app-provider.tsx                   | TypeScript JSX     |        357 |         39 |         58 |        454 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\data\seed.ts                                        | TypeScript         |         93 |          1 |          6 |        100 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\hooks\use-local-storage.ts                          | TypeScript         |         28 |          5 |          6 |         39 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\hooks\use-mobile.tsx                                | TypeScript JSX     |         15 |          3 |          5 |         23 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\hooks\use-toast.ts                                  | TypeScript         |        162 |          3 |         32 |        197 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\hooks\useAuthenticationGuard.ts                     | TypeScript         |        380 |         76 |         87 |        543 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\hooks\useBadges.ts                                  | TypeScript         |        312 |         37 |         56 |        405 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\hooks\useScoreSync.ts                               | TypeScript         |        159 |         46 |         36 |        241 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\hooks\useUserRole.ts                                | TypeScript         |         37 |         30 |          9 |         76 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\i18n.ts                                             | TypeScript         |         14 |          2 |          5 |         21 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\lib\api-client.ts                                   | TypeScript         |        138 |         13 |         24 |        175 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\lib\api.ts                                          | TypeScript         |         55 |          6 |          6 |         67 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\lib\api\client.ts                                   | TypeScript         |        630 |        115 |         98 |        843 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\lib\api\scoreService.ts                             | TypeScript         |        274 |         60 |         43 |        377 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\lib\api\smartApiClient.ts                           | TypeScript         |          0 |          0 |          1 |          1 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\lib\api\useSmartApi.ts                              | TypeScript         |          0 |          0 |          1 |          1 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\lib\auth\INTEGRATION_GUIDE.md                       | Markdown           |        312 |          0 |         81 |        393 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\lib\auth\cookieService.ts                           | TypeScript         |        142 |         39 |         26 |        207 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\lib\auth\debug-cookies.ts                           | TypeScript         |        145 |         18 |         28 |        191 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\lib\auth\fetchWithAuth.examples.ts                  | TypeScript         |        323 |        102 |         66 |        491 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\lib\auth\fetchWithAuth.test.ts                      | TypeScript         |         55 |        162 |         15 |        232 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\lib\auth\fetchWithAuth.ts                           | TypeScript         |        428 |         88 |         55 |        571 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\lib\auth\jwt\README.md                              | Markdown           |        172 |          0 |         68 |        240 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\lib\auth\jwt\jwt.ts                                 | TypeScript         |         50 |          0 |          7 |         57 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\lib\auth\jwt\refreshApiAdapter.ts                   | TypeScript         |        198 |         39 |         37 |        274 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\lib\auth\jwt\refreshTokenService.ts                 | TypeScript         |         75 |         18 |         15 |        108 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\lib\auth\jwt\usageExamples.ts                       | TypeScript         |        147 |         61 |         32 |        240 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\lib\auth\loginService.ts                            | TypeScript         |         18 |          3 |          5 |         26 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\lib\auth\rateLimiter.ts                             | TypeScript         |        223 |         65 |         39 |        327 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\lib\auth\requireAuth.ts                             | TypeScript         |         55 |          6 |          9 |         70 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\lib\auth\security-test.ts                           | TypeScript         |        140 |         22 |         17 |        179 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\lib\auth\signupService.ts                           | TypeScript         |        333 |         62 |         46 |        441 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\lib\completionDateCache.ts                          | TypeScript         |        133 |         40 |         25 |        198 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\lib\completionDateService.ts                        | TypeScript         |        114 |         19 |         21 |        154 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\lib\config\environment.ts                           | TypeScript         |          0 |          0 |          1 |          1 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\lib\database\user-repository.ts                     | TypeScript         |        395 |         99 |         46 |        540 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\lib\design-system\colors.ts                         | TypeScript         |        201 |         17 |         20 |        238 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\lib\design-system\responsive-archive.ts             | TypeScript         |        186 |         44 |         42 |        272 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\lib\design-system\theme-utils.ts                    | TypeScript         |        291 |         15 |         16 |        322 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\lib\dev\environmentUtils.ts                         | TypeScript         |        248 |         35 |         39 |        322 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\lib\gamification\badge-definitions.ts               | TypeScript         |        622 |         34 |         24 |        680 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\lib\gamification\badge-service.ts                   | TypeScript         |        448 |         62 |         75 |        585 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\lib\gamification\mock-badge-service.ts              | TypeScript         |        285 |         32 |         35 |        352 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\lib\getAllScoresService.ts                          | TypeScript         |          0 |          0 |          1 |          1 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\lib\getAllTasksService.ts                           | TypeScript         |        170 |         30 |         25 |        225 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\lib\middleware\rateLimitMiddleware.ts               | TypeScript         |        279 |         50 |         39 |        368 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\lib\navigation.ts                                   | TypeScript         |         10 |          2 |          1 |         13 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\lib\prismaClient.ts                                 | TypeScript         |         10 |          0 |          5 |         15 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\lib\redis.ts                                        | TypeScript         |        211 |         13 |         15 |        239 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\lib\redis\key-manager.ts                            | TypeScript         |        465 |        148 |         80 |        693 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\lib\redis\operations.ts                             | TypeScript         |        458 |        105 |         68 |        631 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\lib\scoreService.ts                                 | TypeScript         |        353 |         68 |         53 |        474 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\lib\security\apiWrapper.ts                          | TypeScript         |        384 |         67 |         44 |        495 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\lib\security\index.ts                               | TypeScript         |        270 |        124 |         48 |        442 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\lib\security\inputValidator.ts                      | TypeScript         |        160 |         37 |         33 |        230 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\lib\security\rateLimitManager.ts                    | TypeScript         |        502 |         42 |         52 |        596 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\lib\security\roleValidation.ts                      | TypeScript         |        134 |         52 |         26 |        212 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\lib\security\secureEndpoint.ts                      | TypeScript         |        429 |         27 |         55 |        511 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\lib\security\securityMiddleware.ts                  | TypeScript         |        164 |          9 |         23 |        196 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\lib\utils.ts                                        | TypeScript         |         64 |         34 |         11 |        109 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\lib\utils\__tests__\i18n-numerals.test.ts           | TypeScript         |        140 |          7 |         27 |        174 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\lib\utils\core.ts                                   | TypeScript         |        157 |        110 |         29 |        296 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\lib\utils\i18n-numerals.ts                          | TypeScript         |        198 |        146 |         51 |        395 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\messages\ar.json                                    | JSON               |        320 |          0 |          1 |        321 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\messages\en.json                                    | JSON               |        325 |          0 |          1 |        326 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\middleware-with-refresh.ts                          | TypeScript         |        205 |         31 |         37 |        273 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\middleware.ts                                       | TypeScript         |        222 |         33 |         39 |        294 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\schemas\auth\login.schema.ts                        | TypeScript         |          5 |          0 |          2 |          7 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\schemas\auth\signup.schema.ts                       | TypeScript         |         22 |          1 |          6 |         29 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\types\badges.ts                                     | TypeScript         |        204 |         48 |         37 |        289 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\src\types\index.ts                                      | TypeScript         |         86 |          0 |         16 |        102 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\tailwind.config.ts                                      | TypeScript         |        107 |          0 |          2 |        109 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\test-addtask-fetchauth.js                               | JavaScript         |        171 |         15 |         30 |        216 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\test-admin-error-handling-improvements.js               | JavaScript         |        163 |         58 |         22 |        243 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\test-admin-only-access-control.js                       | JavaScript         |        165 |         11 |         26 |        202 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\test-arabic-numbers.js                                  | JavaScript         |         18 |          2 |          5 |         25 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\test-auth-flow.js                                       | JavaScript         |         67 |         14 |         16 |         97 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\test-auto-login-fix.html                                | HTML               |        267 |          0 |         29 |        296 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\test-badge-positioning-fixed.html                       | HTML               |        166 |         12 |          9 |        187 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\test-badge-positioning.html                             | HTML               |        165 |          4 |         10 |        179 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\test-complete-auth-flow.js                              | JavaScript         |        248 |         50 |         44 |        342 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\test-complete-auth.js                                   | JavaScript         |        100 |         13 |         18 |        131 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\test-complete-refresh-flow.html                         | HTML               |        531 |          0 |         59 |        590 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\test-complete-refresh-flow.js                           | JavaScript         |        153 |         19 |         26 |        198 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\test-cookie-fix.js                                      | JavaScript         |         55 |          9 |         11 |         75 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\test-cookie-security.js                                 | JavaScript         |        119 |         15 |         27 |        161 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\test-enhanced-app-provider-compatibility.js             | JavaScript         |        242 |         17 |         40 |        299 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\test-enhanced-signup.html                               | HTML               |        563 |          0 |         64 |        627 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\test-enterprise-architecture-complete.js                | JavaScript         |        348 |         46 |         69 |        463 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\test-fetchWithAuth-flow.js                              | JavaScript         |         55 |          8 |         11 |         74 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\test-get-all-tasks-endpoint.js                          | JavaScript         |        300 |         51 |         51 |        402 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\test-integration.mjs                                    | JavaScript         |         25 |          2 |          5 |         32 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\test-internationalization.js                            | JavaScript         |         65 |          2 |         10 |         77 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\test-jwt.js                                             | JavaScript         |         18 |          3 |          6 |         27 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\test-leaderboard-optimization.js                        | JavaScript         |        143 |         17 |         21 |        181 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\test-logout-endpoint.html                               | HTML               |        190 |          0 |         18 |        208 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\test-mock-badge-service.js                              | JavaScript         |         43 |          8 |         10 |         61 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\test-phase2-integration.js                              | JavaScript         |         71 |         20 |         22 |        113 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\test-positioning.html                                   | HTML               |         57 |          7 |          6 |         70 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\test-progress-calculation.js                            | JavaScript         |          0 |          0 |          1 |          1 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\test-quick-login.js                                     | JavaScript         |         53 |         11 |         14 |         78 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\test-real-endpoint-integration.js                       | JavaScript         |        133 |         14 |         25 |        172 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\test-redis-connection.js                                | JavaScript         |         14 |          5 |          6 |         25 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\test-refresh-endpoint.html                              | HTML               |        267 |          0 |         26 |        293 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\test-role-based-access-control.js                       | JavaScript         |        176 |         14 |         27 |        217 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\test-score-adjustments-vs-total.js                      | JavaScript         |        103 |         11 |         22 |        136 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\test-score-calculation.js                               | JavaScript         |         23 |          7 |          8 |         38 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\test-score-endpoints.js                                 | JavaScript         |        396 |         62 |         70 |        528 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\test-score-fetching.html                                | HTML               |        252 |          0 |         27 |        279 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\test-score-fetching.js                                  | JavaScript         |         96 |         13 |         19 |        128 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\test-step1-token-status.js                              | JavaScript         |         53 |          7 |         11 |         71 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\test-step2-validation.js                                | JavaScript         |         44 |          8 |         11 |         63 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\test-task-completion-endpoints.js                       | JavaScript         |        332 |         56 |         56 |        444 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\test-token-deletion-recovery.js                         | JavaScript         |         61 |         34 |         17 |        112 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\test-token-refresh-flow.js                              | JavaScript         |         85 |          9 |         15 |        109 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\test-token-refresh.html                                 | HTML               |          0 |          0 |          1 |          1 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\test-token-status-endpoint.js                           | JavaScript         |        230 |         52 |         46 |        328 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\tsconfig.json                                           | JSON with Comments |         27 |          0 |          1 |         28 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\vercel.json                                             | JSON               |          9 |          0 |          1 |         10 |
+| c:\Users\dell\WebstormProjects\ChoreChampion\chorechampion\why-secure-cookie-clearing.js                           | JavaScript         |         88 |          5 |          5 |         98 |
+| Total                                                                                                              |                    |     68,791 |      9,615 |      9,647 |     88,053 |
++--------------------------------------------------------------------------------------------------------------------+--------------------+------------+------------+------------+------------+
