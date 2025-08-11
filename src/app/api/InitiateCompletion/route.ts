@@ -4,7 +4,7 @@ import {
   logSuccessfulAccess,
 } from "@/lib/security/roleValidation";
 import { getRedis } from "@/lib/redis";
-import { generateCompletionKey, IS_DEV } from "@/lib/utils";
+import { RedisKeyManager, IS_DEV } from "@/lib/utils";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import type { Task } from "@/types";
@@ -171,7 +171,10 @@ export const POST = createSecureEndpoint(
       }
 
       // ✅ PERFORMANCE: Generate completion key using optimized utility
-      const completionKey = generateCompletionKey(task.period, task.id);
+      const completionKey = RedisKeyManager.generateCompletionKey(
+        task.period,
+        task.id
+      );
 
       // ✅ AUDIT: Log successful initiation
       if (IS_DEV) {

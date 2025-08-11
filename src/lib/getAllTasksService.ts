@@ -1,5 +1,5 @@
 import { getRedis } from "@/lib/redis";
-import { generateCompletionKey, IS_DEV } from "@/lib/utils";
+import { RedisKeyManager, IS_DEV } from "@/lib/utils";
 import type { Task } from "@/types";
 
 export class GetAllTasksError extends Error {
@@ -141,7 +141,10 @@ const getAllTasksService = async (): Promise<Task[]> => {
 
     const completionPipeline = redis.pipeline();
     validTasks.forEach((task) => {
-      const completionKey = generateCompletionKey(task.period, task.id);
+      const completionKey = RedisKeyManager.generateCompletionKey(
+        task.period,
+        task.id
+      );
       completionPipeline.exists(completionKey);
     });
 
