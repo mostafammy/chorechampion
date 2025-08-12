@@ -1,4 +1,4 @@
-import { Dashboard } from '@/components/dashboard';
+import { Dashboard } from '@/components/smart-dashboard';
 import { Header } from '@/components/header';
 
 

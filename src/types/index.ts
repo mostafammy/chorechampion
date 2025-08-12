@@ -12,6 +12,9 @@ export interface Task {
   period: Period;
   completed: boolean;
   assigneeId: string;
+  // ✅ ENTERPRISE: Enhanced task completion metadata
+  completedAt?: string; // ISO date string
+  completedBy?: string; // User ID who completed the task
 }
 
 export interface ScoreSummary {

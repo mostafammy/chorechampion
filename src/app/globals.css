@@ -226,3 +226,195 @@
 html, body {
   transition: background-color 0.4s, color 0.3s;
 }
+
+/* ✅ ENTERPRISE SCROLLBAR DESIGN - PRINCIPAL FRONTEND ENGINEER EDITION
+ * 
+ * Professional custom scrollbar that integrates seamlessly with gradient cards.
+ * Provides premium UX with smooth interactions and visual harmony.
+ * 
+ * Design Philosophy:
+ * - Minimal visual noise while maintaining functionality
+ * - Gradient-aware styling that complements card themes
+ * - Responsive hover states for enhanced interaction feedback
+ * - Cross-browser compatibility with graceful degradation
+ */
+
+@layer components {
+  /* 🎨 CARD-INTEGRATED CUSTOM SCROLLBAR */
+  .scrollbar-custom-card {
+    /* Webkit browsers (Chrome, Safari, Edge) */
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+  }
+  
+  .scrollbar-custom-card::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  
+  .scrollbar-custom-card::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 3px;
+    margin: 2px;
+  }
+  
+  .scrollbar-custom-card::-webkit-scrollbar-thumb {
+    background: linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.3),
+      rgba(255, 255, 255, 0.15)
+    );
+    border-radius: 3px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 
+      inset 0 1px 0 rgba(255, 255, 255, 0.2),
+      0 1px 2px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  /* 🎯 PREMIUM HOVER INTERACTIONS */
+  .scrollbar-custom-card::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.45),
+      rgba(255, 255, 255, 0.25)
+    );
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 
+      inset 0 1px 0 rgba(255, 255, 255, 0.3),
+      0 2px 4px rgba(0, 0, 0, 0.15);
+    transform: scaleY(1.05);
+  }
+  
+  .scrollbar-custom-card::-webkit-scrollbar-thumb:active {
+    background: linear-gradient(
+      to bottom,
+      rgba(255, 255, 255, 0.5),
+      rgba(255, 255, 255, 0.3)
+    );
+    box-shadow: 
+      inset 0 1px 2px rgba(0, 0, 0, 0.1),
+      0 1px 2px rgba(0, 0, 0, 0.1);
+    transform: scaleY(0.98);
+  }
+  
+  /* 🎨 CORNER STYLING (for horizontal + vertical scrollbars) */
+  .scrollbar-custom-card::-webkit-scrollbar-corner {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 3px;
+  }
+  
+  /* ✨ ENHANCED SCROLLBAR WITH GRADIENT THEMES */
+  .scrollbar-gradient-blue {
+    scrollbar-color: rgba(59, 130, 246, 0.4) transparent;
+  }
+  
+  .scrollbar-gradient-blue::-webkit-scrollbar-thumb {
+    background: linear-gradient(
+      to bottom,
+      rgba(59, 130, 246, 0.6),
+      rgba(29, 78, 216, 0.4)
+    );
+    border-color: rgba(59, 130, 246, 0.2);
+  }
+  
+  .scrollbar-gradient-blue::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(
+      to bottom,
+      rgba(59, 130, 246, 0.8),
+      rgba(29, 78, 216, 0.6)
+    );
+  }
+  
+  .scrollbar-gradient-purple {
+    scrollbar-color: rgba(147, 51, 234, 0.4) transparent;
+  }
+  
+  .scrollbar-gradient-purple::-webkit-scrollbar-thumb {
+    background: linear-gradient(
+      to bottom,
+      rgba(147, 51, 234, 0.6),
+      rgba(109, 40, 217, 0.4)
+    );
+    border-color: rgba(147, 51, 234, 0.2);
+  }
+  
+  .scrollbar-gradient-purple::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(
+      to bottom,
+      rgba(147, 51, 234, 0.8),
+      rgba(109, 40, 217, 0.6)
+    );
+  }
+  
+  /* 🌈 ADDITIONAL GRADIENT THEMES */
+  .scrollbar-gradient-emerald::-webkit-scrollbar-thumb {
+    background: linear-gradient(
+      to bottom,
+      rgba(16, 185, 129, 0.6),
+      rgba(5, 150, 105, 0.4)
+    );
+    border-color: rgba(16, 185, 129, 0.2);
+  }
+  
+  .scrollbar-gradient-rose::-webkit-scrollbar-thumb {
+    background: linear-gradient(
+      to bottom,
+      rgba(244, 63, 94, 0.6),
+      rgba(225, 29, 72, 0.4)
+    );
+    border-color: rgba(244, 63, 94, 0.2);
+  }
+  
+  .scrollbar-gradient-amber::-webkit-scrollbar-thumb {
+    background: linear-gradient(
+      to bottom,
+      rgba(245, 158, 11, 0.6),
+      rgba(217, 119, 6, 0.4)
+    );
+    border-color: rgba(245, 158, 11, 0.2);
+  }
+  
+  .scrollbar-gradient-slate::-webkit-scrollbar-thumb {
+    background: linear-gradient(
+      to bottom,
+      rgba(100, 116, 139, 0.6),
+      rgba(71, 85, 105, 0.4)
+    );
+    border-color: rgba(100, 116, 139, 0.2);
+  }
+  
+  .scrollbar-gradient-slate::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(
+      to bottom,
+      rgba(100, 116, 139, 0.8),
+      rgba(71, 85, 105, 0.6)
+    );
+  }
+  
+  /* 🎯 ACCESSIBILITY & PERFORMANCE OPTIMIZATIONS */
+  @media (prefers-reduced-motion: reduce) {
+    .scrollbar-custom-card::-webkit-scrollbar-thumb {
+      transition: none;
+    }
+  }
+  
+  /* 📱 MOBILE RESPONSIVE (touch devices) */
+  @media (hover: none) and (pointer: coarse) {
+    .scrollbar-custom-card::-webkit-scrollbar {
+      width: 8px; /* Slightly wider for touch */
+    }
+    
+    .scrollbar-custom-card::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.4); /* More visible on mobile */
+    }
+  }
+  
+  /* 🎨 HIGH CONTRAST MODE SUPPORT */
+  @media (prefers-contrast: high) {
+    .scrollbar-custom-card::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.8);
+      border: 2px solid rgba(0, 0, 0, 0.2);
+    }
+  }
+}

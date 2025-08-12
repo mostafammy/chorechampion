@@ -68,6 +68,18 @@ export {
   baseUrl,
 } from "./api/client";
 
+// ✅ RE-EXPORT TASK STATE MANAGEMENT
+export {
+  TaskStateManager,
+  markTaskCompleted,
+  markTaskIncomplete,
+  getTaskState,
+  batchUpdateTaskStates,
+  type TaskStateUpdateOptions,
+  type TaskStateResult,
+  type TaskCompletionMetadata,
+} from "./taskStateManager";
+
 // ✅ LEGACY SUPPORT - EXAMPLE FUNCTION
 // This function is kept for backward compatibility but should be migrated
 export function examples() {

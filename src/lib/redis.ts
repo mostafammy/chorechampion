@@ -234,5 +234,51 @@ function createMockRedis(): Redis {
       return members;
     },
     // Add other Redis methods as needed
+    multi: () => {
+      console.log("🔧 Mock Redis MULTI: Creating mock transaction");
+      const operations: Array<() => Promise<any>> = [];
+
+      const multiObj = {
+        set: (key: string, value: any, options?: any) => {
+          operations.push(async () => {
+            const stringValue =
+              typeof value === "string" ? value : JSON.stringify(value);
+            mockStore.set(key, stringValue);
+            console.log(`✅ Mock Redis MULTI SET: ${key} = ${stringValue}`);
+            return "OK";
+          });
+          return multiObj;
+        },
+        del: (key: string) => {
+          operations.push(async () => {
+            const existed = mockStore.has(key) || mockLists.has(key);
+            mockStore.delete(key);
+            mockLists.delete(key);
+            console.log(
+              `🗑️ Mock Redis MULTI DEL: ${key} (existed: ${existed})`
+            );
+            return existed ? 1 : 0;
+          });
+          return multiObj;
+        },
+        exec: async () => {
+          console.log(
+            `🎯 Mock Redis MULTI EXEC: Executing ${operations.length} operations`
+          );
+          const results = [];
+          for (const operation of operations) {
+            try {
+              const result = await operation();
+              results.push([null, result]); // [error, result] format
+            } catch (error) {
+              results.push([error, null]);
+            }
+          }
+          return results;
+        },
+      };
+
+      return multiObj;
+    },
   } as any;
 }

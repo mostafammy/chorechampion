@@ -30,7 +30,7 @@ export type UserRole = keyof typeof USER_ROLES;
 export const ROLE_PERMISSIONS = {
   SCORE_ADJUSTMENT: [USER_ROLES.ADMIN, USER_ROLES.admin],
   TASK_MANAGEMENT: [USER_ROLES.ADMIN, USER_ROLES.admin], // Admin-only task operations
-  TASK_COMPLETION: [USER_ROLES.ADMIN, USER_ROLES.admin], // ✅ CHANGED: Admin-only task completion
+  TASK_COMPLETION: [USER_ROLES.ADMIN, USER_ROLES.admin, USER_ROLES.USER, USER_ROLES.user], // ✅ FIXED: Allow users to complete their own tasks
   USER_MANAGEMENT: [USER_ROLES.ADMIN, USER_ROLES.admin],
 } as const;
 
