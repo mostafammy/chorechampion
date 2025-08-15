@@ -15,7 +15,7 @@ interface ConditionalAppProviderProps {
 }
 
 // Define public routes that don't need AppProvider authentication
-const publicRoutes = ['/login', '/signup', '/test-auth', '/phase2-test', '/test', '/simple-login'];
+const publicRoutes = ['/login', '/signup', '/test-auth', '/phase2-test', '/test', '/simple-login', '/test-today', '/debug-archive', '/diagnostic-task-completion'];
 
 export function ConditionalAppProvider({ 
   children, 

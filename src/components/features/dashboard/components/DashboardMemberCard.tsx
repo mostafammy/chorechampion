@@ -46,7 +46,7 @@ import type { DashboardMemberData, MemberCardGradient } from '../types';
 import type { Task } from '@/types';
 import { useAppContext } from '@/context/app-provider';
 import { useTaskFiltering } from '../hooks/useTaskFiltering';
-import { useTaskCompletionPermissions, useScoreAdjustmentPermissions } from '../hooks/useRoleBasedTaskControl';
+import { useTaskCompletionPermissions, useScoreAdjustmentPermissions } from '@/components/features/dashboard';
 import { CompactTaskFilter } from './TaskFilterTabs';
 import { TaskCompletionButton } from './TaskCompletionButton';
 

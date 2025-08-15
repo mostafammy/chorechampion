@@ -5,9 +5,6 @@ import { Toaster } from '@/components/ui/toaster';
 import type { Metadata } from 'next';
 import './globals.css';
 import LoadingSpinner from '@/components/loading-spinner';
-import getAllTasksService from "@/lib/getAllTasksService";
-import {MergeCompletionDate} from "@/lib/completionDateService";
-import {initialMembers} from "@/data/seed";
 import { cookies } from 'next/headers';
 import {NextIntlClientProvider} from "next-intl";
 

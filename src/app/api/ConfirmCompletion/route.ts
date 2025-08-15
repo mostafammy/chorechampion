@@ -87,6 +87,7 @@ export const POST = createSecureEndpoint(
     { user, validatedData }
   ): Promise<NextResponse<ConfirmCompletionResponse>> => {
     try {
+      const TTL_90_DAYS = 60 * 60 * 24 * 90;
       const { completionKey } = validatedData as ConfirmCompletionRequest;
 
       if (IS_DEV) {
@@ -152,7 +153,7 @@ export const POST = createSecureEndpoint(
       
       // ✅ CRITICAL: Set the completion state in Redis (always execute)
       // This ensures task completion is recorded regardless of duplicate keys
-      await redis.setex(completionKey, 300, JSON.stringify({
+      await redis.setex(completionKey, TTL_90_DAYS, JSON.stringify({
         confirmed: true,
         confirmedAt: new Date().toISOString(),
         confirmedBy: user.id || user.userId || 'system',

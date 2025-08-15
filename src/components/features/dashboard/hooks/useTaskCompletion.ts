@@ -887,6 +887,9 @@ export function useTaskCompletion({
 
         setState("completed");
 
+        // setArchivedTasks((prev) => [...prev, completionResult.archivedTask!]);
+        // setActiveTasks((prev) => prev.filter((task) => task.id !== taskId));
+
         toast({
           title: t("taskCompleted") || "Task Completed! 🎉",
           description: taskMetadata.name

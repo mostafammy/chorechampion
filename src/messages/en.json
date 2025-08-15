@@ -193,7 +193,24 @@
     "lastUpdated": "Archive last updated",
     "emptyState": {
       "title": "No Completed Tasks Yet",
-      "description": "Once family members start completing tasks, they'll appear here for you to review and celebrate achievements."
+      "description": "Once family members start completing tasks, they'll appear here for you to review and celebrate achievements.",
+      "filtered": {
+        "title": "No Results Found",
+        "description": "Try adjusting your filters or search criteria to find what you're looking for."
+      }
+    },
+    "error": {
+      "title": "Archive Error",
+      "description": "Unable to load archive data. Please try again."
+    },
+    "table": {
+      "columns": {
+        "member": "Member",
+        "tasks": "Tasks",
+        "score": "Score",
+        "performance": "Performance",
+        "lastActivity": "Last Activity"
+      }
     },
     "statistics": {
       "totalTasks": "Tasks Completed",
@@ -209,7 +226,8 @@
     },
     "controls": {
       "viewTimeline": "View Timeline",
-      "viewTimelineShort": "Timeline"
+      "viewTimelineShort": "Timeline",
+      "export": "Export"
     }
   },
   "ArchiveTable": {
@@ -217,6 +235,13 @@
     "period": "Period",
     "score": "Score",
     "completed": "Completed",
+    "columns": {
+      "member": "Member",
+      "tasks": "Tasks",
+      "score": "Score",
+      "performance": "Performance",
+      "lastActivity": "Last Activity"
+    },
     "sortByDate": "Sort by Date",
     "sortByScore": "Sort by Score",
     "sortByName": "Sort by Name",
@@ -226,37 +251,56 @@
     "filterMonth": "This Month",
     "expandTasks": "Click to view tasks",
     "collapseTasks": "Click to hide tasks",
+    "searchPlaceholder": "Search tasks and members...",
+    "clearFilters": "Clear Filters",
+    "emptyState": {
+      "title": "No Archive Data",
+      "description": "Complete some tasks to see them in the archive."
+    },
     "performanceBadges": {
       "rookie": "Rookie",
       "active": "Active",
       "achiever": "Achiever",
-      "champion": "Champion"
+      "champion": "Champion",
+      "high": "High Performer",
+      "good": "Good",
+      "average": "Average"
     },
     "sortBy": {
+      "label": "Sort By",
       "date": "Date",
       "dateShort": "📅",
       "score": "Score",
       "scoreShort": "🏆",
       "name": "Name",
-      "nameShort": "👤"
+      "nameShort": "👤",
+      "performance": "Performance"
     },
     "filterBy": {
-      "all": "All",
+      "period": "Filter Period",
+      "all": "All Time",
       "allShort": "📂",
       "today": "Today",
       "todayShort": "📅",
-      "week": "Week",
+      "week": "This Week",
       "weekShort": "📆",
-      "month": "Month",
-      "monthShort": "🗓️"
+      "month": "This Month",
+      "monthShort": "🗓️",
+      "quarter": "This Quarter",
+      "year": "This Year"
     },
     "viewMode": {
-      "cards": "📱 Cards",
-      "table": "📊 Table"
+      "label": "View Mode",
+      "cards": "Cards",
+      "table": "Table",
+      "timeline": "Timeline"
     },
     "dateLabels": {
       "today": "Today",
-      "yesterday": "Yesterday"
+      "yesterday": "Yesterday",
+      "justNow": "Just now",
+      "timezone": "Timezone",
+      "completeDateAndTime": "Complete Date & Time"
     },
     "periods": {
       "daily": "Daily",

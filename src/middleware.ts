@@ -19,6 +19,8 @@ const publicRoutes = [
   "/phase2-test",
   "/test",
   "/simple-login",
+  "/test-today",
+  "/debug-archive",
 ];
 
 // Define API routes that don't require authentication

@@ -5,7 +5,7 @@ import '@/app/globals.css'
 import {baseUrl} from "@/lib/utils";
 import {initialMembers} from "@/data/seed";
 import {ConditionalAppProvider} from "@/components/conditional-app-provider";
-import {MergeCompletionDate} from "@/lib/completionDateService";
+import {taskCompletionStateService} from "@/lib/services/taskCompletionStateService";
 import getAllTasksService from "@/lib/getAllTasksService";
 import {getScoreSummary} from "@/lib/scoreService";
 import {cookies} from "next/headers";
@@ -72,22 +72,49 @@ export default async function LocaleLayout({
         // Continue without role info - will be handled client-side as fallback
       }
       
-      // Fetch all tasks using the service directly (server-side)
-      const allTasks = await getAllTasksService();
+      // ✅ ENTERPRISE: Fetch all tasks using enhanced service (server-side)
+      const allTasksFromService = await getAllTasksService();
       
-      // Separate active and archived tasks
-      initialActiveTasks = allTasks.filter(task => !task.completed);
-      const rawArchivedTasks = allTasks.filter(task => task.completed) as ArchivedTask[];
-      
-      // ✅ PRINCIPAL ENGINEER: Apply real completion dates from Redis logs
-      console.log('[Layout] 🕐 Enriching archived tasks with real completion dates...');
+      // ✅ PRINCIPAL ENGINEER: Apply enterprise-grade completion state processing
+      console.log('[Layout] 🚀 Processing task completion state with enterprise service...');
       try {
-        initialArchivedTasks = await MergeCompletionDate(initialMembers, rawArchivedTasks);
-        console.log('[Layout] ✅ Real completion dates applied successfully');
+        const completionStateResult = await taskCompletionStateService.processTaskCompletionState(allTasksFromService);
+        
+        // ✅ ENTERPRISE ARCHITECTURE: Use processed results from single source of truth
+        initialActiveTasks = completionStateResult.activeTasks;
+        initialArchivedTasks = completionStateResult.completedTasks.map(task => ({
+          ...task,
+          completedDate: task.completedAt ? new Date(task.completedAt) : new Date(), // Type-safe conversion
+        })) as ArchivedTask[];
+        
+        // ✅ ENTERPRISE METRICS: Log performance and completion insights
+        console.log('[Layout] ✅ Enterprise completion state processing completed:', {
+          totalProcessed: completionStateResult.metrics.totalTasks,
+          activeTasks: completionStateResult.activeTasks.length,
+          completedTasks: completionStateResult.completedTasks.length,
+          processingTime: `${completionStateResult.metrics.redisOperationTimeMs.toFixed(2)}ms`,
+          periodDistribution: completionStateResult.metrics.periodDistribution,
+          errors: completionStateResult.metrics.keyCheckErrors
+        });
+        
       } catch (error) {
-        console.error('[Layout] ❌ Failed to merge completion dates:', error);
-        // Fallback to raw archived tasks without completion date enrichment
-        initialArchivedTasks = rawArchivedTasks;
+        console.error('[Layout] ❌ Enterprise completion state processing failed:', error);
+        
+        // ✅ CIRCUIT BREAKER: Fallback to basic task separation with proper error handling
+        console.warn('[Layout] 🔄 Falling back to basic task separation...');
+        initialActiveTasks = allTasksFromService.filter(task => !task.completed);
+        const basicArchivedTasks = allTasksFromService.filter(task => task.completed);
+        
+        // ✅ TYPE SAFETY: Ensure proper ArchivedTask type conversion with fallback date
+        initialArchivedTasks = basicArchivedTasks.map(task => ({
+          ...task,
+          completedDate: task.completedAt ? new Date(task.completedAt) : new Date(), // Safe fallback
+        })) as ArchivedTask[];
+        
+        console.log('[Layout] ⚠️ Using fallback task separation:', {
+          activeTasks: initialActiveTasks.length,
+          archivedTasks: initialArchivedTasks.length
+        });
       }
       
       // ✅ NEW: Fetch score adjustments (not total scores) for all members server-side
@@ -136,7 +163,7 @@ export default async function LocaleLayout({
       }
 
       console.log('[Layout] ✅ Server-side data fetched successfully', {
-        totalTasks: allTasks.length,
+        totalTasksFromService: allTasksFromService.length,
         activeTasks: initialActiveTasks.length,
         archivedTasks: initialArchivedTasks.length,
         scoreAdjustmentsLoaded: Object.keys(initialScoreAdjustments).length,

@@ -19,7 +19,7 @@ import { CoreError, Validators, TypeGuards, Performance } from "../utils/core";
  * Centralized key pattern management for consistency
  */
 const KEY_PATTERNS = Object.freeze({
-  COMPLETION_KEY: /^task:completion:(daily|weekly|monthly):(.+):(.+)$/,
+  COMPLETION_KEY: /^task:completion:(daily|weekly|monthly):(.+):(.+)$/, // task:completion:{period}:{taskId}:{datePart}
   DATE_PATTERNS: {
     DAILY: /^\d{4}-\d{2}-\d{2}$/,
     WEEKLY: /^(\d{4})-W(\d{2})$/,
@@ -140,7 +140,7 @@ export class RedisKeyManager {
     // Generate date part
     const datePart = this.formatDatePart(period, targetDate);
 
-    // Construct key
+    // Construct key  // task:completion:{period}:{taskId}:{datePart}
     const key = `${KEY_CONFIG.PREFIX}${KEY_CONFIG.SEPARATOR}${period}${KEY_CONFIG.SEPARATOR}${taskId}${KEY_CONFIG.SEPARATOR}${datePart}`;
 
     // Validate final key length

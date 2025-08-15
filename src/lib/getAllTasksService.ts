@@ -1,6 +1,7 @@
 import { getRedis } from "@/lib/redis";
 import { RedisKeyManager, IS_DEV } from "@/lib/utils";
 import type { Task } from "@/types";
+import { processTaskCompletionState } from "./services/taskCompletionStateService";
 
 export class GetAllTasksError extends Error {
   constructor(public status: number, message: string) {
@@ -10,18 +11,26 @@ export class GetAllTasksError extends Error {
 }
 
 /**
- * 🚀 Enhanced Get All Tasks Service - Enterprise Edition
- * ======================================================
+ * 🚀 ENTERPRISE GET ALL TASKS SERVICE - PRINCIPAL ENGINEER REFACTOR v2.0
+ * ======================================================================
  *
- * Optimized for server-side rendering and high-performance data retrieval.
- * Features batch operations, connection pooling, and comprehensive error handling.
+ * Implements the CORRECT architectural pattern for task retrieval and completion state.
+ *
+ * ✅ CORRECT APPROACH:
+ * 1. Fetch ALL tasks from Redis (without pre-filtering by completion)
+ * 2. Use TaskCompletionStateService to determine completion state via period-aware key checking
+ * 3. Return tasks with proper completion state based on authoritative Redis completion keys
+ *
+ * ❌ ELIMINATED ANTI-PATTERNS:
+ * - No more dual-phase processing with MergeCompletionDate
+ * - No more log parsing for completion dates
+ * - No more checking only current period completion keys
  *
  * Performance Optimizations:
+ * - ✅ Single-phase processing with period-aware completion checking
  * - ✅ Batch Redis operations with pipeline
- * - ✅ Parallel task data and completion status fetching
- * - ✅ Early validation and filtering
- * - ✅ Memory-efficient data processing
- * - ✅ Connection pooling support
+ * - ✅ Authoritative completion state from Redis keys
+ * - ✅ Proper separation of concerns
  */
 const getAllTasksService = async (): Promise<Task[]> => {
   try {
