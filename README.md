@@ -15,7 +15,7 @@ To get started with ChoreChamp, follow these steps:
 
 1.  **Clone the repository:**
     ```bash
-    git clone https://github.com/your-username/chore-champion.git
+    git clone https://github.com/mostafammy/chorechampion
     ```
 2.  **Install dependencies:**
     ```bash
